@@ -47,6 +47,14 @@ const Search = () => {
   const dbcallsaleal=async(index)=>{
     setActiveIndex(index)
     console.log("inside dbcallsalealgo function")
+
+
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+
+    }
+    else{
+
+    
     //let getalgo=localStorage.getItem("walletalgo");
     //let req = [];
   
@@ -106,7 +114,7 @@ const Search = () => {
       setgetI(req)    
     })    
     console.log("cfbbba",req) 
-    
+  }
   //}
   
 }
@@ -114,14 +122,15 @@ const Search = () => {
 
   const dbcallsalealgo=async()=>{
     console.log("inside dbcallsalealgo function")
-    let getalgo=localStorage.getItem("walletalgo");
+    
     let req = [];
   
-    if(getalgo === ""){
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
   
     }else{
   
     
+      let getalgo=localStorage.getItem("walletalgo");
       
       //let kreq =[];
       firebase.database().ref("imagerefexploreoneAlgos").child(getalgo).on("value", (data) => {

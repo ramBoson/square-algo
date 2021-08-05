@@ -18,46 +18,48 @@ const User = ({ className, item }) => {
   const [visible, setVisible] = useState(false);
   const [visibleShare, setVisibleShare] = useState(false);
   const [visibleModalReport, setVisibleModalReport] = useState(false);
-  let getac="undefined";
-  let getalgo="undefined";
-  let getname="undefined";
+  //let getac="";
+  let getalgo="";
+  //let getname="";
+  if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "")
+  {
+
+  }
+  else{
+
+  
   getalgo=localStorage.getItem("walletalgo");
   console.log("getmetamask",getalgo)
   //getalgo=localStorage.getItem("walletalgo");
-  getname=localStorage.getItem("walletname");
+  //getname=localStorage.getItem("walletname");
   //const[getImgreff,setgetImgreff]=useState([]);
   //console.log("getImHeader",getImgreff)
 
   //console.log("checking",getprodata[0].profileurl)
-
+  }
   const dbcallprodata=()=>{
 
 
     console.log("inside setgetdbcall function")
-    let getalgo=localStorage.getItem("walletalgo");
-    let req = [];
-      
-    if(localStorage.getItem("walletalgo") === null){
-
+    let req = [];      
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
       req.push(              
         {              
           Bio: "",
           Twitter: "",
           address: "",
-          displayname:"",
+          displayname:"aaaa",
           profileurl:"",
-          username: ""
+          username: "bbbb"
         })
-        setgetprodata(req);   
-  
+        setgetprodata(req);     
     }
     else{  
+      let getalgo=localStorage.getItem("walletalgo");
       //let kreq =[];
       fireDb.database().ref("profiledata").child(getalgo).on("value", (data) => {
         if (data) {
-
           console.log("start",data.val())
-
           let value=data.val();
           console.log("valuess",value)
           setgetusername(value.displayname)
@@ -84,36 +86,36 @@ const User = ({ className, item }) => {
 
   const followcall=(event)=>{
 
-    console.log("followcall",event.target.innerText)
-    let getalgo=localStorage.getItem("walletalgo");    
-    if(event.target.innerText === 'Follow'){    
-    console.log("addlikedb function follow call");
-    let ref2=fireDb.database().ref(`followdb/${getalgo}`).child(getalgo);
-    //const db = ref2.push().key;                         
-    ref2.set({
-      username:"",
-      datesets:new Date().toDateString(),
-      description:"",whois:'follow',
-      status:"",      
+    // console.log("followcall",event.target.innerText)
+    // let getalgo=localStorage.getItem("walletalgo");    
+    // if(event.target.innerText === 'Follow'){    
+    // console.log("addlikedb function follow call");
+    // let ref2=fireDb.database().ref(`followdb/${getalgo}`).child(getalgo);
+    // //const db = ref2.push().key;                         
+    // ref2.set({
+    //   username:"",
+    //   datesets:new Date().toDateString(),
+    //   description:"",whois:'follow',
+    //   status:"",      
       
 
-      }).then(()=>{
-        setVisible(!visible)
-      });    
-    }
-    else if(event.target.innerText === 'Unfollow'){
+    //   }).then(()=>{
+    //     setVisible(!visible)
+    //   });    
+    // }
+    // else if(event.target.innerText === 'Unfollow'){
       
-    console.log("addlikedb function unfollow call");
-    fireDb.database().ref(`followdb/${getalgo}`).child(getalgo).remove().then(()=>{
-      setVisible(!visible)
-    });    
+    // console.log("addlikedb function unfollow call");
+    // fireDb.database().ref(`followdb/${getalgo}`).child(getalgo).remove().then(()=>{
+    //   setVisible(!visible)
+    // });    
     
-    }
+    // }
   }
 
   const unfollowcall=()=>{
 
-    console.log("unfollowcall")
+    //console.log("unfollowcall")
     
   }
 

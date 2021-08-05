@@ -50,8 +50,15 @@ const CardBuy = ({ className, item }) => {
     //console.log("addlikedb function call");
     console.log("addlikedb function call");
 
-    const accounts = await  web3.eth.getAccounts();
-    fireDb.database().ref(`imagereflikes/${accounts[0]}`).child(item.highestBid).set({
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+
+    }
+    else{
+
+      let getalgo=localStorage.getItem("walletalgo");
+
+    //const accounts = await  web3.eth.getAccounts();
+    fireDb.database().ref(`imagereflikes/${getalgo}`).child(item.highestBid).set({
       id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
       userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
       ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
@@ -62,12 +69,20 @@ const CardBuy = ({ className, item }) => {
         window.location.reload(false)   
       });    
 
+    }
 
     }
 
     const usernameget=()=>{
 
     console.log("inside usernameget function")
+
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x"){
+
+    }
+    else{
+
+    
     let getalgo=localStorage.getItem("wallet");
 
     fireDb.database().ref("profiledata").child(getalgo).on("value", (data) => {
@@ -78,7 +93,7 @@ const CardBuy = ({ className, item }) => {
         setgetprodata(value);   
       }                 
    });
-
+  }
 }
 
 useEffect(()=>{usernameget()},[])
@@ -90,7 +105,7 @@ useEffect(()=>{usernameget()},[])
     console.log("inside buy function")
 
 
-    if(localStorage.getItem("walletalgo") === null ){
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("wallet") === "0x"){
 
     }
 

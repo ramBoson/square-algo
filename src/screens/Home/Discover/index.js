@@ -45,6 +45,14 @@ const Discover = () => {
   const dbcallsaleal=async(index)=>{
     setActiveIndex(index)
     console.log("inside dbcallsalealgo function")
+
+
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+
+    }
+    else{
+
+    
     let getalgo=localStorage.getItem("walletalgo");
     //let req = [];
   
@@ -98,7 +106,7 @@ const Discover = () => {
     console.log("cfbbba",req) 
     
   }
-  
+}
 }
   useEffect(()=>{dbcallsaleal()},[])
 

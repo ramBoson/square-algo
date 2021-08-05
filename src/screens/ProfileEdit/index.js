@@ -48,6 +48,14 @@ const ProfileEdit = () => {
   const dbcallprodata=()=>{
 
     console.log("inside setgetdbcall function")
+
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x")
+    {
+
+    }
+    else{
+
+    
     let getalgo=localStorage.getItem("wallet");
     let req = [];
       
@@ -55,15 +63,15 @@ const ProfileEdit = () => {
   
       console.log("not algo get")
 
-      // req.push(              
-      //   {              
-      //     Bio: "",
-      //     Twitter: "",
-      //     address: "",
-      //     displayname:"",
-      //     profileurl:"",
-      //     username: ""
-      //   })
+      req.push(              
+        {              
+          Bio: "",
+          Twitter: "",
+          address: "",
+          displayname:"aaaa",
+          profileurl:"",
+          username: "bbbb"
+        })
         setgetprodata(req);   
 
 
@@ -99,7 +107,7 @@ const ProfileEdit = () => {
         
         
       });
-      
+    } 
     }    
     //console.log("accpro",getprodata)    
   }
@@ -136,9 +144,16 @@ const ProfileEdit = () => {
 
     console.log("adddbprofile");
     //const accounts = await web3.eth.getAccounts();
-  let getac="undefined";
-  let getalgo="undefined";
-  let getname="undefined";
+  let getac="";
+  let getalgo="";
+  let getname="";
+  if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x")
+  {
+
+  }
+  else{
+
+  
   getalgo=localStorage.getItem("walletalgo");
   console.log("getmetamask",getac)
   //getalgo=localStorage.getItem("walletalgo");
@@ -179,6 +194,7 @@ const ProfileEdit = () => {
     refprofile.set({profileurl:Img,displayname:name,http:url,Bio:bio,social:socialweb,Twitter:twitter,address:getalgo,dbkey:db,username:getname}).then(()=>{
       setIsOpen(true)
     })
+  }
   
     }
   }

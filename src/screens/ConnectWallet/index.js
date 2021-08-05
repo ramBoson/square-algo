@@ -69,26 +69,25 @@ const Connect = () => {
       console.log("acc Algo",accounts[0].address)
       localStorage.setItem("walletalgo",accounts[0].address)
 
-      if(localStorage.getItem("walletalgo") === "")
+      if(localStorage.getItem("walletalgo") === null )
 {
 
-  let refprofile=fireDb.database().ref(`profiledata/${accounts[0].address}`);
+    let refprofile=fireDb.database().ref(`profiledata/${accounts[0].address}`);
     let dateset=new Date().toDateString();
     console.log("dateget",dateset)
     const db = refprofile.push().key;
     console.log("dbcheck",db)
-          refprofile.set({profileurl:"",displayname:"",http:"",Bio:"",social:"",Twitter:"",address:"",dbkey:"",username:""}).then(()=>{                      
+          refprofile.set({profileurl:"",displayname:"aaaa",http:"",Bio:"",social:"",Twitter:"",address:"",dbkey:"",username:"bbbb"}).then(()=>{                      
           })                
-
 }
 else if(localStorage.getItem("walletalgo") === "0x"){ 
 
-  
-
+  setIsOpen(true)
 }
-      
-      setIsOpen(true)
-  
+else{
+
+  setIsOpen(true)
+}
     })
     .catch((e) => {
       console.error(e);
