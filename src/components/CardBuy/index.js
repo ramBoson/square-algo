@@ -294,6 +294,65 @@ useEffect(()=>{usernameget()},[])
      // You should now see the 10 assets listed in the account information
      console.log("Account 3 = " + recoveredAccount3.addr);
      await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
+
+
+     fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
+
+      if(getprodata.displayname === null){
+  
+        fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
+  
+  
+    id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+    userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+    ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
+    previousoaddress:item.previousaddress,datesets:item.date,
+    description:item.description,whois:'buyers',history:item.url,paramsdb:item.image2x,privatekey:item.category
+  
+  
+          }).then(()=>{
+            setIsOpenss(false)
+            setIsOpens(true)
+            
+          }) 
+  
+      }else{
+  
+        console.log("itemid",item.title)
+        console.log("itemimage",item.image)
+        console.log("itemprice",item.price)
+        console.log("itemcAddress",item.categoryText)
+        console.log("itemkeyid",item.highestBid)
+        console.log("itemusername",getprodata.username)
+        console.log("itempreaddress",item.bid)
+        console.log("itemacc",getalgo)
+        
+  
+        fireDb.database().ref(`imagerefbuyAlgos/${getalgo}`).child(item.highestBid).set({
+  
+    id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+    userName:getprodata.displayname,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+    ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
+    previousoaddress:item.previousaddress,datesets:item.date,
+    description:item.description,whois:'buyers',history:item.url,paramsdb:item.image2x,privatekey:item.category
+          
+  
+          }).then(()=>{
+            setIsOpenss(false)
+            setIsOpens(true)
+            
+            //window.location.reload(false)   
+          }) 
+  
+      }
+  
+     //alert("amount has been sent")
+  //end trans 
+     //let thing = a.addIds; 
+     //let s = await getaaa.methods.items(thing).call(); 
+     //console.log("sget",s) 
+     //let state = a.addPrices;       
+    })    
     
     
 
@@ -303,63 +362,7 @@ useEffect(()=>{usernameget()},[])
   });
 
 
-  fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
-
-    if(getprodata.displayname === null){
-
-      fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
-
-
-  id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-  userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-  ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
-  previousoaddress:item.previousaddress,datesets:item.date,
-  description:item.description,whois:'buyers',history:item.url,paramsdb:item.image2x,privatekey:item.category
-
-
-        }).then(()=>{
-          setIsOpenss(false)
-          setIsOpens(true)
-          
-        }) 
-
-    }else{
-
-      console.log("itemid",item.title)
-      console.log("itemimage",item.image)
-      console.log("itemprice",item.price)
-      console.log("itemcAddress",item.categoryText)
-      console.log("itemkeyid",item.highestBid)
-      console.log("itemusername",getprodata.username)
-      console.log("itempreaddress",item.bid)
-      console.log("itemacc",getalgo)
-      
-
-      fireDb.database().ref(`imagerefbuyAlgos/${getalgo}`).child(item.highestBid).set({
-
-  id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-  userName:getprodata.displayname,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-  ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
-  previousoaddress:item.previousaddress,datesets:item.date,
-  description:item.description,whois:'buyers',history:item.url,paramsdb:item.image2x,privatekey:item.category
-        
-
-        }).then(()=>{
-          setIsOpenss(false)
-          setIsOpens(true)
-          
-          //window.location.reload(false)   
-        }) 
-
-    }
-
-   //alert("amount has been sent")
-//end trans 
-   //let thing = a.addIds; 
-   //let s = await getaaa.methods.items(thing).call(); 
-   //console.log("sget",s) 
-   //let state = a.addPrices;       
-  })    
+  
 
     //end money transfer here and opt and transfer algos
 
