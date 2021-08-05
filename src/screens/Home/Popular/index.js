@@ -265,7 +265,7 @@ const directionOptions = ["Sellers", "Buyers"];
   const dbcallalgobuy=async()=>{
     //console.log("inside dbcallalgobuy function")
     let req2 = [];//imagerefexplore//
-    firebase.database().ref("imagerefbuy").on("value", (data) => {
+    firebase.database().ref("imagerefbuyAlgos").on("value", (data) => {
       if (data) {
         data.forEach((d) => {
           req2.push(d.val())          
@@ -311,14 +311,14 @@ const directionOptions = ["Sellers", "Buyers"];
   
   }
   
-  useEffect(()=>{dbcallalgobuy()},[])
+  useEffect(()=>{dbcallalgobuy()},[getImb])
 
 
   //seller
   const dbcallsalealgo=async()=>{
     //console.log("inside dbcallsalealgo function")
     let req2 = [];//imagerefexplore//
-    firebase.database().ref("imagerefexploreone").on("value", (data) => {
+    firebase.database().ref("imagerefexploreoneAlgos").on("value", (data) => {
       if (data) {
         data.forEach((d) => {
           req2.push(d.val())                    
@@ -360,7 +360,7 @@ const directionOptions = ["Sellers", "Buyers"];
     //console.log("cfbbba",req) 
   
   }
-  useEffect(()=>{dbcallsalealgo()},[])
+  useEffect(()=>{dbcallsalealgo()},[getIm])
 
   //getIm
 
