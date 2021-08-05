@@ -30,28 +30,28 @@ const Connect = () => {
   console.log(isOpen)
 
   const menu = [
-    {
-      title: "Connect Metamask",
-      color: "#9757D7",
-      onclick:async()=>{        
-        console.log("Metamask")
-        window.ethereum.enable();
+    // {
+    //   title: "Connect Metamask",
+    //   color: "#9757D7",
+    //   onclick:async()=>{        
+    //     console.log("Metamask")
+    //     window.ethereum.enable();
         
           
          
-           setIsOpen(true)        
+    //        setIsOpen(true)        
 
         
-        //onClick={() => setVisibleModal(true)}
+    //     //onClick={() => setVisibleModal(true)}
         
-        //if(accounts[0]!== ''){
-          //var btns = document.getElementById("me");
-          //btns.innerHTML = "CONNECTED";          
-        //}
-        //console.log(accounts[0]);  
-        //alert("connected....")
-      }
-    },
+    //     //if(accounts[0]!== ''){
+    //       //var btns = document.getElementById("me");
+    //       //btns.innerHTML = "CONNECTED";          
+    //     //}
+    //     //console.log(accounts[0]);  
+    //     //alert("connected....")
+    //   }
+    // },
     {
       title: "Algosigner Wallet",
       color: "#3772FF",
@@ -119,17 +119,18 @@ else{
   
       }
   
-    },
-    {
-      title: "MyEtherWallet",
-      color: "#45B26B",
-      onclick:()=>{console.log("Etherwallet")}
-    },
-    {
-      title: "Wallet Connect",
-      color: "#EF466F",
-      onclick:()=>{console.log("Wallet Connect")}
-    },
+    }
+    //,
+    // {
+    //   title: "MyEtherWallet",
+    //   color: "#45B26B",
+    //   onclick:()=>{console.log("Etherwallet")}
+    // },
+    // {
+    //   title: "Wallet Connect",
+    //   color: "#EF466F",
+    //   onclick:()=>{console.log("Wallet Connect")}
+    // },
   ];
 
   const onClo=()=>{

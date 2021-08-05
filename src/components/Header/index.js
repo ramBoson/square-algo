@@ -92,8 +92,8 @@ const Headers = () => {
         <Link className={styles.logo} to="/">
           <Image
             className={styles.pic}
-            src="/images/logo-dark.png"
-            srcDark="/images/logo-light.png"
+            src="/images/logocifis.png"
+            srcDark="/images/logocifis.png"
             alt="Fitness Pro"
           />
         </Link>

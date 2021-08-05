@@ -94,7 +94,7 @@ const User = ({ className,onProfile}) => {
           profileurl:"",
           username: "bbb"
         })
-        setgetprodata("");   
+        setgetprodata(req);   
     }
     else{  
       //let kreq =[];
@@ -213,7 +213,18 @@ const User = ({ className,onProfile}) => {
     //let kreq =[];
     if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
 
-      setgetusername("")
+      req.push(              
+        {              
+          Bio: "",
+          Twitter: "",
+          address: "",
+          displayname:"aaa",
+          profileurl:"",
+          username: "bbb"
+        })
+
+    
+      setgetusername(req)
 
       console.log("dbcallalgo",getalgo)
 
@@ -243,19 +254,30 @@ const User = ({ className,onProfile}) => {
 
         <div className={styles.head} onClick={() => setVisible(!visible)}>
 
-        {getprodata.profileurl === "" ? (
-          <div className={styles.avatar}>
+           {(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || getprodata.profileurl === "aaa") ? 
+        (
+        <>
+
+<div className={styles.avatar}>
             
-          {/* <img src="/images/content/avatar-user.jpg" alt="Avatar" />  */}
-          <img src={getprodata.profileurl} alt="Avatar" />          
-   </div>
-            ):(
-              <div className={styles.avatar}>            
+            {/* <img src="/images/content/avatar-user.jpg" alt="Avatar" />  */}
+            <img src={"/images/logocifis.png"} alt="hello" />          
+     </div>
+        
+        </>
+        )
+        
+        :(
+        <>
+
+        <div className={styles.avatar}>            
                  {/* <img src="/images/content/avatar-user.jpg" alt="Avatar" />  */}
-                 <img src={getprodata.profileurl} alt="Avatar" />                       
+                 <img src={getprodata.profileurl} alt="world" />                       
           </div>
-          )}
-          
+        </>
+        )
+        }
+        
           
             {algobalance === "" ? (
               <div className={styles.wallet}>
