@@ -47,22 +47,32 @@ const Headers = () => {
 
     //check
 
-    
-    let get=localStorage.getItem("wallet");
-    let getalgo=localStorage.getItem("walletalgo");
-    console.log("walletcheck",get)
-    console.log("walletcheckalgo",getalgo)
 
-    if(get)
+    if(localStorage.getItem("walletalgo") === null )
+    {
+
+    }
+    else if(localStorage.getItem("walletalgo") === "0x")
+    {
+
+    }
+    else{
+
+    
+    //let get=localStorage.getItem("wallet");
+    let getalgo=localStorage.getItem("walletalgo");
+    //console.log("walletcheck",get)
+    console.log("walletcheckalgo",getalgo)
+    if(getalgo === "0x" || getalgo === "")
+    setConnected(false)
+    else if(getalgo)
     setConnected(true)
     // else if(getalgo)
     // setConnected(true)
     else
     setConnected(false)
-    
-  
+    }
   }
-
   useEffect(() => {isconnected()}, [])
 
   const onProfile=()=>{
@@ -77,7 +87,7 @@ const Headers = () => {
       
       <div className={cn("container", styles.container)}>
 
-      
+
         {/* <button type="submit" onClick={()=>{setConnected(!connected)}}>Toggle</button> */}
         <Link className={styles.logo} to="/">
           <Image

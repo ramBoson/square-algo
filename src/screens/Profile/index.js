@@ -12,7 +12,6 @@ import firebase from "../UploadDetails/firebase";
 //import web3 from '../UploadDetails/web3';
 import Compress from "react-image-file-resizer";
 //import axios from 'axios';
-
 // data
 //import { bids } from "../../mocks/bids";
 //import { isStepDivisible } from "react-range/lib/utils";
@@ -223,10 +222,10 @@ console.log("getImgalgobuy",getImgreffalgobuy)
 
 const dbcallalgolikes=async()=>{
   console.log("inside dbcallsalealgo function")
-  let getalgo=localStorage.getItem("wallet");
+  let getalgo=localStorage.getItem("walletalgo");
   let req = [];
     
-  if(localStorage.getItem("wallet") === null){
+  if(localStorage.getItem("walletalgo") === null){
 
   }
   else{
@@ -253,6 +252,13 @@ const dbcallalgolikes=async()=>{
               categoryText: value.cAddress,
               //purchasing !
               url: value.history,
+              date:value.datesets,
+              description:value.description,
+              extra:value.extra1,
+              ipfsurl:value.ipfsUrl,
+              previousaddress:value.previousaddress,
+              soldd:value.soldd,
+              whois:value.whois,
               users: [                
                 {
                   avatar: "/images/content/avatar-4.jpg",
@@ -277,15 +283,15 @@ useEffect(()=>{dbcallalgolikes()},[])
 
 const dbcallsalealgo=async()=>{
   console.log("inside dbcallsalealgo function")
-  let getalgo=localStorage.getItem("wallet");
+  let getalgo=localStorage.getItem("walletalgo");
   let req = [];
 
-  if(localStorage.getItem("wallet") === null){
+  if(localStorage.getItem("walletalgo") === null){
 
   }else{
     
     //let kreq =[];
-    firebase.database().ref("imagerefexploreone").child(getalgo).on("value", (data) => {
+    firebase.database().ref("imagerefexploreoneAlgos").child(getalgo).on("value", (data) => {
       if (data) {
         data.forEach((d) => {
           //console.log("keycheck",d.key)
@@ -304,6 +310,13 @@ const dbcallsalealgo=async()=>{
               categoryText: value.cAddress,
               //purchasing !
               url: value.history,
+              date:value.datesets,
+              description:value.description,
+              extra:value.extra1,
+              ipfsurl:value.ipfsUrl,
+              previousaddress:value.previousoaddress,
+              soldd:value.soldd,
+              whois:value.whois,
               users: [                
                 {
                   avatar: "/images/content/avatar-4.jpg",
@@ -326,10 +339,10 @@ useEffect(()=>{dbcallsalealgo()},[])
 
 const dbcallalgo=async()=>{
   console.log("inside dbcallalgo function")
-  let getalgo=localStorage.getItem("wallet");
+  let getalgo=localStorage.getItem("walletalgo");
   let req = [];
 
-  if(localStorage.getItem("wallet") === null){
+  if(localStorage.getItem("walletalgo") === null){
 
   }
   else{
@@ -337,7 +350,7 @@ const dbcallalgo=async()=>{
   
     
     //let kreq =[];
-    firebase.database().ref("imageref").child(getalgo).on("value", (data) => {
+    firebase.database().ref("imagerefAlgos").child(getalgo).on("value", (data) => {
       if (data) {
         data.forEach((d) => {
           //console.log("keycheck",d.key)
@@ -357,6 +370,13 @@ const dbcallalgo=async()=>{
               categoryText: value.cAddress,
               //purchasing !
               url: value.history,
+              date:value.datesets,
+              description:value.description,
+              extra:value.extra1,
+              ipfsurl:value.ipfsUrl,
+              previousaddress:value.previousoaddress,
+              soldd:value.soldd,
+              whois:value.whois,
               users: [                
                 {
                   avatar: "/images/content/avatar-4.jpg",
@@ -382,21 +402,18 @@ const dbcallalgo=async()=>{
 
 useEffect(()=>{dbcallalgo()},[])
 
-
 const dbcallalgobuy=async()=>{
   console.log("inside dbcallalgobuy function")
-  let getalgo=localStorage.getItem("wallet");
+  let getalgo=localStorage.getItem("walletalgo");
   let req = [];
-
-  if(localStorage.getItem("wallet") === null){
-
+  if(localStorage.getItem("walletalgo") === null){
   }
   else{
 
   
     
     //let kreq =[];
-    firebase.database().ref("imagerefbuy").child(getalgo).on("value", (data) => {
+    firebase.database().ref("imagerefbuyAlgos").child(getalgo).on("value", (data) => {
       if (data) {
         data.forEach((d) => {
           //console.log("keycheck",d.key)
@@ -416,6 +433,13 @@ const dbcallalgobuy=async()=>{
               categoryText: value.cAddress,
               //purchasing !
               url: value.history,
+              date:value.datesets,
+              description:value.description,
+              extra:value.extra1,
+              ipfsurl:value.ipfsurl,
+              previousaddress:value.previousoaddress,
+              soldd:value.soldd,
+              whois:value.whois,
               users: [                
                 {
                   avatar: "/images/content/avatar-4.jpg",
@@ -466,9 +490,9 @@ const captureFile=(event)=>{
 
 const getbg=()=>{
 
-  let getalgo=localStorage.getItem("wallet");
+  let getalgo=localStorage.getItem("walletalgo");
     
-    if(localStorage.getItem("wallet") === null && Img === "" ){
+    if(localStorage.getItem("walletalgo") === null && Img === "" ){
   
     }else{
 
@@ -493,9 +517,9 @@ useEffect(()=>{getbg()},[])
 const setprofilephoto=()=>{
 
   console.log("inside setprofilephoto function")
-  let getalgo=localStorage.getItem("wallet");
+  let getalgo=localStorage.getItem("walletalgo");
     
-    if(localStorage.getItem("wallet") === null && Img === "" ){
+    if(localStorage.getItem("walletalgo") === null && Img === "" ){
   
     }else{
 

@@ -135,17 +135,17 @@ const ProfileEdit = () => {
   const adddbprofile=async()=>{
 
     console.log("adddbprofile");
-    const accounts = await web3.eth.getAccounts();
+    //const accounts = await web3.eth.getAccounts();
   let getac="undefined";
   let getalgo="undefined";
   let getname="undefined";
-  getalgo=localStorage.getItem("wallet");
+  getalgo=localStorage.getItem("walletalgo");
   console.log("getmetamask",getac)
   //getalgo=localStorage.getItem("walletalgo");
   getname=localStorage.getItem("walletname");
 
 
-    console.log("acc",accounts[0]);
+    //console.log("acc",accounts[0]);
   
 
     if(Img===null){
@@ -169,8 +169,8 @@ const ProfileEdit = () => {
     }
     else{
 
-      localStorage.setItem("wallet",accounts[0]);      
-      localStorage.setItem("walletname",name);
+      //localStorage.setItem("walletalgo",);      
+      //localStorage.setItem("walletname",name);
     let refprofile=fireDb.database().ref(`profiledata/${getalgo}`);
     let dateset=new Date().toDateString();
     console.log("dateget",dateset)

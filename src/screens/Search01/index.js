@@ -1,5 +1,4 @@
 import React, { useState,useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import cn from "classnames";
 import styles from "./Search01.module.sass";
 import { Range, getTrackBackground } from "react-range";
@@ -7,8 +6,6 @@ import Icon from "../../components/Icon";
 //import Card from "../../components/CardBuy";
 import Dropdown from "../../components/Dropdown";
 import firebase from "../UploadDetails/firebase";
-import Modald from "../../components/ModalD";
-import FolowStepsdr from "./FolowSteps";
 //UploadDetails/firebase
 
 // data
@@ -25,10 +22,6 @@ const colorOptions = ["All colors", "Black", "Green", "Pink", "Purple"];
 const creatorOptions = ["Verified only", "All", "Most liked"];
 
 const Search = () => {
-
-  let history=useHistory();
-  const [isOpen, setIsOpen] = useState(false);
-
   const [searchTerm,setSearchTerm]=useState('');
   console.log('returnsearch',searchTerm)
 
@@ -63,7 +56,7 @@ const Search = () => {
 
       //let req = [];
     let req2 = [];//imagerefexplore//
-    firebase.database().ref("imagerefexploreone").on("value", (data) => {
+    firebase.database().ref("imagerefexploreoneAlgos").on("value", (data) => {
       if (data) {
         data.forEach((d) => {
           req2.push(d.val())          
@@ -94,6 +87,14 @@ const Search = () => {
                 categoryText: a[b].cAddress,
                 //purchasing !
                 url: a[b].history,
+                date:a[b].datesets,
+                description:a[b].description,
+                extra:a[b].extra1,
+                ipfsurl:a[b].ipfsUrl,
+                previousaddress:a[b].previousoaddress,
+                soldd:a[b].soldd,
+                whois:a[b].whois,
+
                 users: [                
                   {
                     avatar: "/images/content/avatar-4.jpg",
@@ -113,7 +114,7 @@ const Search = () => {
 
   const dbcallsalealgo=async()=>{
     console.log("inside dbcallsalealgo function")
-    let getalgo=localStorage.getItem("wallet");
+    let getalgo=localStorage.getItem("walletalgo");
     let req = [];
   
     if(getalgo === ""){
@@ -123,7 +124,7 @@ const Search = () => {
     
       
       //let kreq =[];
-      firebase.database().ref("imagerefexploreone").child(getalgo).on("value", (data) => {
+      firebase.database().ref("imagerefexploreoneAlgos").child(getalgo).on("value", (data) => {
         if (data) {
           data.forEach((d) => {
             //console.log("keycheck",d.key)
@@ -131,23 +132,30 @@ const Search = () => {
             req.push(
               
               {
-                title: value.id,
-                price: value.priceSet,
-                highestBid: value.keyId,
-                counter:value.userName ,
-                //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
-                bid:value.ownerAddress,
-                image: value.imageUrl,
-                image2x: value.paramsdb,
-                category: value.privatekey,
-                categoryText: value.cAddress,
-                //purchasing !
-                url: value.history,
-                users: [                
-                  {
-                    avatar: "/images/content/avatar-4.jpg",
-                  },
-                ],
+              title: value.id,
+              price: value.priceSet,
+              highestBid: value.keyId,
+              counter:value.userName ,
+              //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
+              bid:value.ownerAddress,
+              image: value.imageUrl,
+              image2x: value.paramsdb,
+              category: value.privatekey,
+              categoryText: value.cAddress,
+              //purchasing !
+              url: value.history,
+              date:value.datesets,
+              description:value.description,
+              extra:value.extra1,
+              ipfsurl:value.ipfsUrl,
+              previousaddress:value.previousoaddress,
+              soldd:value.soldd,
+              whois:value.whois,
+              users: [                
+                {
+                  avatar: "/images/content/avatar-4.jpg",
+                },
+              ],
               },
             
             )
@@ -178,12 +186,6 @@ const Search = () => {
   const STEP = 0.1;
   const MIN = 0.01;
   const MAX = 10;
-
-  const onSub=()=>{
-    console.log("hello close")
-    //setIsOpen(false);
-    history.push("/")
-  }
 
   return (
     <div className={cn("section-pt80", styles.section)}>
@@ -338,8 +340,8 @@ const Search = () => {
                 )}
               />
               <div className={styles.scale}>
-                <div className={styles.number}>0.01 BNB</div>
-                <div className={styles.number}>10 BNB</div>
+                <div className={styles.number}>0.01 Algos</div>
+                <div className={styles.number}>10 Algos</div>
               </div>
             </div>
             <div className={styles.group}>
@@ -388,11 +390,6 @@ const Search = () => {
                 <span>Load more</span>
               </button>
             </div>
-
-            <Modald visible={isOpen} onClose={() => setIsOpen(false)}>
-<FolowStepsdr className={styles.steps} onSub={()=>onSub}/>
-</Modald>
-
           </div>
         </div>
       </div>

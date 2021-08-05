@@ -5,7 +5,7 @@ import cn from "classnames";
 import styles from "./ConnectWallet.module.sass";
 import Icon from "../../components/Icon";
 import Checkbox from "../../components/Checkbox";
-import web3 from './web3';
+//import web3 from './web3';
 //import Popup from './Popup';
 import 'reactjs-popup/dist/index.css';
 //import Popup from 'reactjs-popup';
@@ -36,21 +36,11 @@ const Connect = () => {
       onclick:async()=>{        
         console.log("Metamask")
         window.ethereum.enable();
-        //const currProvider = window.web3.currentProvider;
-        let accounts=await web3.eth.getAccounts();
-        await web3.eth.getAccounts().then(()=>{          
-          console.log("acc Algo",accounts[0])
-          localStorage.setItem("wallet",accounts[0])
-          //let refprofile=fireDb.database().ref(`profiledata/${accounts[0]}`);
-    //let dateset=new Date().toDateString();
-    //console.log("dateget",dateset)
-    //const db = refprofile.push().key;
-    //console.log("dbcheck",db)
-        //   refprofile.set({profileurl:"",displayname:"",http:"",Bio:"",social:"",Twitter:"",address:"",dbkey:"",username:""}).then(()=>{                      
-        //   })                
-         }).then(()=>{
+        
+          
+         
            setIsOpen(true)        
-         })        
+
         
         //onClick={() => setVisibleModal(true)}
         
@@ -76,8 +66,27 @@ const Connect = () => {
     })
     .then((d) => {
       let accounts = d;
-      console.log("acc Algo",accounts[1].address)
-      localStorage.setItem("walletalgo",accounts[1].address)
+      console.log("acc Algo",accounts[0].address)
+      localStorage.setItem("walletalgo",accounts[0].address)
+
+      if(localStorage.getItem("walletalgo") === "")
+{
+
+  let refprofile=fireDb.database().ref(`profiledata/${accounts[0].address}`);
+    let dateset=new Date().toDateString();
+    console.log("dateget",dateset)
+    const db = refprofile.push().key;
+    console.log("dbcheck",db)
+          refprofile.set({profileurl:"",displayname:"",http:"",Bio:"",social:"",Twitter:"",address:"",dbkey:"",username:""}).then(()=>{                      
+          })                
+
+}
+else if(localStorage.getItem("walletalgo") === "0x"){ 
+
+  
+
+}
+      
       setIsOpen(true)
   
     })
@@ -138,7 +147,7 @@ const Connect = () => {
               //connect wallet write below
                             
               <div
-                className={cn({ [styles.active]: index === 0 }, styles.link)}
+                className={cn({ [styles.active]: index === 1 }, styles.link)}
                 key={index}                                
                 onClick={x.onclick}
               >            

@@ -53,11 +53,11 @@ const CardBuy = ({ className, item }) => {
     const accounts = await  web3.eth.getAccounts();
     fireDb.database().ref(`imagereflikes/${accounts[0]}`).child(item.highestBid).set({
       id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-      userName:item.counter,userSymbol:"BNB",ipfsUrl:item.image,
-      ownerAddress:accounts[0],soldd:"",extra1:"ready to sold",
-      previousoaddress:"",datesets:new Date().toDateString(),
-      description:"",whois:'likes'      
-      }).then(()=>{
+      userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+      ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
+      previousoaddress:item.previousaddress,datesets:item.date,
+      description:item.description,whois:'likes',history:item.url,paramsdb:item.image2x,privatekey:item.category  
+        }).then(()=>{
         setVisible(!visible)
         window.location.reload(false)   
       });    
@@ -88,31 +88,31 @@ useEffect(()=>{usernameget()},[])
   const updatepricedb=async()=>{
 
     console.log("inside buy function")
-    let getalgo=localStorage.getItem("wallet");
-  
+
+
+    if(localStorage.getItem("walletalgo") === null ){
+
+    }
+
+    else{
+
+      let getalgo=localStorage.getItem("walletalgo");
     
-
-    setIsOpenss(true)
   //bnb 0x2cA1655cceB43D27027e6676E880D1Ce4e7d7d18
-  let gettrans=new web3.eth.Contract(tra,'0x2cA1655cceB43D27027e6676E880D1Ce4e7d7d18');
+//   let gettrans=new web3.eth.Contract(tra,'0x2cA1655cceB43D27027e6676E880D1Ce4e7d7d18');
+//   let gettest=item.categoryText
+//   let getaaa=new web3.eth.Contract(abi,gettest);
+//     console.log("insidebutton",item.categoryText)
+//     console.log("insidebuttonid",item.price)
+//     console.log("insidebuttonids",item.bid)
+//     const accounts = await web3.eth.getAccounts();
+// //tra start
+//   //  await gettrans.methods.sendss(a.addOwnerAddress).send({
+//   //    from:accounts[0], 
+//   //    value: web3.utils.toWei(a.addPrices, 'ether')
+//   //  });
 
-  let gettest=item.categoryText
-  let getaaa=new web3.eth.Contract(abi,gettest);
-
-    console.log("insidebutton",item.categoryText)
-    console.log("insidebuttonid",item.price)
-    console.log("insidebuttonids",item.bid)
-
-    const accounts = await web3.eth.getAccounts();
-
-//tra start
-
-  //  await gettrans.methods.sendss(a.addOwnerAddress).send({
-  //    from:accounts[0], 
-  //    value: web3.utils.toWei(a.addPrices, 'ether')
-  //  });
-
-  if(item.bid === accounts[0])
+  if(item.bid === getalgo)
   {
 
     alert("you are owner so you does not purchase this token")
@@ -120,71 +120,239 @@ useEffect(()=>{usernameget()},[])
   }
   else{
 
+    setIsOpenss(true)
 
-    await gettrans.methods.sendss(item.bid).send({
-      from: accounts[0],
-      //value:web3.utils.toWei(a.addPrices,'BNB')
-      value: web3.utils.toWei(item.price, 'ether')//ether
-     });
-  
-     await getaaa.methods.transferFrom(item.bid,accounts[0],item.title).send({
-       from:accounts[0]
-     });
+    let getprize = null;
 
-      fireDb.database().ref(`imagerefexploreone/${item.bid}`).child(item.highestBid).remove().then(()=>{
+    getprize = prompt("Please enter Price");
 
-        if(getprodata.username === null){
-  
-          fireDb.database().ref(`imagerefbuy/${accounts[0]}`).child(item.highestBid).set({
-            id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,
-            keyId:item.highestBid,userName:"",
-            userSymbol:"BNB",previousoaddress:item.bid,
-            ipfsUrl:item.image,ownerAddress:accounts[0],soldd:"solded",extra1:"buyed",
-            datesets:new Date().toDateString(),whois:'Buyers'}).then(()=>{
-              setIsOpenss(false)
-              setIsOpens(true)
-              
-            }) 
-  
-        }else{
-  
-          console.log("itemid",item.title)
-          console.log("itemimage",item.image)
-          console.log("itemprice",item.price)
-          console.log("itemcAddress",item.categoryText)
-          console.log("itemkeyid",item.highestBid)
-          console.log("itemusername",getprodata.username)
-          console.log("itempreaddress",item.bid)
-          console.log("itemacc",accounts[0])
-          
-  
-          fireDb.database().ref(`imagerefbuy/${accounts[0]}`).child(item.highestBid).set({
-            id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,
-            keyId:item.highestBid,userName:getprodata.username,
-            userSymbol:"BNB",previousoaddress:item.bid,
-            ipfsUrl:item.image,ownerAddress:accounts[0],soldd:"solded",extra1:"buyed",
-            datesets:new Date().toDateString(),whois:'Buyers'}).then(()=>{
-              setIsOpenss(false)
-              setIsOpens(true)
-              
-              //window.location.reload(false)   
-            }) 
-  
-        }
-  
-       //alert("amount has been sent")
-   //end trans 
-       //let thing = a.addIds; 
-       //let s = await getaaa.methods.items(thing).call(); 
-       //console.log("sget",s) 
-       //let state = a.addPrices;       
-      })    
-     
+    if(getprize === null){
+
+      getprize = prompt("Please enter Price");
+
+    }
+    else
+    {
+
+      //start money transfer here and opt and transfer algos
+
+    const algosdk = require('algosdk');
+
+    const waitForConfirmation = async function (algodclient, txId) {
+      let response = await algodclient.status().do();
+      let lastround = response["last-round"];
+      while (true) {
+          const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
+          if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
+              //Got the completed Transaction
+              console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
+              break;
+          }
+          lastround++;
+          await algodclient.statusAfterBlock(lastround).do();
+      }
+    };
     
+    
+    // Function used to print created asset for account and assetid
+    const printCreatedAsset = async function (algodclient, account, assetid) {
+      // note: if you have an indexer instance available it is easier to just use this
+      //     let accountInfo = await indexerClient.searchAccounts()
+      //    .assetID(assetIndex).do();
+      // and in the loop below use this to extract the asset for a particular account
+      // accountInfo['accounts'][idx][account]);
+      let accountInfo = await algodclient.accountInformation(account).do();
+      for (let idx = 0; idx < accountInfo['created-assets'].length; idx++) {
+          let scrutinizedAsset = accountInfo['created-assets'][idx];
+          if (scrutinizedAsset['index'] === assetid) {
+              console.log("AssetID = " + scrutinizedAsset['index']);
+              let myparms = JSON.stringify(scrutinizedAsset['params'], undefined, 2);
+              console.log("parms = " + myparms);
+              break;
+          }
+      }
+    };
+    // Function used to print asset holding for account and assetid
+    const printAssetHolding = async function (algodclient, account, assetid) {
+      // note: if you have an indexer instance available it is easier to just use this
+      //     let accountInfo = await indexerClient.searchAccounts()
+      //    .assetID(assetIndex).do();
+      // and in the loop below use this to extract the asset for a particular account
+      // accountInfo['accounts'][idx][account]);
+      let accountInfo = await algodclient.accountInformation(account).do();
+      for (let idx = 0; idx < accountInfo['assets'].length; idx++) {
+          let scrutinizedAsset = accountInfo['assets'][idx];
+          if (scrutinizedAsset['asset-id'] === assetid) {
+              let myassetholding = JSON.stringify(scrutinizedAsset, undefined, 2);
+              console.log("assetholdinginfo = " + myassetholding);
+              break;
+          }
+      }
+    };
+    
+    
+    // var account1_mnemonic = "canal enact luggage spring similar zoo couple stomach shoe laptop middle wonder eager monitor weather number heavy skirt siren purity spell maze warfare ability ten";
+    // var account2_mnemonic = "beauty nurse season autumn curve slice cry strategy frozen spy panic hobby strong goose employ review love fee pride enlist friend enroll clip ability runway";
+    var account3_mnemonic =  getprize;
+    
+    var recoveredAccount1 = algosdk.mnemonicToSecretKey(item.category);
+    var recoveredAccount2 = algosdk.mnemonicToSecretKey(item.category);
+    var recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
+    console.log(recoveredAccount1.addr);
+    console.log(recoveredAccount2.addr);
+    console.log(recoveredAccount3.addr);
+    
+    // Instantiate the algod wrapper
+    
+    const server = "https://testnet-algorand.api.purestake.io/ps2";
+    const port = "";
+    
+    const token = {
+      'X-API-key' : 'SVsJKi8vBM1RwK1HEuwhU20hYmwFJelk8bagKPin',
+    }
+    
+    
+        let algodclient = new algosdk.Algodv2(token, server, port);
+    
+    
+        (async () => {
+    
+        //params = await algodclient.getTransactionParams().do();
+        //comment out the next two lines to use suggested fee
+        //params.fee = 1000;
+        //params.flatFee = true;
+    
+        let sender = recoveredAccount3.addr;
+        let recipient = sender;
+        // We set revocationTarget to undefined as 
+        // This is not a clawback operation
+        let revocationTarget = undefined;
+        // CloseReaminerTo is set to undefined as
+        // we are not closing out an asset
+        let closeRemainderTo = undefined;
+        // We are sending 0 assets
+        let amount = 0;
+        let note = undefined;
+        let assetID=item.title;
+        let params =  item.image2x;
+    
+    
+        // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
+        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+             amount, note, assetID, params);
+    
+        // Must be signed by the account wishing to opt in to the asset    
+        let rawSignedTxn = opttxn.signTxn(recoveredAccount3.sk);
+        let opttx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
+        console.log("Transaction : " + opttx.txId);
+        // wait for transaction to be confirmed
+        await waitForConfirmation(algodclient, opttx.txId);
+    
+        //You should now see the new asset listed in the account information
+        console.log("Account 3 = " + recoveredAccount3.addr);
+        await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
+    
+    
+        //trans
+    
+        sender = recoveredAccount1.addr;
+        recipient = recoveredAccount3.addr;
+        revocationTarget = undefined;
+        closeRemainderTo = undefined;
+            //Amount of the asset to transfer
+        amount = 10;
+        note = undefined
+        assetID= item.title
+        params=item.image2x
+        
+    
+        // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
+        let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+          amount,  note, assetID, params);
+     // Must be signed by the account sending the asset  
+     rawSignedTxn = xtxn.signTxn(recoveredAccount1.sk)
+     let xtx = (await algodclient.sendRawTransaction(rawSignedTxn).do());
+     console.log("Transaction : " + xtx.txId);
+     // wait for transaction to be confirmed
+     await waitForConfirmation(algodclient, xtx.txId);
+    
+     // You should now see the 10 assets listed in the account information
+     console.log("Account 3 = " + recoveredAccount3.addr);
+     await printAssetHolding(algodclient, recoveredAccount3.addr, assetID);
+    
+    
+
+    })().catch(e => {
+      console.log(e);
+      console.trace();
+  });
+
+
+  fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
+
+    if(getprodata.displayname === null){
+
+      fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
+
+
+  id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+  userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+  ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
+  previousoaddress:item.previousaddress,datesets:item.date,
+  description:item.description,whois:'buyers',history:item.url,paramsdb:item.image2x,privatekey:item.category
+
+
+        }).then(()=>{
+          setIsOpenss(false)
+          setIsOpens(true)
+          
+        }) 
+
+    }else{
+
+      console.log("itemid",item.title)
+      console.log("itemimage",item.image)
+      console.log("itemprice",item.price)
+      console.log("itemcAddress",item.categoryText)
+      console.log("itemkeyid",item.highestBid)
+      console.log("itemusername",getprodata.username)
+      console.log("itempreaddress",item.bid)
+      console.log("itemacc",getalgo)
+      
+
+      fireDb.database().ref(`imagerefbuyAlgos/${getalgo}`).child(item.highestBid).set({
+
+  id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+  userName:getprodata.displayname,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+  ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
+  previousoaddress:item.previousaddress,datesets:item.date,
+  description:item.description,whois:'buyers',history:item.url,paramsdb:item.image2x,privatekey:item.category
+        
+
+        }).then(()=>{
+          setIsOpenss(false)
+          setIsOpens(true)
+          
+          //window.location.reload(false)   
+        }) 
+
+    }
+
+   //alert("amount has been sent")
+//end trans 
+   //let thing = a.addIds; 
+   //let s = await getaaa.methods.items(thing).call(); 
+   //console.log("sget",s) 
+   //let state = a.addPrices;       
+  })    
+
+    //end money transfer here and opt and transfer algos
+
+    }   
   } 
 
+  }  
   }
-
 
   //history function
   const viewhistory=()=>{
@@ -204,9 +372,10 @@ useEffect(()=>{usernameget()},[])
     console.log("gettt",get)
 
     // setIsOpen(true)
-    
-    
-  }
+
+    }
+
+  
 
   return (
     <>

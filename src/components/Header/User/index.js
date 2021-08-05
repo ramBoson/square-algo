@@ -48,20 +48,32 @@ const User = ({ className,onProfile}) => {
   const[getprodata,setgetprodata]=useState([]);
   console.log("getprodata",getprodata)
   const[getusername,setgetusername]=useState("");
-
+  console.log("getuser",getusername)
   let history=useHistory();
   const [visible, setVisible] = useState(false);
   const [algobalance, setalgobalance] = useState("");
-  let getac="undefined";
-  let getalgo="undefined";
+  let getac="";
+  let getalgo="";
   //let getname="undefined";
-  getac=localStorage.getItem("wallet");
+
+  if(localStorage.getItem("walletalgo") === null ){
+
+  }
+  else if(localStorage.getItem("walletalgo") === "0x"){
+
+  }
+  else{
+
+  getac=localStorage.getItem("walletalgo");
   console.log("getmetamask",getac)
-  getalgo=localStorage.getItem("wallet");
+  getalgo=localStorage.getItem("walletalgo");
   //getname=localStorage.getItem("walletname");
   //const[getImgHeader,setgetImgHeader]=useState([]);
   //console.log("getImHeader",getImgHeader)
 
+
+  }
+  
 
   const dbcallprodata=()=>{
 
@@ -69,7 +81,7 @@ const User = ({ className,onProfile}) => {
     //let getalgo=;
     let req = [];
       
-    if(localStorage.getItem("wallet") === null){
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
   
       console.log("notalgoget",getalgo)
 
@@ -78,45 +90,24 @@ const User = ({ className,onProfile}) => {
           Bio: "",
           Twitter: "",
           address: "",
-          displayname:"",
+          displayname:"aaa",
           profileurl:"",
-          username: ""
+          username: "bbb"
         })
-        setgetprodata(req);   
-
-
+        setgetprodata("");   
     }
     else{  
       //let kreq =[];
+      let getalgo=localStorage.getItem("walletalgo");
       fire.database().ref("profiledata").child(getalgo).on("value", (data) => {
         if (data) {
 
           console.log("startcon",data.val())
-
-          
-          //   console.log("datacover",data)
-          //   data.forEach((d) => {
-          //     req.push(d.val().profileurl)      
-          //     //console.log("list",d.val().bgurl)
-          //   });        
-          // }      
           let value=data.val();
-          console.log("valuess",value)
-          // req.push(              
-          //   {              
-          //     Bio: value.Bio,
-          //     Twitter: value.Twitter,
-          //     address: value.address,
-          //     displayname:value.displayname,
-          //     profileurl:value.profileurl,
-          //     username: value.username
-          //   })        
-
-            setgetprodata(value);   
-        }     
-        
-        
-     });
+          console.log("valuess",value)        
+          setgetprodata(value);   
+        }      
+     })
       
     }    
     console.log("accpro",getprodata)    
@@ -128,82 +119,91 @@ const User = ({ className,onProfile}) => {
   const disconn=()=>{
     console.log("disconnect function call")
 
-    let getal=localStorage.getItem("wallet");
+    if(localStorage.getItem("walletalgo") === null )
+    {
+
+    }
+    else if(localStorage.getItem("walletalgo") === "0x"){
+
+    }
+    else{
+    let getal=localStorage.getItem("walletalgo");
     let getalname=localStorage.getItem("walletname");
     console.log("get",getal)
     console.log("getname",getalname)
-    localStorage.setItem("wallet","")
-    localStorage.setItem("walletname","")
+    localStorage.setItem("walletalgo","0x")
+    localStorage.setItem("walletname","demo")
     let getalafter=localStorage.getItem("walletalgo");
-    let getalnameafter=localStorage.getItem("walletname");
+    //let getalnameafter=localStorage.getItem("walletname");
     console.log("getafter",getalafter)
-    console.log("getnameafter",getalnameafter)
+    //console.log("getnameafter",getalnameafter)
 
     history.push("/")
     window.location.reload();
-
+    }
   }
 
   const balancecall=async()=>{
     console.log("inside balance function")
-//     const algosdk = require('algosdk');
-//     const baseServer = "https://testnet-algorand.api.purestake.io/ps2";
-//           const port = "";
-//           //B3SU4KcVKi94Jap2VXkK83xx38bsv95K5UZm2lab
-//           const token = {
+    const algosdk = require('algosdk');
+    const baseServer = "https://testnet-algorand.api.purestake.io/ps2";
+          const port = "";
+          //B3SU4KcVKi94Jap2VXkK83xx38bsv95K5UZm2lab
+          const token = {
           
-//               'X-API-key' : 'SVsJKi8vBM1RwK1HEuwhU20hYmwFJelk8bagKPin',
-//           }
-//           let client = new algosdk.Algodv2(token, baseServer, port);  
+              'X-API-key' : 'SVsJKi8vBM1RwK1HEuwhU20hYmwFJelk8bagKPin',
+          }
+          let client = new algosdk.Algodv2(token, baseServer, port);  
 
-//           console.log("log1",client);
+          console.log("log1",client);
 
-//   ( async() => {
-//     let account1_info = (await client.accountInformation(getalgo).do());
-//     console.log("accinfo",account1_info)
-//     console.log("accinfoamount",account1_info.amount)
-//     let calc=JSON.stringify(account1_info.amount)/1000000;
-//     console.log("calc",calc)
-//     setalgobalance(JSON.stringify(account1_info.amount)/1000000);
-//     console.log("Balance of account 1: " + JSON.stringify(account1_info.amount));
-//     localStorage.setItem("balget",account1_info);
-//     // let account2_info = (await client.accountInformation().do());
-//     // console.log("Balance of account 2: " + JSON.stringify(account2_info.amount));
-// })().catch(e => {
-// 	console.log(e);
-// })
+  ( async() => {
+    let account1_info = (await client.accountInformation(getalgo).do());
+    console.log("accinfo",account1_info)
+    console.log("accinfoamount",account1_info.amount)
+    let calc=JSON.stringify(account1_info.amount)/1000000;
+    console.log("calc",calc)
+    setalgobalance(JSON.stringify(account1_info.amount)/1000000);
+    console.log("Balance of account 1: " + JSON.stringify(account1_info.amount));
+    localStorage.setItem("balget",account1_info);
+    // let account2_info = (await client.accountInformation().do());
+    // console.log("Balance of account 2: " + JSON.stringify(account2_info.amount));
+})().catch(e => {
+	console.log(e);
+})
 
 // var accounts = await web3.eth.getAccounts();
 // web3.eth.getBalance(getalgo)
 // .then(console.log);
 
-if(localStorage.getItem("wallet") === null){
+// if(localStorage.getItem("wallet") === null){
 
-  console.log("bnbalgo",getalgo)
+//   console.log("bnbalgo",getalgo)
 
-}
-else{
+// }
+// else{
 
 
 
-let url="https://api-testnet.bscscan.com/api?module=account&action=balance&address="+getalgo+"&tag=latest&apikey=YourApiKeyToken";
-//+"&tag=latest&apikey=26NPBCN1ZIZ33YJKKJ24MSY9GB6I6I4NVQ";
+// let url="https://api-testnet.bscscan.com/api?module=account&action=balance&address="+getalgo+"&tag=latest&apikey=YourApiKeyToken";
+// //+"&tag=latest&apikey=26NPBCN1ZIZ33YJKKJ24MSY9GB6I6I4NVQ";
 
-axios.get(`${url}`)
-         .then((url)=>{
-           const allnote=url.data.result/1000000000000000000;
+// axios.get(`${url}`)
+//          .then((url)=>{
+//            const allnote=url.data.result/1000000000000000000;
            
-           setalgobalance(allnote);
-           console.log("bnbbal",allnote)
-         }).catch(error => console.error(`Error: ${error}`));       
-        }
+//            setalgobalance(allnote);
+//            console.log("bnbbal",allnote)
+//          }).catch(error => console.error(`Error: ${error}`));       
+//         }
 
   }
 
   useEffect(()=>{balancecall()},[])
 
   const dbcall=async()=>{
-    let getalgo=localStorage.getItem("wallet");
+    
+    
     console.log("inside dbcall function")
     //db call start
 
@@ -211,7 +211,7 @@ axios.get(`${url}`)
     let req = [];
     
     //let kreq =[];
-    if(localStorage.getItem("wallet") === null){
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
 
       setgetusername("")
 
@@ -219,13 +219,13 @@ axios.get(`${url}`)
 
     }else{
 
-      
+      let getalgo=localStorage.getItem("walletalgo");
      fire.database().ref("profiledata").child(getalgo).on("value", (data) => {
       if (data) {
          let value=data.val();
-         setgetusername(value.username)
-         localStorage.getItem("walletname",value.username);
-          console.log("valueuser",value.username);          
+         setgetusername(value.displayname)
+         //localStorage.getItem("walletname",value.username);
+          console.log("valueuser",value.displayname);          
       }
     });
   }
@@ -259,11 +259,11 @@ axios.get(`${url}`)
           
             {algobalance === "" ? (
               <div className={styles.wallet}>
-{"demo"}<span className={styles.currency}>BNB</span>
+{"demo"}<span className={styles.currency}>Algo</span>
 </div>
             ):(
               <div className={styles.wallet}>
-{algobalance.toFixed(4)}<span className={styles.currency}>BNB</span>
+{algobalance.toFixed(4)}<span className={styles.currency}>Algo</span>
               </div>
 
             )}
@@ -272,7 +272,7 @@ axios.get(`${url}`)
         </div>
         {visible && (
           <div className={styles.body}>          
-          {getprodata.username === "" ? (
+          {getprodata.displayname === null ? (
 
 <div className={styles.name}>              
 
@@ -283,13 +283,13 @@ axios.get(`${url}`)
 
             <div className={styles.name}>              
 
-              {getprodata.username}
+              {getprodata.displayname}
               </div>
 
           )}
           
             
-              {localStorage.getItem("wallet") === null ?(
+              {localStorage.getItem("walletalgo") === null ?(
 
 <div className={styles.code}>
 <div className={styles.number} >{"0Xsdjsjipps"}....</div>
@@ -313,8 +313,8 @@ axios.get(`${url}`)
               <div className={styles.line}>
                 <div className={styles.preview}>
                   <img
-                    src="/images/BNB.png"
-                    alt="BNB"
+                    src="/images/Algo.png"
+                    alt="Algo"
                   />
                 </div>
                 {algobalance === "" ? (
@@ -322,7 +322,7 @@ axios.get(`${url}`)
 <div className={styles.details}>
 <div className={styles.info}>Balance</div>
 
-<div className={styles.price}>{"demo"} BNB</div>
+<div className={styles.price}>{"demo"} Algo</div>
 </div>
               
             ):(
@@ -330,7 +330,7 @@ axios.get(`${url}`)
               <div className={styles.details}>
               <div className={styles.info}>Balance</div>
               
-              <div className={styles.price}>{algobalance.toFixed(4)} BNB</div>
+              <div className={styles.price}>{algobalance.toFixed(4)} Algo</div>
             </div>
               
             )}
