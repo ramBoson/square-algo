@@ -139,19 +139,60 @@ useEffect(()=>{usernameget()},[])
 
     let getprize = null;
 
-    getprize = prompt("Please enter Price");
+    getprize = prompt("Please enter mnemonic");
 
     if(getprize === null){
 
-      getprize = prompt("Please enter Price");
+      getprize = prompt("Please enter mnemonic");
 
     }
     else
     {
+      const algosdk = require('algosdk');
 
+      const server = "https://testnet-algorand.api.purestake.io/ps2";
+      const port = "";
+      
+      const token = {
+        'X-API-key' : 'SVsJKi8vBM1RwK1HEuwhU20hYmwFJelk8bagKPin',
+      }
+      
+      
+          let algodclient = new algosdk.Algodv2(token, server, port);
+  
+
+      //algo transfer
+
+      (async() => {
+
+        let params = await algodclient.getTransactionParams().do();    
+        let amount = item.price;
+        var mnemonic = getprize; 
+        var recoveredAccount = algosdk.mnemonicToSecretKey(mnemonic); 
+        
+        let txn = {
+            "from": recoveredAccount.addr,
+            "to": item.bid,
+            "fee": 1,
+            "amount": amount,
+            "firstRound": params.firstRound,
+            "lastRound": params.lastRound,
+            "genesisID": params.genesisID,
+            "genesisHash": params.genesisHash,
+            "note": new Uint8Array(0),
+        };
+        console.log(txn);
+    
+        let signedTxn = algosdk.signTransaction(txn, recoveredAccount.sk);
+        let sendTx = await algodclient.sendRawTransaction(signedTxn.blob).do();
+    
+        console.log("Transaction",sendTx.txId);
+    })().catch(e => {
+        console.log(e);
+    }); 
+    
+      //algo transfer
       //start money transfer here and opt and transfer algos
-
-    const algosdk = require('algosdk');
 
     const waitForConfirmation = async function (algodclient, txId) {
       let response = await algodclient.status().do();
@@ -219,15 +260,6 @@ useEffect(()=>{usernameget()},[])
     
     // Instantiate the algod wrapper
     
-    const server = "https://testnet-algorand.api.purestake.io/ps2";
-    const port = "";
-    
-    const token = {
-      'X-API-key' : 'SVsJKi8vBM1RwK1HEuwhU20hYmwFJelk8bagKPin',
-    }
-    
-    
-        let algodclient = new algosdk.Algodv2(token, server, port);
     
     
         (async () => {
