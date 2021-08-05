@@ -9,9 +9,9 @@ import fireDb from "../../screens/UploadDetails/firebase";
 //import axios from 'axios';
 import FolowStepsd from "../Card/FolowStepsd";
 import Modald from "../../components/ModalD";
-import web3 from '../../screens/./UploadDetails/web3';
-import {abi} from '../Card/data'
-import {tra} from './tra'
+//import web3 from '../../screens/./UploadDetails/web3';
+//import {abi} from '../Card/data'
+//import {tra} from './tra'
 import FolowStepsdr from "../../screens/Search01/FolowSteps";
 
 import FolowStepss from "../../screens/Search01/FolowStepss";
