@@ -38,6 +38,12 @@ const Card = ({ className, item }) => {
   const addlikedb=async()=>{
     //let getalgo=localStorage.getItem("wallet");
     //const accounts = await  web3.eth.getAccounts();
+
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+
+    }else{
+
+    
     let getalgo=localStorage.getItem("walletalgo");
     console.log("addlikedb function call");
 
@@ -53,7 +59,7 @@ const Card = ({ className, item }) => {
         window.location.reload(false)   
       });    
   }
-
+  }
   const saledbset=async()=>{
 
   // const algosdk = require('algosdk');
@@ -75,6 +81,11 @@ const Card = ({ className, item }) => {
       //let tx;
       //let tokenname;
       //let getAssetid;
+
+      if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+
+      }
+    else{
 
     
       //const accounts = await  web3.eth.getAccounts();
@@ -163,8 +174,16 @@ const Card = ({ className, item }) => {
     //      console.log("items",item)
     
   }
+}
 
   const setpricedb=async()=>{
+
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+
+    }
+    else{
+
+    
 
     let getalgo=localStorage.getItem("walletalgo");
 
@@ -210,7 +229,7 @@ else{
   else{
     alert("Your are not owner so you does not update or set prizes......")
     }
-
+  }
 }
 
 

@@ -222,15 +222,15 @@ console.log("getImgalgobuy",getImgreffalgobuy)
 
 const dbcallalgolikes=async()=>{
   console.log("inside dbcallsalealgo function")
-  let getalgo=localStorage.getItem("walletalgo");
+  
   let req = [];
     
-  if(localStorage.getItem("walletalgo") === null){
+  if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
 
   }
   else{
 
-  
+    let getalgo=localStorage.getItem("walletalgo");
     //let kreq =[];
     firebase.database().ref("imagereflikes").child(getalgo).on("value", (data) => {
       if (data) {
@@ -283,12 +283,14 @@ useEffect(()=>{dbcallalgolikes()},[])
 
 const dbcallsalealgo=async()=>{
   console.log("inside dbcallsalealgo function")
-  let getalgo=localStorage.getItem("walletalgo");
+  
   let req = [];
 
-  if(localStorage.getItem("walletalgo") === null){
+  if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
 
   }else{
+
+    let getalgo=localStorage.getItem("walletalgo");
     
     //let kreq =[];
     firebase.database().ref("imagerefexploreoneAlgos").child(getalgo).on("value", (data) => {
@@ -339,16 +341,16 @@ useEffect(()=>{dbcallsalealgo()},[])
 
 const dbcallalgo=async()=>{
   console.log("inside dbcallalgo function")
-  let getalgo=localStorage.getItem("walletalgo");
+  
   let req = [];
 
-  if(localStorage.getItem("walletalgo") === null){
+  if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
 
   }
   else{
 
   
-    
+    let getalgo=localStorage.getItem("walletalgo");  
     //let kreq =[];
     firebase.database().ref("imagerefAlgos").child(getalgo).on("value", (data) => {
       if (data) {
@@ -396,7 +398,7 @@ const dbcallalgo=async()=>{
     setgetImgreffalgo(req);
   
   }
-  console.log("acc",getalgo)
+  //console.log("acc",getalgo)
 
 }
 
@@ -404,13 +406,14 @@ useEffect(()=>{dbcallalgo()},[])
 
 const dbcallalgobuy=async()=>{
   console.log("inside dbcallalgobuy function")
-  let getalgo=localStorage.getItem("walletalgo");
+  
   let req = [];
-  if(localStorage.getItem("walletalgo") === null){
+  if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
   }
   else{
 
   
+    let getalgo=localStorage.getItem("walletalgo");
     
     //let kreq =[];
     firebase.database().ref("imagerefbuyAlgos").child(getalgo).on("value", (data) => {
@@ -459,7 +462,7 @@ const dbcallalgobuy=async()=>{
     setgetImgreffalgobuy(req);
   
   }
-  console.log("acc",getalgo)
+  //console.log("acc",getalgo)
 
 }
 
@@ -490,12 +493,13 @@ const captureFile=(event)=>{
 
 const getbg=()=>{
 
-  let getalgo=localStorage.getItem("walletalgo");
+  
     
-    if(localStorage.getItem("walletalgo") === null && Img === "" ){
+    if((localStorage.getItem("walletalgo") === null && Img === "" ) || localStorage.getItem("walletalgo") === "0x"){
   
     }else{
 
+      let getalgo=localStorage.getItem("walletalgo");
       let req=[];
   // firebase.database().ref("bgphoto").child(getalgo).on("value", (data) => {
   //   if (data) {
@@ -517,11 +521,13 @@ useEffect(()=>{getbg()},[])
 const setprofilephoto=()=>{
 
   console.log("inside setprofilephoto function")
-  let getalgo=localStorage.getItem("walletalgo");
+  
     
-    if(localStorage.getItem("walletalgo") === null && Img === "" ){
+  if((localStorage.getItem("walletalgo") === null && Img === "" ) || localStorage.getItem("walletalgo") === "0x"){
   
     }else{
+
+      let getalgo=localStorage.getItem("walletalgo");
 
   let ref=firebase.database().ref(`bgphoto/${getalgo}`);
   let dateset=new Date().toDateString();
