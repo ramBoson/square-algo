@@ -166,7 +166,7 @@ useEffect(()=>{usernameget()},[])
       (async() => {
 
         let params = await algodclient.getTransactionParams().do();    
-        let amount = item.price;
+        let amount = 10;
         var mnemonic = getprize; 
         var recoveredAccount = algosdk.mnemonicToSecretKey(mnemonic); 
         
