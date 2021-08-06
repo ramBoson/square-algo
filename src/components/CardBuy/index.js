@@ -163,33 +163,33 @@ useEffect(()=>{usernameget()},[])
 
       //algo transfer
 
-      (async() => {
+    //   (async() => {
 
-        let params = await algodclient.getTransactionParams().do();    
-        let amount = 10;
-        var mnemonic = getprize; 
-        var recoveredAccount = algosdk.mnemonicToSecretKey(mnemonic); 
+    //     let params = await algodclient.getTransactionParams().do();    
+    //     let amount = 10;
+    //     var mnemonic = getprize; 
+    //     var recoveredAccount = algosdk.mnemonicToSecretKey(mnemonic); 
         
-        let txn = {
-            "from": recoveredAccount.addr,
-            "to": item.bid,
-            "fee": 1,
-            "amount": amount,
-            "firstRound": params.firstRound,
-            "lastRound": params.lastRound,
-            "genesisID": params.genesisID,
-            "genesisHash": params.genesisHash,
-            "note": new Uint8Array(0),
-        };
-        console.log(txn);
+    //     let txn = {
+    //         "from": recoveredAccount.addr,
+    //         "to": item.bid,
+    //         "fee": 1,
+    //         "amount": amount,
+    //         "firstRound": params.firstRound,
+    //         "lastRound": params.lastRound,
+    //         "genesisID": params.genesisID,
+    //         "genesisHash": params.genesisHash,
+    //         "note": new Uint8Array(0),
+    //     };
+    //     console.log(txn);
     
-        let signedTxn = algosdk.signTransaction(txn, recoveredAccount.sk);
-        let sendTx = await algodclient.sendRawTransaction(signedTxn.blob).do();
+    //     let signedTxn = algosdk.signTransaction(txn, recoveredAccount.sk);
+    //     let sendTx = await algodclient.sendRawTransaction(signedTxn.blob).do();
     
-        console.log("Transaction",sendTx.txId);
-    })().catch(e => {
-        console.log(e);
-    }); 
+    //     console.log("Transaction",sendTx.txId);
+    // })().catch(e => {
+    //     console.log(e);
+    // }); 
     
       //algo transfer
       //start money transfer here and opt and transfer algos
