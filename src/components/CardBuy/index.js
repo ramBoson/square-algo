@@ -158,38 +158,44 @@ useEffect(()=>{usernameget()},[])
       }
       
       
-          let algodclient = new algosdk.Algodv2(token, server, port);
-  
+      let algodclient = new algosdk.Algodv2(token, server, port);
+
+
+      //console.log("algodclient",algodclient)
+      
+
+          //console.log("164")
 
       //algo transfer
 
-    //   (async() => {
+      (async() => {
 
-    //     let params = await algodclient.getTransactionParams().do();    
-    //     let amount = 10;
-    //     var mnemonic = getprize; 
-    //     var recoveredAccount = algosdk.mnemonicToSecretKey(mnemonic); 
+        let params = await algodclient.getTransactionParams().do();    
+        let amount = parseInt(item.price.replace(/['"]+/g, ''));
+        console.log("conscheck",amount)
+        var mnemonic = getprize; 
+        var recoveredAccount = algosdk.mnemonicToSecretKey(mnemonic); 
         
-    //     let txn = {
-    //         "from": recoveredAccount.addr,
-    //         "to": item.bid,
-    //         "fee": 1,
-    //         "amount": amount,
-    //         "firstRound": params.firstRound,
-    //         "lastRound": params.lastRound,
-    //         "genesisID": params.genesisID,
-    //         "genesisHash": params.genesisHash,
-    //         "note": new Uint8Array(0),
-    //     };
-    //     console.log(txn);
+        let txn = {
+            "from": recoveredAccount.addr,
+            "to": item.bid,
+            "fee": 1,
+            "amount": amount,
+            "firstRound": params.firstRound,
+            "lastRound": params.lastRound,
+            "genesisID": params.genesisID,
+            "genesisHash": params.genesisHash,
+            "note": new Uint8Array(0),
+        };
+        console.log(txn);
     
-    //     let signedTxn = algosdk.signTransaction(txn, recoveredAccount.sk);
-    //     let sendTx = await algodclient.sendRawTransaction(signedTxn.blob).do();
+        let signedTxn = algosdk.signTransaction(txn, recoveredAccount.sk);
+        let sendTx = await algodclient.sendRawTransaction(signedTxn.blob).do();
     
-    //     console.log("Transaction",sendTx.txId);
-    // })().catch(e => {
-    //     console.log(e);
-    // }); 
+        console.log("Transaction",sendTx.txId);
+    })().catch(e => {
+        console.log(e);
+    }); 
     
       //algo transfer
       //start money transfer here and opt and transfer algos
@@ -280,9 +286,14 @@ useEffect(()=>{usernameget()},[])
         // We are sending 0 assets
         let amount = 0;
         let note = undefined;
-        let assetID=item.title;
-        let params =  item.image2x;
+        let assetID= item.title
+        //item.title;
+        //let params =  item.image2x;
+
+        let params = await algodclient.getTransactionParams().do();
     
+
+        console.log("check","287")
     
         // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
         let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
@@ -309,10 +320,12 @@ useEffect(()=>{usernameget()},[])
         revocationTarget = undefined;
         closeRemainderTo = undefined;
             //Amount of the asset to transfer
-        amount = 10;
+        amount = 1;
         note = undefined
         assetID= item.title
-        params=item.image2x
+        //params=item.image2x
+
+        //let params = await algodclient.getTransactionParams().do();
         
     
         // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
@@ -366,7 +379,7 @@ useEffect(()=>{usernameget()},[])
         fireDb.database().ref(`imagerefbuyAlgos/${getalgo}`).child(item.highestBid).set({
   
     id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-    userName:getprodata.displayname,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+    userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
     ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
     previousoaddress:item.previousaddress,datesets:item.date,
     description:item.description,whois:'buyers',history:item.url,paramsdb:item.image2x,privatekey:item.category
