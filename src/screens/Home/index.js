@@ -13,12 +13,17 @@ const Home = () => {
     
       {/* <Hero /> */}
       <Selection />
-      <Popular />
+      {/* <Popular /> */}
       {/* <HotBid classSection="section" /> */}
       <Collections />
+
+      {/* <PopularCopy />
+      <PopularCopys /> */}
       <Discover />
       <Description />
-      
+
+
+                
     </>
   );
 };
