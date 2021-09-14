@@ -238,7 +238,7 @@ const User = ({ className, item }) => {
           rel="noopener noreferrer"
         >
           <Icon name="globe" size="16" />
-          <span>htpps://algoexplorer...</span>
+          <span>https://algoexplorer...</span>
         </a>
 
         ):(
@@ -251,7 +251,7 @@ const User = ({ className, item }) => {
           rel="noopener noreferrer"
         >
           <Icon name="globe" size="16" />
-          <span>htpps://algoexplorer..</span>
+          <span>https://algoexplorer...</span>
         </a>
 </>
         )}
