@@ -103,8 +103,7 @@ useEffect(()=>{usernameget()},[])
   const updatepricedb=async()=>{
 
     console.log("inside buy function")
-    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("wallet") === "0x"){
-
+    if(localStorage.getItem("wallet")  === null || localStorage.getItem("wallet")  === "" || localStorage.getItem("wallet")  === " " || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === '' || localStorage.getItem("wallet") === "0x"){
     }
 
     else{
