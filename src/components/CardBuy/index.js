@@ -264,9 +264,10 @@ let tx;
   
  let rawSignedTxn = algosdk.signLogicSigTransaction(opttxn,lsig).blob;
 let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-console.log("Transaction : " + opttx.txId);
+console.log("Transaction : " + opttx.txId);//work here now
 await waitForConfirmation(algodClient, opttx.txId);
-     let manager = lsig.address();
+     //let manager = lsig.address();
+     let manager = accounts[0].address;
      let reserve = accounts[0].address;
      let freeze = accounts[0].address;
      let clawback = accounts[0].address;
