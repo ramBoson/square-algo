@@ -47,21 +47,13 @@ const Search = () => {
   const dbcallsaleal=async(index)=>{
     setActiveIndex(index)
     console.log("inside dbcallsalealgo function")
-
-
     if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
-
     }
-    else{
-
-    
+    else{    
     //let getalgo=localStorage.getItem("walletalgo");
-    //let req = [];
-  
-    // if(getalgo === ""){
-  
+    //let req = [];  
+    // if(getalgo === ""){  
     // }else{
-
       //let req = [];
     let req2 = [];//imagerefexplore//
     firebase.database().ref("imagerefexploreoneAlgos").on("value", (data) => {
@@ -71,16 +63,12 @@ const Search = () => {
         });        
       }
       
-    });
-    
+    });    
     setgetIm(req2)
-
     let req=[];
-
     getIm.map((a)=>{
       console.log(`abb`, a)    
       Object.keys(a).map((b)=>{
-
         console.log(a[b].id);
                 req.push({
                 title: a[b].id,
@@ -121,15 +109,10 @@ const Search = () => {
   useEffect(()=>{dbcallsaleal()},[])
 
   const dbcallsalealgo=async()=>{
-    console.log("inside dbcallsalealgo function")
-    
-    let req = [];
-  
-    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
-  
-    }else{
-  
-    
+    console.log("inside dbcallsalealgo function")    
+    let req = [];  
+    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){  
+    }else{      
       let getalgo=localStorage.getItem("walletalgo");
       
       //let kreq =[];
