@@ -53,12 +53,12 @@ const CardBuy = ({ className, item }) => {
     //console.log("addlikedb function call");
     console.log("addlikedb function call");
 
-    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === ''){
 
     }
     else{
 
-      let getalgo=localStorage.getItem("walletalgo");
+      let getalgo=localStorage.getItem("wallet");
 
     //const accounts = await  web3.eth.getAccounts();
     fireDb.database().ref(`imagereflikes/${getalgo}`).child(item.highestBid).set({
@@ -103,12 +103,12 @@ useEffect(()=>{usernameget()},[])
   const updatepricedb=async()=>{
 
     console.log("inside buy function")
-    if(localStorage.getItem("wallet")  === null || localStorage.getItem("wallet")  === "" || localStorage.getItem("wallet")  === " " || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === '' || localStorage.getItem("wallet") === "0x"){
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === ''){
     }
 
     else{
 
-      let getalgo=localStorage.getItem("walletalgo");
+      let getalgo=localStorage.getItem("wallet");
 
       const waitForConfirmation = async function (algodclient, txId) {
         let response = await algodclient.status().do();

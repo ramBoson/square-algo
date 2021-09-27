@@ -866,11 +866,13 @@ algodClient.healthCheck().do()
     total: +1000,
     decimals: +2,
     note: AlgoSigner.encoding.stringToByteArray("nothing"),
+    manager:accounts[0].address,
+    reserve:accounts[0].address,
+    freeze: accounts[0].address,
+    clawback:accounts[0].address,
     //AlgoSigner.encoding.stringToByteArray(document.getElementById('note').value),
     suggestedParams: txParamsJS
   });
-  
-
   console.log("txnprint",txn)
   // Use the AlgoSigner encoding library to make the transactions base64
   const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());

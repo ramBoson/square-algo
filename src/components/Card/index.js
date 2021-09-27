@@ -82,12 +82,12 @@ const Card = ({ className, item }) => {
       //let tokenname;
       //let getAssetid;
 
-      if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+      if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === ''){
 
       }
     else{
       //const accounts = await  web3.eth.getAccounts();
-      let getalgo=localStorage.getItem("walletalgo");
+      let getalgo=localStorage.getItem("wallet");
       console.log("1",item.bid)
       console.log("2",item.highestBid)
       console.log("3",item.category)
@@ -187,23 +187,21 @@ const Card = ({ className, item }) => {
 
   const setpricedb=async()=>{
 
-    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === ''){
 
+      alert("nothing")
     }
-    else{
-
-    
-
-    let getalgo=localStorage.getItem("walletalgo");
+    else{  
+    let getalgo=localStorage.getItem("wallet");
 
     //let getprize = prompt("Please enter Price");
     if( urlprize === ""){
       //getprize = prompt("Please enter Price");
-
       alert("please enter Algos ?")
     }
 else{
-
+console.log("checkowner",item.bid)
+console.log("checkowners",getalgo)
   if(getalgo === item.bid)
   {
     const algosdk = require('algosdk');
@@ -237,7 +235,6 @@ else{
         ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
         previousoaddress:item.previousaddress,datesets:item.date,
         description:item.description,whois:'readytosale',history:item.url
-
 
     }).then(()=>{
   
