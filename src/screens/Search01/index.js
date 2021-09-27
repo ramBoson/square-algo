@@ -390,7 +390,7 @@ const Search = () => {
           <div className={styles.wrapper}>
             <div className={styles.list}>
               
-              {handleSubmit().map((x, index) => (                              
+              {getI.map((x, index) => (                              
                 <CardBuy className={styles.card} item={x} key={index} />                
               ))}
             </div>
