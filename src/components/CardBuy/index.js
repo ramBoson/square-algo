@@ -153,7 +153,7 @@ useEffect(()=>{usernameget()},[])
 //   //    value: web3.utils.toWei(a.addPrices, 'ether')
 //   //  });
 
-  if(item.bid !== getalgo)
+  if(item.bid === getalgo)
   {
 
     //console.log("Inside Amount",item.price)
