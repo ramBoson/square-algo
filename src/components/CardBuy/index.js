@@ -103,7 +103,7 @@ useEffect(()=>{usernameget()},[])
   const updatepricedb=async()=>{
 
     console.log("inside buy function")
-    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === ''){
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
     }
 
     else{
@@ -259,7 +259,8 @@ let tx;
      let closeRemainderTo = undefined;
        let  amount = 0;
        let note = undefined;
-       let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(lsig.address(), accounts[0].address, closeRemainderTo, revocationTarget,
+       //lsig.address()
+       let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(item.bid, accounts[0].address, closeRemainderTo, revocationTarget,
       amount, note, item.title, params);
   
  let rawSignedTxn = algosdk.signLogicSigTransaction(opttxn,lsig).blob;
@@ -271,7 +272,8 @@ await waitForConfirmation(algodClient, opttx.txId);
      let reserve = accounts[0].address;
      let freeze = accounts[0].address;
      let clawback = accounts[0].address;
-      let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(lsig.address(), note, 
+     //lsig.address()
+      let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(item.bid, note, 
       item.title, manager, reserve, freeze, clawback, params);  
       rawSignedTxn = algosdk.signLogicSigTransaction(ctxn,lsig).blob;
       let ctx = (await algodClient.sendRawTransaction(rawSignedTxn).do());

@@ -38,7 +38,7 @@ const Card = ({ className, item }) => {
     //let getalgo=localStorage.getItem("wallet");
     //const accounts = await  web3.eth.getAccounts();
 
-    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
 
     }else{
 
@@ -82,7 +82,7 @@ const Card = ({ className, item }) => {
       //let tokenname;
       //let getAssetid;
 
-      if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === ''){
+      if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
 
       }
     else{
@@ -187,7 +187,7 @@ const Card = ({ className, item }) => {
 
   const setpricedb=async()=>{
 
-    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === ''){
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
 
       alert("nothing")
     }
