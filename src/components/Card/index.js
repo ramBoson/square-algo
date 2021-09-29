@@ -43,7 +43,7 @@ const Card = ({ className, item }) => {
     }else{
 
     
-    let getalgo=localStorage.getItem("walletalgo");
+    let getalgo=localStorage.getItem("wallet");
     console.log("addlikedb function call");
 
     

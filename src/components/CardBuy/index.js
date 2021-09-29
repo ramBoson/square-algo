@@ -336,7 +336,7 @@ let tx;
         revocationTarget = undefined;
         closeRemainderTo = undefined;
         //Amount of the asset to transfer
-        amount = 100;
+        amount = 1;
         note = undefined
         assetID= parseInt(item.title)
         //params=item.image2x

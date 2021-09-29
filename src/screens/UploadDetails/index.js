@@ -228,16 +228,16 @@ const Upload = () => {
   let history=useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpens, setIsOpens] = useState(false);
-  //const [ipfsHash,setIpfsHash] = useState(null);
+  const [ipfsHash,setIpfsHash] = useState(null);
   //const [ipf,setIpf] = useState(null);
-  //const [buffer,setBuffer] = useState("");
+  const [buffer,setBuffer] = useState("");
   const [Img,setImg] = useState("")
   const [tname,setName] = useState("");
   const [tdescription,setDescription] = useState("");
   const [tmnemonic,setMnemonic] = useState("");
   //const [isLoading, setLoading] = useState(false)
   //const [currentid, setCurrentid] = useState("");
-  //let tf;
+  let ge;
 
   console.log("description",tdescription)
   //
@@ -281,9 +281,9 @@ const Upload = () => {
   
 const convertToBuffer = async(reader) => {
   //file is converted to a buffer for upload to IPFS
-    //const buffer = await Buffer.from(reader.result);
+    const buffer = await Buffer.from(reader.result);
   //set this buffer -using es6 syntax
-    //setBuffer(buffer);
+    setBuffer(buffer);
 };
 // const onSubmitImage = async (event) => {
 
@@ -789,6 +789,23 @@ const onSubmitNFT = async (event) => {
 
       else{
 
+    //   await ipfs.add(buffer, (err, ipfsHash) => {
+    //   console.log(err,ipfsHash);
+    //   console.log("buff",buffer);
+    //   setIpfsHash(ipfsHash[0].hash);
+    //   console.log(ipfsHash[0].hash)
+    //   const CID = require('cids')
+    //   var cid = new CID(ipfsHash[0].hash)
+    //   //let ccp=cid.toV1().toBaseEncodedString('base32');
+    //   console.log( cid.toV1().toBaseEncodedString('base32'));
+    //   //setIpf(cid.toV1().toBaseEncodedString('base32'));      
+      
+    // }).then(()=>{
+
+    //   //setVisiblePreview(true)
+    // }); 
+
+
     //const accounts = await web3.eth.getAccounts();
     //console.log("acc",accounts[0]);
     ta=tname;
@@ -863,7 +880,7 @@ algodClient.healthCheck().do()
     from: accounts[0].address,
     assetName: tname,
     unitName: tb,
-    total: +1000,
+    total: +1,
     decimals: +2,
     note: AlgoSigner.encoding.stringToByteArray("nothing"),
     manager:accounts[0].address,
@@ -943,6 +960,55 @@ algodClient.healthCheck().do()
                       league:selected,team:selected2,type:selected3,teamlogo:selectedImg,dimen:selected4,
                       description:tdescription,history:"",Mnemonic:tmnemonic})
                       .then(()=>{
+
+//               //             const axios = require('axios');
+//               //             let pinataApiKey='88348e7ce84879e143e1';
+//               //             let pinataSecretApiKey='e4e8071ff66386726f9fe1aebf2d3235a9f88ceb4468d4be069591eb78d4bf6f';
+
+//               //             const pinataSDK = require('@pinata/sdk');
+//               //             const pinata = pinataSDK(pinataApiKey, pinataSecretApiKey);
+//               //                         pinata.testAuthentication().then((result) => {
+//               // //handle successful authentication here
+//               // console.log(result);
+      
+//               // //let ge=ipfsHash;
+//               // // /console.log("ipfsHash",ipfsHash);
+//               //         const body = {
+//               //             message: ge
+//               //         };
+//               //         const options = {
+//               //             pinataMetadata: {
+//               //                 name: tname,
+//               //                 keyvalues: {
+//               //                     customKey: 'customValue',
+//               //                     customKey2: 'customValue2'
+//               //                 }
+//               //             },
+//               //             pinataOptions: {
+//               //                 cidVersion: 0
+//               //             }
+//               //         };
+//               //         pinata.pinJSONToIPFS(body, options).then((result) => {
+//               //             //handle results here
+//               //             console.log(result);
+//               //             console.log("jsonresult")
+//               //             //setVisibleModal(false)
+//               //             //setIsOpen(true);
+      
+                          
+//               //           }).catch((err) => {
+//               //               //handle error here
+//               //               console.log(err);
+//               //           });
+            
+                      
+// })().catch(e => {
+//   console.log(e);
+//   console.trace();
+// });
+
+
+
                         setIsOpens(false)
                       setIsOpen(true);
                       })              
