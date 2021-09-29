@@ -113,8 +113,18 @@ useEffect(()=>{usernameget()},[])
 
       if(Mnemo === null){
 
+        alert("please enter your mnemonic")
+
       }
       else{
+
+        var recoveredAccount1 = algosdk.mnemonicToSecretKey(item.Mnemonic);//from db owner
+        var recoveredAccount2 = algosdk.mnemonicToSecretKey(Mnemo);//current receiver
+
+        console.log("rec1",recoveredAccount1)
+        console.log("rec2",recoveredAccount2)
+        console.log("rec1addr",recoveredAccount1.addr)
+        console.log("rec2addr",recoveredAccount2.addr)
 
         let getalgo=localStorage.getItem("wallet");
 
@@ -274,21 +284,22 @@ let tx;
 
         (async () => {
     
-          let assetID= item.title
+          let assetID= parseInt(item.title)
           let params = await algodClient.getTransactionParams().do();
           //comment out the next two lines to use suggested fee
           params.fee = 1000;
           params.flatFee = true;
           console.log(params);
     
-        let sender = mnemonic.addr;
-        let recipient = Mnemo.addr;
+        let sender = recoveredAccount2.addr;
+        let recipient = recoveredAccount2.addr;
+        console.log("sender",recoveredAccount2.addr)        
         // We set revocationTarget to undefined as 
         // This is not a clawback operation
-        let revocationTarget = AlgoSigner.encoding.stringToByteArray("nothing");
+        let revocationTarget = undefined
         // CloseReaminerTo is set to undefined as
         // we are not closing out an asset
-        let closeRemainderTo = AlgoSigner.encoding.stringToByteArray("nothing");
+        let closeRemainderTo = undefined
         // We are sending 0 assets
         let amount = 0;
         let note = AlgoSigner.encoding.stringToByteArray("nothing");    
@@ -297,20 +308,20 @@ let tx;
         //let params = await algodClient.getTransactionParams().do();  
         console.log("check","287")    
         // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
-        //let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
-        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
+        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
+        //let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
         
         console.log("304 working")
         // Must be signed by the account wishing to opt in to the asset    
-        let rawSignedTxn = opttxn.signTxn(Mnemo.sk);
+        let rawSignedTxn = opttxn.signTxn(recoveredAccount2.sk);
         let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
         console.log("Transaction : " + opttx.txId);
         // wait for transaction to be confirmed
         await waitForConfirmation(algodClient, opttx.txId);
     
         //You should now see the new asset listed in the account information
-        console.log("Account 3 = " + Mnemo.addr);        
-        await printAssetHolding(algodClient, Mnemo.addr, assetID);
+        console.log("Account 3 = " + recoveredAccount2.addr);        
+        await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);
     
     
         console.log("opt","success")
@@ -320,35 +331,36 @@ let tx;
         params = await algodClient.getTransactionParams().do();
         params.fee = 1000;
         params.flatFee = true;
-        sender = mnemonic.addr;
-        recipient = Mnemo.addr;
+        sender = recoveredAccount1.addr;
+        recipient = recoveredAccount2.addr;
         revocationTarget = undefined;
         closeRemainderTo = undefined;
         //Amount of the asset to transfer
-        amount = 1000;
+        amount = 1;
         note = undefined
-        assetID= item.title
+        assetID= parseInt(item.title)
         //params=item.image2x
         
-        
-    
         // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
         let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
           amount,  note, assetID, params);
+          console.log("done")
      // Must be signed by the account sending the asset  
-     rawSignedTxn = xtxn.signTxn(mnemonic.sk)
+     rawSignedTxn = xtxn.signTxn(recoveredAccount1.sk)
+     console.log("done2")
      let xtx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+     console.log("done3")
      console.log("Transaction : " + xtx.txId);
      // wait for transaction to be confirmed
      await waitForConfirmation(algodClient, xtx.txId);
     
      // You should now see the 10 assets listed in the account information
-     console.log("Account 3 = " + Mnemo.addr);
-     await printAssetHolding(algodClient, Mnemo.addr, assetID);
+     console.log("Account 3 = " + recoveredAccount2.addr);
+     await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);
 
      console.log("trans","success")
 
-     fireDb.database().ref(`imagerefAlgo/${item.bid}`).child(item.highestBid).remove().then(()=>{
+     fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
       fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
       id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
       userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,

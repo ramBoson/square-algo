@@ -56,7 +56,7 @@ const Search = () => {
     // }else{
       //let req = [];
     let req2 = [];//imagerefexplore//
-    firebase.database().ref("imagerefAlgo").on("value", (data) => {
+    firebase.database().ref("imagerefexploreoneAlgos").on("value", (data) => {
       if (data) {
         data.forEach((d) => {
           req2.push(d.val())          
