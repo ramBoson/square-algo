@@ -285,13 +285,13 @@ let tx;
         let recipient = sender;
         // We set revocationTarget to undefined as 
         // This is not a clawback operation
-        let revocationTarget = undefined;
+        let revocationTarget = AlgoSigner.encoding.stringToByteArray("nothing");
         // CloseReaminerTo is set to undefined as
         // we are not closing out an asset
-        let closeRemainderTo = undefined;
+        let closeRemainderTo = AlgoSigner.encoding.stringToByteArray("nothing");
         // We are sending 0 assets
         let amount = 0;
-        let note = undefined;
+        let note = AlgoSigner.encoding.stringToByteArray("nothing");
         
         //item.title;
         //let params =  item.image2x;
