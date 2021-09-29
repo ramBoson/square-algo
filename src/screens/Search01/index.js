@@ -7,7 +7,6 @@ import Icon from "../../components/Icon";
 import Dropdown from "../../components/Dropdown";
 import firebase from "../UploadDetails/firebase";
 //UploadDetails/firebase
-
 // data
 //import { bids } from "../../mocks/bids";
 import CardBuy from "../../components/CardBuy";
@@ -91,7 +90,7 @@ const Search = () => {
                 previousaddress:a[b].previousoaddress,
                 soldd:a[b].soldd,
                 whois:a[b].whois,
-
+                Mnemonic:a[b].Mnemonic,
                 users: [                
                   {
                     avatar: "/images/content/avatar-4.jpg",

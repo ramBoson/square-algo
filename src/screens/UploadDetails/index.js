@@ -234,7 +234,7 @@ const Upload = () => {
   const [Img,setImg] = useState("")
   const [tname,setName] = useState("");
   const [tdescription,setDescription] = useState("");
-  //const [tmnemonic,setMnemonic] = useState("");
+  const [tmnemonic,setMnemonic] = useState("");
   //const [isLoading, setLoading] = useState(false)
   //const [currentid, setCurrentid] = useState("");
   //let tf;
@@ -781,13 +781,13 @@ const onSubmitNFT = async (event) => {
     else{
 
 
-    //  if(selected === null || selected2 === null){
+     if(tmnemonic === null || tmnemonic === "" || tmnemonic === " "){
 
-      //  alert("please select league name/team name")
+       alert("please Enter your Mnemonic")
 
-    //  }
+     }
 
-      //else{
+      else{
 
     //const accounts = await web3.eth.getAccounts();
     //console.log("acc",accounts[0]);
@@ -914,7 +914,7 @@ algodClient.healthCheck().do()
                       ipfsUrl:Img,ownerAddress:accounts[0].address,soldd:"",extra1:"",previousoaddress:"",datesets:dateset,
                       whois:'',
                       league:selected,team:selected2,type:selected3,
-                      teamlogo:selectedImg,dimen:selected4,description:tdescription,history:""})
+                      teamlogo:selectedImg,dimen:selected4,description:tdescription,history:"",Mnemonic:tmnemonic})
                       .then(()=>{
 
                       ref22.child(db).set({id:idget,imageUrl:Img,priceSet:"",cAddress:tx.txId,keyId:db,
@@ -922,15 +922,12 @@ algodClient.healthCheck().do()
                       ipfsUrl:Img,ownerAddress:accounts[0].address,soldd:"",extra1:"",
                       previousoaddress:"",datesets:dateset,whois:'',
                       league:selected,team:selected2,type:selected3,teamlogo:selectedImg,dimen:selected4,
-                      description:tdescription,history:""})
+                      description:tdescription,history:"",Mnemonic:tmnemonic})
                       .then(()=>{
                         setIsOpens(false)
                       setIsOpen(true);
                       })              
-                      })    
-    
-
-        
+                      })            
       })
       .catch((e) => {
         console.error(e);
@@ -972,6 +969,7 @@ algodClient.healthCheck().do()
     
   //}
 }
+    }
 }
 
 
@@ -1094,6 +1092,16 @@ const callof=()=>{
                       placeholder="e. g. “After purchasing you will able to recived the logo...”"
                       required
                       onChange={event => setDescription( event.target.value)}
+                    />
+
+<TextInput
+                      className={styles.field}
+                      lebel="Mnemonic"
+                      name="Mnemonic"
+                      type="text"
+                      placeholder="e. g. “Enter Your Mnemonic here...”"
+                      required
+                      onChange={event => setMnemonic( event.target.value)}
                     />
 
 {/* <div className="col-md-4"> */}

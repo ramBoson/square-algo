@@ -15,6 +15,7 @@ import Modald from "../../components/ModalD";
 import FolowStepsdr from "../../screens/Search01/FolowSteps";
 
 import FolowStepss from "../../screens/Search01/FolowStepss";
+import TextInput from "../../components/TextInput";
 
 import algosdk from 'algosdk';
 import MyAlgo from '@randlabs/myalgo-connect';
@@ -46,7 +47,8 @@ const CardBuy = ({ className, item }) => {
   // const [historydb, sethistorydb] = useState([]);
   // console.log("hist",historydb)
   const [isOpen, setIsOpen] = useState(false);
-
+  const [Mnemo,setMnemo] = useState(null);
+  console.log("Mnemocheck",Mnemo)
 
   const addlikedb=async()=>{
     //let getalgo=localStorage.getItem("walletalgo");
@@ -66,7 +68,7 @@ const CardBuy = ({ className, item }) => {
       userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
       ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
       previousoaddress:item.previousaddress,datesets:item.date,
-      description:item.description,whois:'likes',history:item.url,paramsdb:item.image2x,privatekey:item.category  
+      description:item.description,whois:'likes',history:item.url,paramsdb:item.image2x,privatekey:item.category,Mnemonic:item.Mnemonic
         }).then(()=>{
         setVisible(!visible)
         window.location.reload(false)   
@@ -80,7 +82,7 @@ const CardBuy = ({ className, item }) => {
 
     console.log("inside usernameget function")
 
-    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x"){
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === ''){
 
     }
     else{    
@@ -108,7 +110,13 @@ useEffect(()=>{usernameget()},[])
 
     else{
 
-      let getalgo=localStorage.getItem("wallet");
+
+      if(Mnemo === null){
+
+      }
+      else{
+
+        let getalgo=localStorage.getItem("wallet");
 
       const waitForConfirmation = async function (algodclient, txId) {
         let response = await algodclient.status().do();
@@ -137,6 +145,23 @@ useEffect(()=>{usernameget()},[])
             }
         }
     };
+    // Function used to print asset holding for account and assetid
+const printAssetHolding = async function (algodclient, account, assetid) {
+  // note: if you have an indexer instance available it is easier to just use this
+  //     let accountInfo = await indexerClient.searchAccounts()
+  //    .assetID(assetIndex).do();
+  // and in the loop below use this to extract the asset for a particular account
+  // accountInfo['accounts'][idx][account]);
+  let accountInfo = await algodclient.accountInformation(account).do();
+  for (let idx = 0; idx < accountInfo['assets'].length; idx++) {
+      let scrutinizedAsset = accountInfo['assets'][idx];
+      if (scrutinizedAsset['asset-id'] === assetid) {
+          let myassetholding = JSON.stringify(scrutinizedAsset, undefined, 2);
+          console.log("assetholdinginfo = " + myassetholding);
+          break;
+      }
+  }
+};
     
   //bnb 0x2cA1655cceB43D27027e6676E880D1Ce4e7d7d18
 //   let gettrans=new web3.eth.Contract(tra,'0x2cA1655cceB43D27027e6676E880D1Ce4e7d7d18');
@@ -243,44 +268,154 @@ let tx;
   console.log(d);
   console.log("last success")
 
+  let mnemonic=item.Mnemonic;
+
+  //Mnemonic transfer start
+
+        (async () => {
+    
+        let params = await algodClient.getTransactionParams().do();
+        //comment out the next two lines to use suggested fee
+        params.fee = 1000;
+        params.flatFee = true;
+    
+        let sender = Mnemo.addr;
+        let recipient = sender;
+        // We set revocationTarget to undefined as 
+        // This is not a clawback operation
+        let revocationTarget = undefined;
+        // CloseReaminerTo is set to undefined as
+        // we are not closing out an asset
+        let closeRemainderTo = undefined;
+        // We are sending 0 assets
+        let amount = 0;
+        let note = undefined;
+        let assetID= parseInt(item.title)
+        //item.title;
+        //let params =  item.image2x;
+
+        //let params = await algodClient.getTransactionParams().do();
+    
+
+        console.log("check","287")
+    
+        // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
+        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+             amount, note, assetID, params);
+    
+        // Must be signed by the account wishing to opt in to the asset    
+        let rawSignedTxn = opttxn.signTxn(Mnemo.sk);
+        let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+        console.log("Transaction : " + opttx.txId);
+        // wait for transaction to be confirmed
+        await waitForConfirmation(algodClient, opttx.txId);
+    
+        //You should now see the new asset listed in the account information
+        console.log("Account 3 = " + Mnemo.addr);        
+        await printAssetHolding(algodClient, Mnemo.addr, assetID);
+    
+    
+        console.log("opt","success")
+
+        //trans
+
+        params = await algodClient.getTransactionParams().do();
+        params.fee = 1000;
+        params.flatFee = true;
+        sender = mnemonic.addr;
+        recipient = Mnemo.addr;
+        revocationTarget = undefined;
+        closeRemainderTo = undefined;
+        //Amount of the asset to transfer
+        amount = 1000;
+        note = undefined
+        assetID= item.title
+        //params=item.image2x
+        
+        
+    
+        // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
+        let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+          amount,  note, assetID, params);
+     // Must be signed by the account sending the asset  
+     rawSignedTxn = xtxn.signTxn(mnemonic.sk)
+     let xtx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+     console.log("Transaction : " + xtx.txId);
+     // wait for transaction to be confirmed
+     await waitForConfirmation(algodClient, xtx.txId);
+    
+     // You should now see the 10 assets listed in the account information
+     console.log("Account 3 = " + Mnemo.addr);
+     await printAssetHolding(algodClient, Mnemo.addr, assetID);
+
+     console.log("trans","success")
+
+     fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
+      fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
+      id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+      userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+      ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
+      previousoaddress:item.bid,datesets:item.date,
+      description:item.description,whois:'buyers',history:item.url
+      //paramsdb:item.image2x,privatekey:item.category  
+            }).then(()=>{
+              setIsOpenss(false)
+              setIsOpens(true)
+              
+            }) 
+  })
+  .catch((e) => {
+    console.error(e);
+  });
+
+       })().catch(e => {
+      console.log(e);
+      console.trace();
+  });
+
+
+  //Mnemonic transfer end
+
   //start shyam code add below
 
-  let program = new Uint8Array(Buffer.from("ASAEADoKAS0VIhJAACIvFSISQAAVLRUjEkAAAC4VIg1AAAAvFSQNQAAGLS4TQAAAJQ==", "base64"));
-    const args=[];
-    args.push([...Buffer.from(item.bid)]);//owner address
-    args.push([...Buffer.from(accounts[0].address)]);//receiver address
-    args.push([...Buffer.from('')]);
+//     let program = new Uint8Array(Buffer.from("ASAEADoKAS0VIhJAACIvFSISQAAVLRUjEkAAAC4VIg1AAAAvFSQNQAAGLS4TQAAAJQ==", "base64"));
+//     const args=[];
+//     args.push([...Buffer.from(item.bid)]);//owner address
+//     args.push([...Buffer.from(accounts[0].address)]);//receiver address
+//     args.push([...Buffer.from('')]);
     
-    let lsig = algosdk.makeLogicSig(program,args);
-    let  params = await algodClient.getTransactionParams().do();
-      params.fee = 1000;
-      params.flatFee = true;
-      let revocationTarget = undefined;
-     let closeRemainderTo = undefined;
-       let  amount = 0;
-       let note = undefined;
-       //lsig.address()
-       let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(item.bid, accounts[0].address, closeRemainderTo, revocationTarget,
-      amount, note, item.title, params);
+//     let lsig = algosdk.makeLogicSig(program,args);
+//     let  params = await algodClient.getTransactionParams().do();
+//       params.fee = 1000;
+//       params.flatFee = true;
+//       let revocationTarget = undefined;
+//      let closeRemainderTo = undefined;
+//        let  amount = 0;
+//        let note = undefined;
+//        //lsig.address()
+//        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(lsig.address(), accounts[0].address, closeRemainderTo, revocationTarget,
+//       amount, note, item.title, params);
   
- let rawSignedTxn = algosdk.signLogicSigTransaction(opttxn,lsig).blob;
-let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-console.log("Transaction : " + opttx.txId);//work here now
-await waitForConfirmation(algodClient, opttx.txId);
-     //let manager = lsig.address();
-     let manager = accounts[0].address;
-     let reserve = accounts[0].address;
-     let freeze = accounts[0].address;
-     let clawback = accounts[0].address;
-     //lsig.address()
-      let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(item.bid, note, 
-      item.title, manager, reserve, freeze, clawback, params);  
-      rawSignedTxn = algosdk.signLogicSigTransaction(ctxn,lsig).blob;
-      let ctx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-      console.log("Transaction2 : " + ctx.txId);
-      await waitForConfirmation(algodClient, ctx.txId);
-      await printCreatedAsset(algodClient,item.bid, item.title);
-      
+//  let rawSignedTxn = algosdk.signLogicSigTransaction(opttxn,lsig).blob;
+// let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+// console.log("Transaction : " + opttx.txId);//work here now
+// await waitForConfirmation(algodClient, opttx.txId);
+//      //let manager = lsig.address();
+//      let manager = accounts[0].address;
+//      let reserve = accounts[0].address;
+//      let freeze = accounts[0].address;
+//      let clawback = accounts[0].address;
+//      //lsig.address()
+//       let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(lsig.address(), note, 
+//       item.title, manager, reserve, freeze, clawback, params);  
+//       rawSignedTxn = algosdk.signLogicSigTransaction(ctxn,lsig).blob;
+//       let ctx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+//       console.log("Transaction2 : " + ctx.txId);
+//       await waitForConfirmation(algodClient, ctx.txId);
+//       await printCreatedAsset(algodClient,item.bid, item.title);
+    
+//cmd above
+
       // await fetch(`https://nft-app-ec882-default-rtdb.firebaseio.com/NFT/${name}.json`,
       // {
       //   method:'PATCH',
@@ -295,23 +430,7 @@ await waitForConfirmation(algodClient, opttx.txId);
 
   
   //end shyam code 
-  fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
-    fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
-    id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-    userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-    ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
-    previousoaddress:item.bid,datesets:item.date,
-    description:item.description,whois:'buyers',history:item.url
-    //paramsdb:item.image2x,privatekey:item.category  
-          }).then(()=>{
-            setIsOpenss(false)
-            setIsOpens(true)
-            
-          }) 
-})
-.catch((e) => {
-  console.error(e);
-});
+ 
 
   
 })
@@ -679,6 +798,10 @@ await waitForConfirmation(algodClient, opttx.txId);
     //}   
   } 
 
+
+      }
+
+      
   }  
   }
 
@@ -735,12 +858,28 @@ await waitForConfirmation(algodClient, opttx.txId);
         
       </div>
       <br></br>
-      {item.price ? 
+      {item.price ? (
+<>
+<TextInput
+                      className={styles.field}
+                      label="Mnemonic"
+                      name="Mnemonic"
+                      type="text"
+                      placeholder="Enter Your Mnemonic"
+                      required
+                      onChange={event => setMnemo(event.target.value)}
+                    />
+                    <br></br>      
       <button className={cn("button-small")} onClick={updatepricedb}>
       <span>Buy</span>
       {/* <Icon name="scatter-up" size="16" /> */}
-    </button>:
+    </button>
+    </>
+      )
+    :
+    (
     <></>
+    )
     //   <button className={cn("button-small")} onClick={setpricedb}>
     //         <span>Price set</span>
     //         {/* <Icon name="scatter-up" size="16" /> */}

@@ -52,7 +52,7 @@ const Card = ({ className, item }) => {
       userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
       ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
       previousoaddress:item.previousaddress,datesets:item.date,
-      description:item.description,whois:'likes',history:item.url
+      description:item.description,whois:'likes',history:item.url,Mnemonic:item.Mnemonic
       //,paramsdb:item.image2x,privatekey:item.category
       }).then(()=>{
         setVisible(!visible)
@@ -119,7 +119,7 @@ const Card = ({ className, item }) => {
         userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
         ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
         previousoaddress:item.previousaddress,datesets:item.date,
-        description:item.description,whois:'readytosale',history:item.url
+        description:item.description,whois:'readytosale',history:item.url,Mnemonic:item.Mnemonic
       }).then(()=>{
         fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).remove();
           console.log("remove db");
@@ -234,7 +234,7 @@ console.log("checkowners",getalgo)
         userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
         ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
         previousoaddress:item.previousaddress,datesets:item.date,
-        description:item.description,whois:'readytosale',history:item.url
+        description:item.description,whois:'readytosale',history:item.url,Mnemonic:item.Mnemonic
 
     }).then(()=>{
   
