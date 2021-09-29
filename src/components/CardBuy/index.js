@@ -356,7 +356,6 @@ let tx;
      // You should now see the 10 assets listed in the account information
      console.log("Account 3 = " + recoveredAccount2.addr);
      await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);
-
      console.log("trans","success")
 
      fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
