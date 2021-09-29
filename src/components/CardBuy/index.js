@@ -336,7 +336,7 @@ let tx;
         revocationTarget = undefined;
         closeRemainderTo = undefined;
         //Amount of the asset to transfer
-        amount = 1;
+        amount = 100;
         note = undefined
         assetID= parseInt(item.title)
         //params=item.image2x
@@ -352,8 +352,7 @@ let tx;
      console.log("done3")
      console.log("Transaction : " + xtx.txId);
      // wait for transaction to be confirmed
-     await waitForConfirmation(algodClient, xtx.txId);
-    
+     await waitForConfirmation(algodClient, xtx.txId);    
      // You should now see the 10 assets listed in the account information
      console.log("Account 3 = " + recoveredAccount2.addr);
      await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);

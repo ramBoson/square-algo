@@ -782,7 +782,7 @@ const dbcallalgobuy=async()=>{
     let getalgo=localStorage.getItem("wallet");
     
     //let kreq =[];
-    firebase.database().ref("imagerefAlgobuy").child(getalgo).on("value", (data) => {
+    firebase.database().ref("imagerefbuy").child(getalgo).on("value", (data) => {
 
       
       if (data) {
