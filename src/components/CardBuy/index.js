@@ -281,8 +281,8 @@ let tx;
           params.flatFee = true;
           console.log(params);
     
-        let sender = Mnemo.addr;
-        let recipient = sender;
+        let sender = mnemonic.addr;
+        let recipient = Mnemo.addr;
         // We set revocationTarget to undefined as 
         // This is not a clawback operation
         let revocationTarget = AlgoSigner.encoding.stringToByteArray("nothing");
@@ -291,11 +291,9 @@ let tx;
         let closeRemainderTo = AlgoSigner.encoding.stringToByteArray("nothing");
         // We are sending 0 assets
         let amount = 0;
-        let note = AlgoSigner.encoding.stringToByteArray("nothing");
-        
+        let note = AlgoSigner.encoding.stringToByteArray("nothing");    
         //item.title;
         //let params =  item.image2x;
-
         //let params = await algodClient.getTransactionParams().do();  
         console.log("check","287")    
         // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
