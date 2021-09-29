@@ -873,6 +873,25 @@ algodClient.healthCheck().do()
     //AlgoSigner.encoding.stringToByteArray(document.getElementById('note').value),
     suggestedParams: txParamsJS
   });
+  // let assetURLs = "http://someurl";
+  // let assetMetadataHash = "16efaa3924a6fd9d3a4824799a4ac65d";
+  // const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({    
+  //     from: accounts[0].address,
+  //     note: AlgoSigner.encoding.stringToByteArray("nothing"),
+  //     total: +1000,
+  //     decimals: +2,
+  //     defaultFrozen : false,
+  //     manager:accounts[0].address,
+  //     reserve:accounts[0].address,
+  //     freeze: accounts[0].address,
+  //     clawback:accounts[0].address,
+  //     unitName: tb,
+  //     assetName: tname,
+  //     assetURL:assetURLs,
+  //     assetMetadataHash:undefined,
+  //     //AlgoSigner.encoding.stringToByteArray(document.getElementById('note').value),
+  //     params: txParamsJS
+  //   });
   console.log("txnprint",txn)
   // Use the AlgoSigner encoding library to make the transactions base64
   const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());

@@ -274,10 +274,12 @@ let tx;
 
         (async () => {
     
-        let params = await algodClient.getTransactionParams().do();
-        //comment out the next two lines to use suggested fee
-        params.fee = 1000;
-        params.flatFee = true;
+          let assetID= item.title
+          let params = await algodClient.getTransactionParams().do();
+          //comment out the next two lines to use suggested fee
+          params.fee = 1000;
+          params.flatFee = true;
+          console.log(params);
     
         let sender = Mnemo.addr;
         let recipient = sender;
@@ -290,18 +292,17 @@ let tx;
         // We are sending 0 assets
         let amount = 0;
         let note = undefined;
-        let assetID= item.title
+        
         //item.title;
         //let params =  item.image2x;
 
-        //let params = await algodClient.getTransactionParams().do();
-  
+        //let params = await algodClient.getTransactionParams().do();  
         console.log("check","287")    
         // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
-        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
-             amount, note, assetID, params);
-    
-             console.log("304 working")
+        //let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
+        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
+        
+        console.log("304 working")
         // Must be signed by the account wishing to opt in to the asset    
         let rawSignedTxn = opttxn.signTxn(Mnemo.sk);
         let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
