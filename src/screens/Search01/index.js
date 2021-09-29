@@ -50,13 +50,13 @@ const Search = () => {
     if(localStorage.getItem("wallet")  === null || localStorage.getItem("wallet")  === "" || localStorage.getItem("wallet")  === " " || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === '' || localStorage.getItem("wallet") === "0x"){
     }
     else{    
-    let getalgo=localStorage.getItem("walletalgo");
+    let getalgo=localStorage.getItem("wallet");
     //let req = [];  
     // if(getalgo === ""){  
     // }else{
       //let req = [];
     let req2 = [];//imagerefexplore//
-    firebase.database().ref("imagerefexploreoneAlgos").on("value", (data) => {
+    firebase.database().ref("imagerefAlgo").on("value", (data) => {
       if (data) {
         data.forEach((d) => {
           req2.push(d.val())          

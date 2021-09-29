@@ -1080,12 +1080,12 @@ console.log("programop",program)
           <div className={styles.wrapper}>
             <div className={styles.nav}>                          
 
-            <button
+            {/* <button
               className={cn("button-small", styles.button)}
               onClick={() => checkasset()}
             >
               check
-            </button>
+            </button> */}
 {/* <h5 style={{cursor:"pointer"}} onClick={e => window.open("https://www.youtube.com/")}>Contract Addres</h5> */}
 
 {/* <h1 onClick={}>Click Me</h1> */}

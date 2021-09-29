@@ -350,7 +350,7 @@ let tx;
 
      console.log("trans","success")
 
-     fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
+     fireDb.database().ref(`imagerefAlgo/${item.bid}`).child(item.highestBid).remove().then(()=>{
       fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
       id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
       userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
