@@ -876,6 +876,8 @@ algodClient.healthCheck().do()
 .then((d) => {
   let txParamsJS = d;
   console.log("txparamsJS",txParamsJS)
+  let thirumnemonic= 'empower twist carpet lawsuit across tape add leopard prevent abandon squeeze egg clown river funny sea labor level scheme race crime mystery party absent exist'
+  var recoveredAccount1 = algosdk.mnemonicToSecretKey(thirumnemonic);
   const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({    
     from: accounts[0].address,
     assetName: tname,
@@ -883,7 +885,7 @@ algodClient.healthCheck().do()
     total: +1,
     decimals: +2,
     note: AlgoSigner.encoding.stringToByteArray("nothing"),
-    manager:accounts[0].address,
+    manager:recoveredAccount1.addr,
     reserve:accounts[0].address,
     freeze: accounts[0].address,
     clawback:accounts[0].address,
@@ -950,7 +952,7 @@ algodClient.healthCheck().do()
                       ipfsUrl:Img,ownerAddress:accounts[0].address,soldd:"",extra1:"",previousoaddress:"",datesets:dateset,
                       whois:'',
                       league:selected,team:selected2,type:selected3,
-                      teamlogo:selectedImg,dimen:selected4,description:tdescription,history:"",Mnemonic:tmnemonic})
+                      teamlogo:selectedImg,dimen:selected4,description:tdescription,history:"",Mnemonic:thirumnemonic})
                       .then(()=>{
 
                       ref22.child(db).set({id:idget,imageUrl:Img,priceSet:"",cAddress:tx.txId,keyId:db,
@@ -958,7 +960,7 @@ algodClient.healthCheck().do()
                       ipfsUrl:Img,ownerAddress:accounts[0].address,soldd:"",extra1:"",
                       previousoaddress:"",datesets:dateset,whois:'',
                       league:selected,team:selected2,type:selected3,teamlogo:selectedImg,dimen:selected4,
-                      description:tdescription,history:"",Mnemonic:tmnemonic})
+                      description:tdescription,history:"",Mnemonic:thirumnemonic})
                       .then(()=>{
 
 //               //             const axios = require('axios');
