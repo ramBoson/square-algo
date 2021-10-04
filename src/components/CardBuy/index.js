@@ -299,8 +299,8 @@ algodClient.getTransactionParams().do()
   let txParamsJS = d;
   //document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
   const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-    from: accounts[0].address,
-    to: item.bid,
+    from: item.bid,
+    to: accounts[0].address,
     assetIndex: parseInt(item.title),
     note: AlgoSigner.encoding.stringToByteArray("hello"),
     amount: 0,
@@ -326,8 +326,8 @@ algodClient.getTransactionParams().do()
 
         
         const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-          from: accounts[0].address,
-          to: item.bid,
+          from: item.bid,
+          to: accounts[0].address,          
           assetIndex: parseInt(item.title),
           note: AlgoSigner.encoding.stringToByteArray("hello"),
           amount: 1,
