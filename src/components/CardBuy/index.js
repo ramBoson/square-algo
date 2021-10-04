@@ -111,20 +111,20 @@ useEffect(()=>{usernameget()},[])
     else{
 
 
-      if(Mnemo === null){
+      // if(Mnemo === null){
 
-        alert("please enter your mnemonic")
+      //   alert("please enter your mnemonic")
 
-      }
-      else{
+      // }
+      //else{
 
-        var recoveredAccount1 = algosdk.mnemonicToSecretKey(item.Mnemonic);//from db owner
-        var recoveredAccount2 = algosdk.mnemonicToSecretKey(Mnemo);//current receiver
+        //var recoveredAccount1 = algosdk.mnemonicToSecretKey(item.Mnemonic);//from db owner
+        //var recoveredAccount2 = algosdk.mnemonicToSecretKey(Mnemo);//current receiver
 
-        console.log("rec1",recoveredAccount1)
-        console.log("rec2",recoveredAccount2)
-        console.log("rec1addr",recoveredAccount1.addr)
-        console.log("rec2addr",recoveredAccount2.addr)
+        //console.log("rec1",recoveredAccount1)
+        //console.log("rec2",recoveredAccount2)
+        //console.log("rec1addr",recoveredAccount1.addr)
+        //console.log("rec2addr",recoveredAccount2.addr)
         let getalgo=localStorage.getItem("wallet");
 
       const waitForConfirmation = async function (algodclient, txId) {
@@ -330,7 +330,7 @@ algodClient.getTransactionParams().do()
           to: item.bid,
           assetIndex: parseInt(item.title),
           note: AlgoSigner.encoding.stringToByteArray("hello"),
-          amount: 10,
+          amount: 1,
           revocationTarget:undefined,
           closeRemainderTo:undefined,
           suggestedParams: {...txParamsJS}          
@@ -914,7 +914,7 @@ console.error(e);
     //end money transfer here and opt and transfer algos
 
     //}   
-  } 
+//  } 
 
 
       }
