@@ -286,9 +286,12 @@ let tx;
   .then((d) => {
     let accounts = d;
 
+    console.log("itemid",item.id)
+    let changeid=item.id;
     let program = new Uint8Array(Buffer.from("AyAEAwHFxKUO6AcyBCISRDMBECMSRDMCEiMSRDMCESQSRDMCASUORDMCFTIDEkQzAiAyAxJEI0M=", "base64"));
     const args=[];
-    args.push([...Buffer.from((item.id).toString())]);
+    //args.push([...Buffer.from((changeid.toString()))]);
+    args.push([...Buffer.from(changeid.toString())]);
     //args.push([...Buffer.from(addr2)]);
     //args.push([...Buffer.from('')]);
     
