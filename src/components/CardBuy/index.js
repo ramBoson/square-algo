@@ -171,6 +171,37 @@ const printAssetHolding = async function (algodclient, account, assetid) {
       }
   }
 };
+
+const waitForConfirmation1 = async function (algodClient, txId, timeout) {
+  if (algodClient == null || txId == null || timeout < 0) {
+      throw new Error("Bad arguments");
+  }
+
+  const status = (await algodClient.status().do());
+  if (status === undefined) {
+      throw new Error("Unable to get node status");
+  }
+
+  const startround = status["last-round"] + 1;
+  let currentround = startround;
+
+  while (currentround < (startround + timeout)) {
+      const pendingInfo = await algodClient.pendingTransactionInformation(txId).do();
+      if (pendingInfo !== undefined) {
+          if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
+              //Got the completed Transaction
+              return pendingInfo;
+          } else {
+              if (pendingInfo["pool-error"] != null && pendingInfo["pool-error"].length > 0) {
+                  // If there was a pool error, then the transaction has been rejected!
+                  throw new Error("Transaction " + txId + " rejected - pool error: " + pendingInfo["pool-error"]);
+              }
+          }
+      }
+      await algodClient.statusAfterBlock(currentround).do();
+      currentround++;
+  }
+}
     
   //bnb 0x2cA1655cceB43D27027e6676E880D1Ce4e7d7d18
 //   let gettrans=new web3.eth.Contract(tra,'0x2cA1655cceB43D27027e6676E880D1Ce4e7d7d18');
@@ -283,7 +314,7 @@ let tx;
   AlgoSigner.accounts({
     ledger: 'TestNet'
   })
-  .then((d) => {
+  .then(async(d) => {
     let accounts = d;
 
     console.log("itemid",item.title)
@@ -307,108 +338,129 @@ const port = '';
 let note = undefined;
 
 let algodClient = new algosdk.Algodv2(token, algodServer, port);
-algodClient.getTransactionParams().do()
-.then((d) => {
-  let txParamsJS = d;
-  //document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
-  const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-    from: lsig.address(),
-    to: accounts[0].address,
-    assetIndex: parseInt(item.title),
-    note: AlgoSigner.encoding.stringToByteArray("hello"),
-    amount: 0,
-    suggestedParams: {...txParamsJS}
-  });
-  
-  // Use the AlgoSigner encoding library to make the transactions base64
-  const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
-  
-  AlgoSigner.signTxn([{txn: txn_b64}]) 
-  .then((d) => {
-    let signedTxs = d;
-    //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
-    AlgoSigner.send({
-        ledger: 'TestNet',
-        tx: signedTxs[0].blob
-      })
-      .then((d) => {
-        let tx = d;
-        //document.getElementById('opt').innerHTML = JSON.stringify(d);
+let  params = await algodClient.getTransactionParams().do();
+params.fee = 1000;
+params.flatFee = true;
 
-        //transfer start
+let txn = algosdk.makePaymentTxnWithSuggestedParams(lsig.address(),accounts[0].address,1,undefined,undefined,params);
+     
+    let signedTxn = algosdk.signLogicSigTransaction(txn,lsig.address());
+    console.log('txn: '+ txn);
+    console.log(signedTxn);
+let txId = txn.txID().toString();
+await algodClient.sendRawTransaction(signedTxn.blob).do();
+        // Wait for confirmation
+        let confirmedTxn = await waitForConfirmation1(algodClient, txId, 4);
+        //Get the completed Transaction
+        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+        let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
+        console.log("Transaction information: %o", mytxinfo);
+        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
+        console.log("Note field: ", string);  
+
+        console.log("transferred end")
+// algodClient.getTransactionParams().do()
+// .then((d) => {
+//   let txParamsJS = d;
+//   //document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
+//   const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+//     from: lsig.address(),
+//     to: accounts[0].address,
+//     assetIndex: parseInt(item.title),
+//     note: AlgoSigner.encoding.stringToByteArray("hello"),
+//     amount: 0,
+//     suggestedParams: {...txParamsJS}
+//   });
+  
+//   // Use the AlgoSigner encoding library to make the transactions base64
+//   const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
+  
+//   AlgoSigner.signTxn([{txn: txn_b64}]) 
+//   .then((d) => {
+//     let signedTxs = d;
+//     //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
+//     AlgoSigner.send({
+//         ledger: 'TestNet',
+//         tx: signedTxs[0].blob
+//       })
+//       .then((d) => {
+//         let tx = d;
+//         //document.getElementById('opt').innerHTML = JSON.stringify(d);
+
+//         //transfer start
 
         
-        const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-          from: lsig.address(),
-          to: accounts[0].address,          
-          assetIndex: parseInt(item.title),
-          note: AlgoSigner.encoding.stringToByteArray("hello"),
-          amount: 1,
-          revocationTarget:undefined,
-          closeRemainderTo:undefined,
-          suggestedParams: {...txParamsJS}          
-        });        
+//         const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+//           from: lsig.address(),
+//           to: accounts[0].address,          
+//           assetIndex: parseInt(item.title),
+//           note: AlgoSigner.encoding.stringToByteArray("hello"),
+//           amount: 1,
+//           revocationTarget:undefined,
+//           closeRemainderTo:undefined,
+//           suggestedParams: {...txParamsJS}          
+//         });        
 
-        const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
+//         const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
   
-  AlgoSigner.signTxn([{txn: txn_b64}]) 
-  .then((d) => {
-    let signedTxs = d;
-    //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
-    AlgoSigner.send({
-        ledger: 'TestNet',
-        tx: signedTxs[0].blob
-      })
-      .then((d) => {
-        let tx = d;
+//   AlgoSigner.signTxn([{txn: txn_b64}]) 
+//   .then((d) => {
+//     let signedTxs = d;
+//     //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
+//     AlgoSigner.send({
+//         ledger: 'TestNet',
+//         tx: signedTxs[0].blob
+//       })
+//       .then((d) => {
+//         let tx = d;
 
 
-        //   fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
-//     fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
-//     id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-//     userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-//     ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
-//     previousoaddress:item.bid,datesets:item.date,
-//     description:item.description,whois:'buyers',history:item.url
-//     //paramsdb:item.image2x,privatekey:item.category  
-//           }).then(()=>{
-//             setIsOpenss(false)
-//             setIsOpens(true)
+//         //   fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
+// //     fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
+// //     id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+// //     userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+// //     ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
+// //     previousoaddress:item.bid,datesets:item.date,
+// //     description:item.description,whois:'buyers',history:item.url
+// //     //paramsdb:item.image2x,privatekey:item.category  
+// //           }).then(()=>{
+// //             setIsOpenss(false)
+// //             setIsOpens(true)
             
-//           }) 
+// //           }) 
+// // })
+// // .catch((e) => {
+// //   console.error(e);
+// // });
+
+
+//       })
+//       .catch((e) => {
+//         console.error(e);
+//       });
+
+//   })
+//   .catch((e) => {
+//     console.error(e);
+//   });
+
+
+//         //end transfer
+
+
+//       })
+//       .catch((e) => {
+//         console.error(e);
+//       });
+
+//   })
+//   .catch((e) => {
+//     console.error(e);
+//   });
 // })
 // .catch((e) => {
 //   console.error(e);
-// });
-
-
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-  })
-  .catch((e) => {
-    console.error(e);
-  });
-
-
-        //end transfer
-
-
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-  })
-  .catch((e) => {
-    console.error(e);
-  });
-})
-.catch((e) => {
-  console.error(e);
-})    
+// })    
 })
 .catch((e) => {
 console.error(e);
