@@ -125,7 +125,6 @@ useEffect(()=>{usernameget()},[])
         console.log("rec2",recoveredAccount2)
         console.log("rec1addr",recoveredAccount1.addr)
         console.log("rec2addr",recoveredAccount2.addr)
-
         let getalgo=localStorage.getItem("wallet");
 
       const waitForConfirmation = async function (algodclient, txId) {
@@ -277,108 +276,220 @@ let tx;
 .then(async(d) => {
   console.log(d);
   console.log("last success")
-
   let mnemonic=item.Mnemonic;
 
-  //Mnemonic transfer start
+  //opt start 
 
-        (async () => {
-    
-          let assetID= parseInt(item.title)
-          let params = await algodClient.getTransactionParams().do();
-          //comment out the next two lines to use suggested fee
-          params.fee = 1000;
-          params.flatFee = true;
-          console.log(params);
-    
-        let sender = recoveredAccount2.addr;
-        let recipient = recoveredAccount2.addr;
-        console.log("sender",recoveredAccount2.addr)        
-        // We set revocationTarget to undefined as 
-        // This is not a clawback operation
-        let revocationTarget = undefined
-        // CloseReaminerTo is set to undefined as
-        // we are not closing out an asset
-        let closeRemainderTo = undefined
-        // We are sending 0 assets
-        let amount = 0;
-        let note = AlgoSigner.encoding.stringToByteArray("nothing");    
-        //item.title;
-        //let params =  item.image2x;
-        //let params = await algodClient.getTransactionParams().do();  
-        console.log("check","287")    
-        // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
-        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
-        //let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
+  AlgoSigner.accounts({
+    ledger: 'TestNet'
+  })
+  .then((d) => {
+    let accounts = d;
+  
+const algosdk = require('algosdk');
+const algodServer = 'https://testnet-algorand.api.purestake.io/ps2'
+const indexerServer = 'https://testnet-algorand.api.purestake.io/idx2'
+const token = { 'X-API-Key': 'SVsJKi8vBM1RwK1HEuwhU20hYmwFJelk8bagKPin' }
+const port = '';
+let note = undefined;
+
+let algodClient = new algosdk.Algodv2(token, algodServer, port);
+algodClient.getTransactionParams().do()
+.then((d) => {
+  let txParamsJS = d;
+  //document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
+  const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+    from: accounts[0].address,
+    to: item.bid,
+    assetIndex: parseInt(item.title),
+    note: AlgoSigner.encoding.stringToByteArray("hello"),
+    amount: 0,
+    suggestedParams: {...txParamsJS}
+  });
+  
+  // Use the AlgoSigner encoding library to make the transactions base64
+  const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
+  
+  AlgoSigner.signTxn([{txn: txn_b64}]) 
+  .then((d) => {
+    let signedTxs = d;
+    //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
+    AlgoSigner.send({
+        ledger: 'TestNet',
+        tx: signedTxs[0].blob
+      })
+      .then((d) => {
+        let tx = d;
+        //document.getElementById('opt').innerHTML = JSON.stringify(d);
+
+        //transfer start
+
         
-        console.log("304 working")
-        // Must be signed by the account wishing to opt in to the asset    
-        let rawSignedTxn = opttxn.signTxn(recoveredAccount2.sk);
-        let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-        console.log("Transaction : " + opttx.txId);
-        // wait for transaction to be confirmed
-        await waitForConfirmation(algodClient, opttx.txId);
-    
-        //You should now see the new asset listed in the account information
-        console.log("Account 3 = " + recoveredAccount2.addr);        
-        await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);
-    
-    
-        console.log("opt","success")
+        const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: accounts[0].address,
+          to: item.bid,
+          assetIndex: parseInt(item.title),
+          note: AlgoSigner.encoding.stringToByteArray("hello"),
+          amount: 10,
+          revocationTarget:undefined,
+          closeRemainderTo:undefined,
+          suggestedParams: {...txParamsJS}          
+        });        
 
-        //trans
+        const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
+  
+  AlgoSigner.signTxn([{txn: txn_b64}]) 
+  .then((d) => {
+    let signedTxs = d;
+    //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
+    AlgoSigner.send({
+        ledger: 'TestNet',
+        tx: signedTxs[0].blob
+      })
+      .then((d) => {
+        let tx = d;
 
-        params = await algodClient.getTransactionParams().do();
-        params.fee = 1000;
-        params.flatFee = true;
-        sender = recoveredAccount1.addr;
-        recipient = recoveredAccount2.addr;
-        revocationTarget = undefined;
-        closeRemainderTo = undefined;
-        //Amount of the asset to transfer
-        amount = 1;
-        note = undefined
-        assetID= parseInt(item.title)
-        //params=item.image2x
-        
-        // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
-        let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
-          amount,  note, assetID, params);
-          console.log("done")
-     // Must be signed by the account sending the asset  
-     rawSignedTxn = xtxn.signTxn(recoveredAccount1.sk)
-     console.log("done2")
-     let xtx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-     console.log("done3")
-     console.log("Transaction : " + xtx.txId);
-     // wait for transaction to be confirmed
-     await waitForConfirmation(algodClient, xtx.txId);    
-     // You should now see the 10 assets listed in the account information
-     console.log("Account 3 = " + recoveredAccount2.addr);
-     await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);
-     console.log("trans","success")
 
-     fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
-      fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
-      id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-      userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-      ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
-      previousoaddress:item.bid,datesets:item.date,
-      description:item.description,whois:'buyers',history:item.url
-      //paramsdb:item.image2x,privatekey:item.category  
-            }).then(()=>{
-              setIsOpenss(false)
-              setIsOpens(true)
-              
-            }) 
+        //   fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
+//     fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
+//     id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+//     userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+//     ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
+//     previousoaddress:item.bid,datesets:item.date,
+//     description:item.description,whois:'buyers',history:item.url
+//     //paramsdb:item.image2x,privatekey:item.category  
+//           }).then(()=>{
+//             setIsOpenss(false)
+//             setIsOpens(true)
+            
+//           }) 
+// })
+// .catch((e) => {
+//   console.error(e);
+// });
+
+
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
   })
   .catch((e) => {
     console.error(e);
   });
-       })().catch(e => {
-      console.log(e);
-      console.trace();
+
+
+        //end transfer
+
+
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+  })
+  .catch((e) => {
+    console.error(e);
   });
+})
+.catch((e) => {
+  console.error(e);
+})    
+})
+.catch((e) => {
+console.error(e);
+});
+
+
+
+  //end opt
+
+
+
+
+  //Mnemonic transfer start
+
+  //       (async () => {
+    
+  //         let assetID= parseInt(item.title)
+  //         let params = await algodClient.getTransactionParams().do();
+  //         //comment out the next two lines to use suggested fee
+  //         params.fee = 1000;
+  //         params.flatFee = true;
+  //         console.log(params);
+    
+  //       let sender = recoveredAccount2.addr;
+  //       let recipient = recoveredAccount2.addr;
+  //       console.log("sender",recoveredAccount2.addr)        
+  //       // We set revocationTarget to undefined as 
+  //       // This is not a clawback operation
+  //       let revocationTarget = undefined
+  //       // CloseReaminerTo is set to undefined as
+  //       // we are not closing out an asset
+  //       let closeRemainderTo = undefined
+  //       // We are sending 0 assets
+  //       let amount = 0;
+  //       let note = AlgoSigner.encoding.stringToByteArray("nothing");    
+  //       //item.title;
+  //       //let params =  item.image2x;
+  //       //let params = await algodClient.getTransactionParams().do();  
+  //       console.log("check","287")    
+  //       // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
+  //       let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
+  //       //let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
+        
+  //       console.log("304 working")
+  //       // Must be signed by the account wishing to opt in to the asset    
+  //       let rawSignedTxn = opttxn.signTxn(recoveredAccount2.sk);
+  //       let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+  //       console.log("Transaction : " + opttx.txId);
+  //       // wait for transaction to be confirmed
+  //       await waitForConfirmation(algodClient, opttx.txId);
+    
+  //       //You should now see the new asset listed in the account information
+  //       console.log("Account 3 = " + recoveredAccount2.addr);        
+  //       await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);
+    
+    
+  //       console.log("opt","success")
+
+  //       //trans
+
+  //       params = await algodClient.getTransactionParams().do();
+  //       params.fee = 1000;
+  //       params.flatFee = true;
+  //       sender = recoveredAccount1.addr;
+  //       recipient = recoveredAccount2.addr;
+  //       revocationTarget = undefined;
+  //       closeRemainderTo = undefined;
+  //       //Amount of the asset to transfer
+  //       amount = 1;
+  //       note = undefined
+  //       assetID= parseInt(item.title)
+  //       //params=item.image2x
+        
+  //       // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
+  //       let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+  //         amount,  note, assetID, params);
+  //         console.log("done")
+  //    // Must be signed by the account sending the asset  
+  //    rawSignedTxn = xtxn.signTxn(recoveredAccount1.sk)
+  //    console.log("done2")
+  //    let xtx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+  //    console.log("done3")
+  //    console.log("Transaction : " + xtx.txId);
+  //    // wait for transaction to be confirmed
+  //    await waitForConfirmation(algodClient, xtx.txId);    
+  //    // You should now see the 10 assets listed in the account information
+  //    console.log("Account 3 = " + recoveredAccount2.addr);
+  //    await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);
+  //    console.log("trans","success")   
+  //      })().catch(e => {
+  //     console.log(e);
+  //     console.trace();
+  // });
+
 
 
   //Mnemonic transfer end

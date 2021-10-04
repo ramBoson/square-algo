@@ -882,8 +882,8 @@ algodClient.healthCheck().do()
     from: accounts[0].address,
     assetName: tname,
     unitName: tb,
-    total: +1,
-    decimals: +2,
+    total: +10,
+    decimals: +0,
     note: AlgoSigner.encoding.stringToByteArray("nothing"),
     manager:recoveredAccount1.addr,
     reserve:accounts[0].address,
@@ -934,6 +934,9 @@ algodClient.healthCheck().do()
         path: '/v2/transactions/pending/' + tx.txId
       })
       .then((d) => {
+
+        
+
         console.log(d);        
         //console.log("before",tx.txId)        
       setIsOpens(true)

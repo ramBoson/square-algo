@@ -1,4 +1,4 @@
-// /* global AlgoSigner */
+/* global AlgoSigner */
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import cn from "classnames";
@@ -221,37 +221,107 @@ console.log("checkowners",getalgo)
       console.log("assetidget",txnInfo.transactions[0]["created-asset-index"])  
       console.log("end")  
       console.log("setitem",item)
-    console.log("settitem",item.price)
-    let checkdb=fireDb.database().ref(`imagerefAlgo/${item.bid}`).child(item.highestBid);
-    console.log("cdb",checkdb)
-    console.log("odb",item.bid)
-    console.log("hdb",item.highestBid)
+      console.log("settitem",item.price)
 
-
-    fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).update({
-
-      id:idget,imageUrl:item.image,priceSet:urlprize,cAddress:item.categoryText,keyId:item.highestBid,
-        userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-        ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
-        previousoaddress:item.previousaddress,datesets:item.date,
-        description:item.description,whois:'readytosale',history:item.url,Mnemonic:item.Mnemonic
-
-    }).then(()=>{
+      fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).update({
+        id:idget,imageUrl:item.image,priceSet:urlprize,cAddress:item.categoryText,keyId:item.highestBid,
+          userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+          ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
+          previousoaddress:item.previousaddress,datesets:item.date,
+          description:item.description,whois:'readytosale',history:item.url,Mnemonic:item.Mnemonic
   
-      setIsOpens(false);
-    setIsOpenss(true)
+      }).then(()=>{  
+        setIsOpens(false);
+      setIsOpenss(true)    
+      })
+// AlgoSigner.connect()
+// .then((d) => {
+
+//   const algosdk = require('algosdk');
+//      const algodServer = 'https://testnet-algorand.api.purestake.io/ps2'
+//      const indexerServer = 'https://testnet-algorand.api.purestake.io/idx2'
+//      const token = { 'X-API-Key': 'SVsJKi8vBM1RwK1HEuwhU20hYmwFJelk8bagKPin' }
+//      const port = '';
+
+//     let algodClient = new algosdk.Algodv2(token, algodServer, port);
+//     algodClient.healthCheck().do()
+// .then(d => { 
+  
+//   AlgoSigner.accounts({
+//     ledger: 'TestNet'
+//   })
+//   .then((d) => {
+//     let accounts = d;
+//     algodClient.getTransactionParams().do()
+// .then((d) => {
+//   var recoveredAccount1 = algosdk.mnemonicToSecretKey(item.Mnemonic);
+//   let txParamsJS = d;
+//   const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+//     from: accounts[0].address,
+//     to: recoveredAccount1.addr,
+//     assetIndex: +parseInt(idget),
+//     note: AlgoSigner.encoding.stringToByteArray("nothing"),
+//     amount: 0,
+//     suggestedParams: {...txParamsJS}
+//   });
+  
+//   // Use the AlgoSigner encoding library to make the transactions base64
+//   const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
+  
+//   AlgoSigner.signTxn([{txn: txn_b64}]) 
+//   .then((d) => {
+//     let signedTxs = d;
+//     //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
+
+//     AlgoSigner.send({
+//       ledger: 'TestNet',
+//       tx: signedTxs[0].blob
+//     })
+//     .then((d) => {
+//       let tx = d;
+
+
+//       //transfer thiru     
+//       //end thiru
+
+//       //db here
+
+//       let checkdb=fireDb.database().ref(`imagerefAlgo/${item.bid}`).child(item.highestBid);
+//     console.log("cdb",checkdb)
+//     console.log("odb",item.bid)
+//     console.log("hdb",item.highestBid)
+
+
     
-  
-    })
 
+//     })
+//     .catch((e) => {
+//       console.error(e);
+//     });
+//   })
+//   .catch((e) => {
+//     console.error(e);
+//   });
+// })
+// .catch((e) => {
+//   console.error(e);
+// });
+//   })
+//   .catch((e) => {
+//     console.error(e);
+//   });
+// })
+// .catch(e => { 
+//   console.error(e); 
+// });
+  
+// })
+// .catch((e) => {
+//   console.error(e);
+// });    
     })().catch(e => {
         console.log(e);
     });
-
-    
-
-    
-
   }
 
   else{
