@@ -285,6 +285,14 @@ let tx;
   })
   .then((d) => {
     let accounts = d;
+
+    let program = new Uint8Array(Buffer.from("AyAEAwHFxKUO6AcyBCISRDMBECMSRDMCEiMSRDMCESQSRDMCASUORDMCFTIDEkQzAiAyAxJEI0M=", "base64"));
+    const args=[];
+    args.push([...Buffer.from(parseInt(item.id))]);
+    //args.push([...Buffer.from(addr2)]);
+    //args.push([...Buffer.from('')]);
+    
+    let lsig = algosdk.makeLogicSig(program,args);
   
 const algosdk = require('algosdk');
 const algodServer = 'https://testnet-algorand.api.purestake.io/ps2'
@@ -299,7 +307,7 @@ algodClient.getTransactionParams().do()
   let txParamsJS = d;
   //document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
   const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-    from: item.bid,
+    from: lsig.address(),
     to: accounts[0].address,
     assetIndex: parseInt(item.title),
     note: AlgoSigner.encoding.stringToByteArray("hello"),
@@ -326,7 +334,7 @@ algodClient.getTransactionParams().do()
 
         
         const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-          from: item.bid,
+          from: lsig.address(),
           to: accounts[0].address,          
           assetIndex: parseInt(item.title),
           note: AlgoSigner.encoding.stringToByteArray("hello"),
