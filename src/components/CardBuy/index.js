@@ -286,8 +286,8 @@ let tx;
   .then((d) => {
     let accounts = d;
 
-    console.log("itemid",item.id)
-    let changeid=item.id;
+    console.log("itemid",item.title)
+    let changeid=item.title;
     let program = new Uint8Array(Buffer.from("AyAEAwHFxKUO6AcyBCISRDMBECMSRDMCEiMSRDMCESQSRDMCASUORDMCFTIDEkQzAiAyAxJEI0M=", "base64"));
     const args=[];
     //args.push([...Buffer.from((changeid.toString()))]);
