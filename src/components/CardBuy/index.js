@@ -288,7 +288,7 @@ let tx;
 
     let program = new Uint8Array(Buffer.from("AyAEAwHFxKUO6AcyBCISRDMBECMSRDMCEiMSRDMCESQSRDMCASUORDMCFTIDEkQzAiAyAxJEI0M=", "base64"));
     const args=[];
-    args.push([...Buffer.from(parseInt(item.id))]);
+    args.push([...Buffer.from((item.id).toString())]);
     //args.push([...Buffer.from(addr2)]);
     //args.push([...Buffer.from('')]);
     

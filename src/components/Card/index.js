@@ -224,7 +224,7 @@ console.log("checkowners",getalgo)
       console.log("settitem",item.price)
     let program = new Uint8Array(Buffer.from("AyAEAwHFxKUO6AcyBCISRDMBECMSRDMCEiMSRDMCESQSRDMCASUORDMCFTIDEkQzAiAyAxJEI0M=", "base64"));
     const args=[];
-    args.push([...Buffer.from(parseInt(idget))]);
+    args.push([...Buffer.from(idget.toString())]);
     //args.push([...Buffer.from(addr2)]);
     //args.push([...Buffer.from('')]);
     
@@ -247,7 +247,7 @@ console.log("checkowners",getalgo)
     algodClient.getTransactionParams().do()
     .then((d) => {
       let txParamsJS = d;
-      document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
+      //document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         from: accounts[0].address,
         to: lsig.address(),
