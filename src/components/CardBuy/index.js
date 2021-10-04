@@ -294,10 +294,12 @@ let tx;
     args.push([...Buffer.from(changeid.toString())]);
     //args.push([...Buffer.from(addr2)]);
     //args.push([...Buffer.from('')]);
+
+    const algosdk = require('algosdk');
     
     let lsig = algosdk.makeLogicSig(program,args);
   
-const algosdk = require('algosdk');
+
 const algodServer = 'https://testnet-algorand.api.purestake.io/ps2'
 const indexerServer = 'https://testnet-algorand.api.purestake.io/idx2'
 const token = { 'X-API-Key': 'SVsJKi8vBM1RwK1HEuwhU20hYmwFJelk8bagKPin' }
