@@ -885,7 +885,7 @@ algodClient.healthCheck().do()
     total: 1,
     decimals: 0,
     note: AlgoSigner.encoding.stringToByteArray("nothing"),
-    manager:recoveredAccount1.addr,
+    manager:accounts[0].address,
     reserve:accounts[0].address,
     freeze: accounts[0].address,
     clawback:accounts[0].address,
