@@ -338,129 +338,130 @@ const port = '';
 let note = undefined;
 
 let algodClient = new algosdk.Algodv2(token, algodServer, port);
-let  params = await algodClient.getTransactionParams().do();
-params.fee = 1000;
-params.flatFee = true;
+// let  params = await algodClient.getTransactionParams().do();
+// params.fee = 1000;
+// params.flatFee = true;
 
-let txn = algosdk.makePaymentTxnWithSuggestedParams(lsig.address(),accounts[0].address,1,undefined,undefined,params);
+// let txn = algosdk.makePaymentTxnWithSuggestedParams(lsig.address(),accounts[0].address,1,undefined,undefined,params);
      
-    let signedTxn = algosdk.signLogicSigTransaction(txn,lsig);
-    console.log('txn: '+ txn);
-    console.log(signedTxn);
-let txId = txn.txID().toString();
-await algodClient.sendRawTransaction(signedTxn.blob).do();
-        // Wait for confirmation
-        let confirmedTxn = await waitForConfirmation1(algodClient, txId, 4);
-        //Get the completed Transaction
-        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-        let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
-        console.log("Transaction information: %o", mytxinfo);
-        var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-        console.log("Note field: ", string);  
+//     let signedTxn = algosdk.signLogicSigTransaction(txn,lsig);
+//     console.log('txn: '+ txn);
+//     console.log(signedTxn);
+// let txId = txn.txID().toString();
+// await algodClient.sendRawTransaction(signedTxn.blob).do();
+//         // Wait for confirmation
+//         let confirmedTxn = await waitForConfirmation1(algodClient, txId, 4);
+//         //Get the completed Transaction
+//         console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+//         let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
+//         console.log("Transaction information: %o", mytxinfo);
+//         var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
+//         console.log("Note field: ", string);  
 
-        console.log("transferred end")
-// algodClient.getTransactionParams().do()
-// .then((d) => {
-//   let txParamsJS = d;
-//   //document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
-//   const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-//     from: lsig.address(),
-//     to: accounts[0].address,
-//     assetIndex: parseInt(item.title),
-//     note: AlgoSigner.encoding.stringToByteArray("hello"),
-//     amount: 0,
-//     suggestedParams: {...txParamsJS}
-//   });
+//         console.log("transferred end")
+algodClient.getTransactionParams().do()
+.then((d) => {
+  let txParamsJS = d;
+  //document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
+  const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+    from: accounts[0].address,
+    to: lsig.address(),
+    assetIndex: parseInt(item.title),
+    note: AlgoSigner.encoding.stringToByteArray("hello"),
+    amount: 0,
+    suggestedParams: {...txParamsJS}
+  });
   
-//   // Use the AlgoSigner encoding library to make the transactions base64
-//   const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
+  // Use the AlgoSigner encoding library to make the transactions base64
+  const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
   
-//   AlgoSigner.signTxn([{txn: txn_b64}]) 
-//   .then((d) => {
-//     let signedTxs = d;
-//     //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
-//     AlgoSigner.send({
-//         ledger: 'TestNet',
-//         tx: signedTxs[0].blob
-//       })
-//       .then((d) => {
-//         let tx = d;
-//         //document.getElementById('opt').innerHTML = JSON.stringify(d);
+  AlgoSigner.signTxn([{txn: txn_b64}]) 
+  .then((d) => {
+    let signedTxs = d;
+    //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
+    AlgoSigner.send({
+        ledger: 'TestNet',
+        tx: signedTxs[0].blob
+      })
+      .then((d) => {
+        let tx = d;
+        //document.getElementById('opt').innerHTML = JSON.stringify(d);
 
-//         //transfer start
+        //transfer start
 
         
-//         const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-//           from: lsig.address(),
-//           to: accounts[0].address,          
-//           assetIndex: parseInt(item.title),
-//           note: AlgoSigner.encoding.stringToByteArray("hello"),
-//           amount: 1,
-//           revocationTarget:undefined,
-//           closeRemainderTo:undefined,
-//           suggestedParams: {...txParamsJS}          
-//         });        
+        const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: accounts[0].address,
+          to: lsig.address(),        
+          assetIndex: parseInt(item.title),
+          note: AlgoSigner.encoding.stringToByteArray("hello"),
+          amount: 1,
+          revocationTarget:undefined,
+          closeRemainderTo:undefined,
+          suggestedParams: {...txParamsJS}          
+        });        
 
-//         const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
+        const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
   
-//   AlgoSigner.signTxn([{txn: txn_b64}]) 
-//   .then((d) => {
-//     let signedTxs = d;
-//     //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
-//     AlgoSigner.send({
-//         ledger: 'TestNet',
-//         tx: signedTxs[0].blob
-//       })
-//       .then((d) => {
-//         let tx = d;
+  AlgoSigner.signTxn([{txn: txn_b64}]) 
+  .then((d) => {
+    let signedTxs = d;
+    //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
+    AlgoSigner.send({
+        ledger: 'TestNet',
+        tx: signedTxs[0].blob
+      })
+      .then((d) => {
+        let tx = d;
 
 
-//         //   fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
-// //     fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
-// //     id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-// //     userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-// //     ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
-// //     previousoaddress:item.bid,datesets:item.date,
-// //     description:item.description,whois:'buyers',history:item.url
-// //     //paramsdb:item.image2x,privatekey:item.category  
-// //           }).then(()=>{
-// //             setIsOpenss(false)
-// //             setIsOpens(true)
+        console.log("done all done ",tx)
+        //   fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
+//     fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
+//     id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+//     userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+//     ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
+//     previousoaddress:item.bid,datesets:item.date,
+//     description:item.description,whois:'buyers',history:item.url
+//     //paramsdb:item.image2x,privatekey:item.category  
+//           }).then(()=>{
+//             setIsOpenss(false)
+//             setIsOpens(true)
             
-// //           }) 
-// // })
-// // .catch((e) => {
-// //   console.error(e);
-// // });
-
-
-//       })
-//       .catch((e) => {
-//         console.error(e);
-//       });
-
-//   })
-//   .catch((e) => {
-//     console.error(e);
-//   });
-
-
-//         //end transfer
-
-
-//       })
-//       .catch((e) => {
-//         console.error(e);
-//       });
-
-//   })
-//   .catch((e) => {
-//     console.error(e);
-//   });
+//           }) 
 // })
 // .catch((e) => {
 //   console.error(e);
-// })    
+// });
+
+
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+  })
+  .catch((e) => {
+    console.error(e);
+  });
+
+
+        //end transfer
+
+
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+  })
+  .catch((e) => {
+    console.error(e);
+  });
+})
+.catch((e) => {
+  console.error(e);
+})    
 })
 .catch((e) => {
 console.error(e);
