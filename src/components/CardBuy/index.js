@@ -344,7 +344,7 @@ params.flatFee = true;
 
 let txn = algosdk.makePaymentTxnWithSuggestedParams(lsig.address(),accounts[0].address,1,undefined,undefined,params);
      
-    let signedTxn = algosdk.signLogicSigTransaction(txn,lsig.address());
+    let signedTxn = algosdk.signLogicSigTransaction(txn,lsig);
     console.log('txn: '+ txn);
     console.log(signedTxn);
 let txId = txn.txID().toString();
