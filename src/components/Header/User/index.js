@@ -13,7 +13,7 @@ import fire from '../../../screens/UploadDetails/firebase'
 //import Report from "../../../components/Report";
 //import web3 from './web3';
 import axios from 'axios';
-import DarkModeToggle from "react-dark-mode-toggle";
+//import DarkModeToggle from "react-dark-mode-toggle";
 
 const items = [
   {
