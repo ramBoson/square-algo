@@ -13,6 +13,7 @@ import fire from '../../../screens/UploadDetails/firebase'
 //import Report from "../../../components/Report";
 //import web3 from './web3';
 import axios from 'axios';
+import DarkModeToggle from "react-dark-mode-toggle";
 
 const items = [
   {
@@ -26,7 +27,7 @@ const items = [
   //   url: "/item",
   // },
   {
-    title: "Dark theme",
+    title: "Light theme",
     icon: "bulb",
   },
   {
@@ -42,6 +43,7 @@ const items = [
 ];
 
 const User = ({ className,onProfile}) => {
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   //localStorage.setItem("wallet","");
 
@@ -55,7 +57,7 @@ const User = ({ className,onProfile}) => {
   let getac="";
   let getalgo="";
   //let getname="undefined";
-  if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined){
+  if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
 
   }
   else{
@@ -140,11 +142,8 @@ const User = ({ className,onProfile}) => {
 
 
   const disconn=()=>{
-    console.log("disconnect function call")
-
-    
+    console.log("disconnect function call")    
     if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
-
     }
     else{
   
@@ -334,14 +333,17 @@ const User = ({ className,onProfile}) => {
 
         <div className={styles.head} onClick={() => setVisible(!visible)}>
 
-        {(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === '') ? 
+        {(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === '') ? 
         (
         <>
 
 <div className={styles.avatar}>
             
             {/* <img src="/images/content/avatar-user.jpg" alt="Avatar" />  */}
-            <img src={"/images/logocifis.png"} alt="hello" />          
+            {/* <img src={"/images/logocifis.png"} alt="hello" />           */}
+<img src={"https://cifi-mvp-nest.vercel.app/static/media/cifi.540fecbe.png"} alt="hello" />          
+            
+            {/* srcDark="https://cifi-mvp-nest.vercel.app/static/media/cifi.540fecbe.png" */}
      </div>
         
         </>
@@ -357,7 +359,7 @@ const User = ({ className,onProfile}) => {
 <div className={styles.avatar}>            
           
 {/* <img src="/images/content/avatar-user.jpg" alt="Avatar" />  */}
-<img src={"/images/logocifis.png"} alt="helloworld" />                       
+<img src={"https://cifi-mvp-nest.vercel.app/static/media/cifi.540fecbe.png"} alt="helloworld" />                       
 
 </div>
 
@@ -369,7 +371,8 @@ const User = ({ className,onProfile}) => {
             <div className={styles.avatar}>            
             
             {/* <img src="/images/content/avatar-user.jpg" alt="Avatar" />  */}
-            <img src={"/images/logocifis.png"} alt="helloworld" />                       
+            {/* <img src={"/images/logocifis.png"} alt="helloworld" />                        */}
+            <img src={"https://cifi-mvp-nest.vercel.app/static/media/cifi.540fecbe.png"} alt="helloworld" />                       
             
      </div>
           ):(
@@ -409,7 +412,7 @@ const User = ({ className,onProfile}) => {
 <div className={styles.name}>              
 
 {"..."}
-</div>
+  </div>
 
           ):(
 
@@ -422,7 +425,7 @@ const User = ({ className,onProfile}) => {
           )}
           
             
-              {localStorage.getItem("wallet") === null ?(
+              {(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") ===  '' || localStorage.getItem("wallet") === undefined ) ?(
 
 <div className={styles.code}>
 <div className={styles.number} >{"0Xsdjsjipps"}....</div>
@@ -475,9 +478,7 @@ const User = ({ className,onProfile}) => {
                 Manage fun on Coinbase
               </button>
             </div>
-            <div className={styles.menu}>
-              
-              
+            <div className={styles.menu}>              
               {items.map((x, index) =>                        
                 x.url ? (                                
                   x.url.startsWith("hello") ? 
@@ -491,10 +492,9 @@ const User = ({ className,onProfile}) => {
                     // >
                     <Link className={styles.item}
                     onClick={()=>disconn()}>
-                      <div className={styles.icon}>
+                      <div className={styles.icon}>                                              
                         <Icon name={x.icon} size="20" />                                            
                       </div>
-
                       <div className={styles.text}>{x.title}</div>
                                       
                       </Link>
@@ -506,24 +506,25 @@ const User = ({ className,onProfile}) => {
                       onClick={() => setVisible(!visible)}
                       key={index}
                     >
-                      <div className={styles.icon}>
+                      <div className={styles.icon}>                        
                         <Icon name={x.icon} size="20" />
                       </div>
-                      {/* {console.log("con")} */}
+                      {/* {console.log("con")} */}                      
                       <div className={styles.text}>{x.title}</div>
                       
                     </Link>
                   )
                   
                 ) : (
-                  <div className={styles.item} key={index}>
-                    <div className={styles.icon}>
-                      <Icon name={x.icon} size="20" />
-                      
-                    </div>
+                  <div className={styles.item} key={index} >
+                    <div className={styles.icon} >                    
+                      <Icon name={x.icon} size="20"/>    
+                    </div>                    
+                    <div className={styles.text} >{x.title}</  div>
+                    <Theme className={styles.theme} boo="true"/>
                     
-                    <div className={styles.text}>{x.title}</div>
-                    <Theme className="theme-big"  boo="true"/>
+      {/* checked={isDarkMode} */}
+      
                     
                   </div>
                 )
@@ -533,8 +534,9 @@ const User = ({ className,onProfile}) => {
             </div>
           </div>
         )}
-      </div>
-    </OutsideClickHandler>
+        {/* {isDarkMode ? <><Theme className={styles.theme} /></>:<><Theme className={styles.theme} /></>} */}
+      </div>      
+    </OutsideClickHandler>    
   );
 };
 
