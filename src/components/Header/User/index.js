@@ -539,5 +539,4 @@ const User = ({ className,onProfile}) => {
     </OutsideClickHandler>    
   );
 };
-
 export default User;
