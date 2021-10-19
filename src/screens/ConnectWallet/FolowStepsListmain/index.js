@@ -8,7 +8,7 @@ import { useState } from "react";
 import fireDb from '../../UploadDetails/firebase';
 
 
-const FolowStepsList = ({ className,data,datas}) => {
+const FolowStepsListmain = ({ className,data,datas}) => {
   //console.log("listfollow",data[0].address)
 
   const [folow, setfolow] = useState("");
@@ -53,4 +53,4 @@ const FolowStepsList = ({ className,data,datas}) => {
   );
 };
 
-export default FolowStepsList;
+export default FolowStepsListmain;

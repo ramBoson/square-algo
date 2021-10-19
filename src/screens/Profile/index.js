@@ -896,7 +896,7 @@ const setprofilephoto=()=>{
   console.log("inside setprofilephoto function")
   
     
-  if(localStorage.getItem("wallet")  === null || localStorage.getItem("wallet")  === "" || localStorage.getItem("wallet")  === " " || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === '' || Img === ""){
+  if(localStorage.getItem("wallet")  === null || localStorage.getItem("wallet")  === "" || localStorage.getItem("wallet")  === " " || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === '' || Img === ""){
   
     }else{
 
@@ -1071,10 +1071,7 @@ console.log("programop",program)
       <div className={styles.body}>
         
         <div className={cn("container", styles.container)}>
-
-
-          
-          
+                    
           <User className={styles.user} item={socials} />
           
           <div className={styles.wrapper}>
