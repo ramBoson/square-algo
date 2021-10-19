@@ -285,20 +285,20 @@ const convertToBuffer = async(reader) => {
     const buffer = await Buffer.from(reader.result);
   //set this buffer -using es6 syntax
     setBuffer(buffer);
-    await ipfs.add(buffer, (err, ipfsHash) => {
-    console.log(err,ipfsHash);
-    console.log("buff",buffer);
-    setIpfsHash(ipfsHash[0].hash);
-    console.log(ipfsHash[0].hash)
-    const CID = require('cids')
-    var cid = new CID(ipfsHash[0].hash)
-    //let ccp=cid.toV1().toBaseEncodedString('base32');
-    console.log( cid.toV1().toBaseEncodedString('base32'));
-    //setIpf(cid.toV1().toBaseEncodedString('base32'));      
-        }).then(()=>{
+    // await ipfs.add(buffer, (err, ipfsHash) => {
+    // console.log(err,ipfsHash);
+    // console.log("buff",buffer);
+    // setIpfsHash(ipfsHash[0].hash);
+    // console.log(ipfsHash[0].hash)
+    // const CID = require('cids')
+    // var cid = new CID(ipfsHash[0].hash)
+    // //let ccp=cid.toV1().toBaseEncodedString('base32');
+    // console.log( cid.toV1().toBaseEncodedString('base32'));
+    // //setIpf(cid.toV1().toBaseEncodedString('base32'));      
+    //     }).then(()=>{
 
-      //setVisiblePreview(true)
-    });
+    //   //setVisiblePreview(true)
+    // });
 };
 // const onSubmitImage = async (event) => {
 

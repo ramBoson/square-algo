@@ -63,7 +63,7 @@
       var preferDarkQuery = '(prefers-color-scheme: dark)';
       var mql = window.matchMedia(preferDarkQuery);
       var supportsColorSchemeQuery = mql.media === preferDarkQuery;
-      localStorageTheme = localStorage.setItem(storageKey,"true");
+      localStorage.setItem(storageKey,"true");
       var localStorageTheme = null;
       try {
         localStorageTheme = localStorage.getItem(storageKey);
