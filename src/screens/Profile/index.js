@@ -285,7 +285,8 @@ const dbcollection=async()=>{
                 Mnemonic:value.Mnemonic,
                 users: [                
                   {
-                    avatar: "/images/content/avatar-4.jpg",
+                    //avatar: "/images/content/avatar-4.jpg",
+                    avatar :value.imageUrl,
                   },
                 ],
               },
@@ -353,7 +354,8 @@ const dbcollection2=async()=>{
                 Mnemonic:value.Mnemonic,
                 users: [                
                   {
-                    avatar: "/images/content/avatar-4.jpg",
+                    //avatar: "/images/content/avatar-4.jpg",
+                    avatar :value.imageUrl,
                   },
                 ],
               },
@@ -424,7 +426,8 @@ const dbcollection3=async()=>{
                 Mnemonic:value.Mnemonic,
                 users: [                
                   {
-                    avatar: "/images/content/avatar-4.jpg",
+                    //avatar: "/images/content/avatar-4.jpg",
+                    avatar :value.imageUrl,
                   },
                 ],
               },
@@ -495,7 +498,8 @@ const dbcollection4=async()=>{
                 Mnemonic:value.Mnemonic,
                 users: [                
                   {
-                    avatar: "/images/content/avatar-4.jpg",
+                    //avatar: "/images/content/avatar-4.jpg",
+                    avatar :value.imageUrl,
                   },
                 ],
               },
@@ -567,7 +571,8 @@ const dbcallalgolikes=async()=>{
               Mnemonic:value.Mnemonic,
               users: [                
                 {
-                  avatar: "/images/content/avatar-4.jpg",
+                  //avatar: "/images/content/avatar-4.jpg",
+                  avatar :value.imageUrl,
                 },
               ],
             },
@@ -679,7 +684,8 @@ const dbcallsalealgo=async()=>{
               Mnemonic:value.Mnemonic,
               users: [                
                 {
-                  avatar: "/images/content/avatar-4.jpg",
+                  //avatar: "/images/content/avatar-4.jpg",
+                  avatar :value.imageUrl,
                 },
               ],
             },
@@ -744,7 +750,8 @@ const dbcallalgo=async()=>{
               Mnemonic:value.Mnemonic,
               users: [                
                 {
-                  avatar: "/images/content/avatar-4.jpg",
+                  //avatar: "/images/content/avatar-4.jpg",
+                  avatar :value.imageUrl,
                 },
               ],
             },
@@ -817,7 +824,8 @@ const dbcallalgobuy=async()=>{
               Mnemonic:value.Mnemonic,
               users: [                
                 {
-                  avatar: "/images/content/avatar-4.jpg",
+                  //avatar: "/images/content/avatar-4.jpg",
+                  avatar :value.imageUrl,
                 },
               ],
             },
