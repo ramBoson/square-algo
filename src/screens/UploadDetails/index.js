@@ -1120,6 +1120,10 @@ algodClient.healthCheck().do()
                       description:tdescription,history:"",Mnemonic:""})
                       .then(()=>{
 
+
+                        setIsOpens(false)
+                      setIsOpen(true);
+
                         //pinata
 
   //const axios = require('axios');
