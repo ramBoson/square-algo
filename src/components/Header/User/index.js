@@ -507,11 +507,11 @@ console.log(e);
             )}
               
               </div>
-              <button
+              {/* <button
                 className={cn("button-stroke button-small", styles.button)}
               >
                 Manage fun on Coinbase
-              </button>
+              </button> */}
             </div>
             <div className={styles.menu}>              
               {items.map((x, index) =>                        
