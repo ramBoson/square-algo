@@ -1091,7 +1091,7 @@ console.error(e);
     <div className={cn(styles.card, className)}>
       <div className={styles.preview}>
         
-        <img srcSet={`${item.image2x} 2x`} src={item.image} alt="Card" />
+        <img srcSet={`${item.image} 2x`} src={item.image} alt="Card" />
         <div className={styles.control}>
           <div
             className={cn(
@@ -1118,7 +1118,7 @@ console.error(e);
       <br></br>
       {item.price ? (
 <>
-<TextInput
+{/* <TextInput
                       className={styles.field}
                       label="Mnemonic"
                       name="Mnemonic"
@@ -1127,7 +1127,7 @@ console.error(e);
                       required
                       onChange={event => setMnemo(event.target.value)}
                     />
-                    <br></br>      
+                    <br></br>       */}
       <button className={cn("button-small")} onClick={updatepricedb}>
       <span>Buy</span>
       {/* <Icon name="scatter-up" size="16" /> */}

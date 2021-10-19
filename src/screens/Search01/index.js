@@ -93,7 +93,8 @@ const Search = () => {
                 Mnemonic:a[b].Mnemonic,
                 users: [                
                   {
-                    avatar: "/images/content/avatar-4.jpg",
+                    //avatar: "/images/content/avatar-4.jpg",
+                    avatar: a[b].imageUrl,
                   },
                 ],
               })
