@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
 import "./styles/app.sass";
 import Page from "./components/Page";
 import Home from "./screens/Home";
