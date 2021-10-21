@@ -431,6 +431,8 @@ let accounts =d;
   let algodClient = new algosdk.Algodv2(token, algodServer, port);
   console.log("247")
 
+  setIsOpens(true);
+
 //let params=algodClient.getTransactionParams().do()
 //.then(async(d) => {
 let  params = await algodClient.getTransactionParams().do();
@@ -527,7 +529,7 @@ note = undefined
     .then((tx) => {
         // our transaction was successful, we can now view it on the blockchain 
         console.log("success",tx)
-        setIsOpens(true);
+        
             fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).update({
             id:idget,imageUrl:item.image,priceSet:urlprize,cAddress:item.categoryText,keyId:item.highestBid,
             userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
