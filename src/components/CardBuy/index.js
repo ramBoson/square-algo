@@ -23,6 +23,27 @@ import MyAlgo from '@randlabs/myalgo-connect';
 
 const CardBuy = ({ className, item }) => {
 
+
+  async function waitForAlgosignerConfirmationtest(tx) {
+    console.log(`Transaction ${tx.txId} waiting for confirmation...`);
+    let status = await AlgoSigner.algod({
+      ledger: 'TestNet',
+      path: '/v2/transactions/pending/' + tx.txId
+    });  
+    while(true) {
+      if(status['confirmed-round'] !== null && status['confirmed-round'] > 0) {
+        //Got the completed Transaction
+        console.log(`Transaction confirmed in round ${status['confirmed-round']}.`);
+        break;
+      }  
+      status = await AlgoSigner.algod({
+        ledger: 'TestNet',
+        path: '/v2/transactions/pending/' + tx.txId
+      });
+    }    
+    return tx;
+  }
+
   let history=useHistory();
   const [isOpens, setIsOpens] = useState(false);
   const [isOpenss, setIsOpenss] = useState(false);
@@ -363,446 +384,161 @@ let accounts;
 let txParamsJS;
 let signedTxs;
 let tx;
-  AlgoSigner.connect()
-  .then((d) => {
-    
-    algodClient.healthCheck().do()
-  .then(d => { 
+AlgoSigner.connect()
+.then((d) => {
+  algodClient = new algosdk.Algodv2(token, algodServer, port);
+  indexerClient = new algosdk.Indexer(token, indexerServer, port);
   
+  algodClient.healthCheck().do()
+  .then(d => { 
     AlgoSigner.accounts({
       ledger: 'TestNet'
     })
     .then((d) => {
       accounts = d;
-  
+
       algodClient.getTransactionParams().do()
-  .then((d) => {
-    txParamsJS = d;
-    //let amountp=(item.price).replace(/^"(.+(?="$))"$/, '$1');
-    //console.log("amountp",amountp)
-    const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      from: localStorage.getItem("wallet"),
-      to: item.bid,
-      amount: parseInt(item.price),
-      note: undefined,
-      suggestedParams: {...txParamsJS}
-    });
-    
-    // Use the AlgoSigner encoding library to make the transactions base64
-    let txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
-    
-    AlgoSigner.signTxn([{txn: txn_b64}])
-    .then((d) => {
-      signedTxs = d;
-  
-      AlgoSigner.send({
-        ledger: 'TestNet',
-        tx: signedTxs[0].blob
-      })
-      .then((d) => {
-        tx = d;
-        algodClient.pendingTransactionInformation(tx.txId).do()
-  .then(async(d) => {
-    console.log(d);
-    console.log("last success")
-    //let mnemonic=item.Mnemonic;
-  
-    //opt start 
-  
-    AlgoSigner.accounts({
-      ledger: 'TestNet'
-    })
-    .then(async(d) => {
-      //let accounts = d;
-  
-      console.log("itemid",item.title)
-      let changeid=item.title;
-      //let program = new Uint8Array(Buffer.from("AyAEAwHFxKUO6AcyBCISRDMBECMSRDMCEiMSRDMCESQSRDMCASUORDMCFTIDEkQzAiAyAxJEI0M=", "base64"));
-      //const args=[];
-      //args.push([...Buffer.from((changeid.toString()))]);
-      //args.push([...Buffer.from(changeid.toString())]);
-      //args.push([...Buffer.from(addr2)]);
-      //args.push([...Buffer.from('')]);
-  
-      //const algosdk = require('algosdk');
-      
-      //let lsig = algosdk.makeLogicSig(program,args);
-  
-  const algodServer = 'https://testnet-algorand.api.purestake.io/ps2'
-  //const indexerServer = 'https://testnet-algorand.api.purestake.io/idx2'
-  const token = { 'X-API-Key': 'SVsJKi8vBM1RwK1HEuwhU20hYmwFJelk8bagKPin' }
-  const port = '';
-  let note = undefined;
-  
-  let algodClient = new algosdk.Algodv2(token, algodServer, port);
-  let  params = await algodClient.getTransactionParams().do();
-  params.fee = 1000;
-  params.flatFee = true;
-  
-  //new opt
-  //new sent shyam ganesh
-  
-  let program = new Uint8Array(Buffer.from("ASAEADoKAS0VIhJAACIvFSISQAAVLRUjEkAAAC4VIg1AAAAvFSQNQAAGLS4TQAAAJQ==", "base64"));
-      const args=[];
-      //args.push([...Buffer.from(idget.toString())]);
-      //const args=[];
-      // args.push([...Buffer.from()]);//lsig address
-      // args.push([...Buffer.from('')]);//buyer address
-      // args.push([...Buffer.from('')]);
-  
-    args.push([...Buffer.from('RWYPYF5XX40P2L6BCMZAA4ETP3S3HSF32QSWSGMXAU05NBJPKPHR6YCCAE')]);//lsig address
-    args.push([...Buffer.from(localStorage.getItem("wallet"))]);//buyer address
-    args.push([...Buffer.from('')]);
-  
-    let lsig = algosdk.makeLogicSig(program,args);
-  
-  
-  let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(lsig.address(), note, 
-  parseInt(item.title), lsig.address(), localStorage.getItem("wallet"), localStorage.getItem("wallet"), localStorage.getItem("wallet"), params);        
-  let rawSignedTxn = algosdk.signLogicSigTransaction(ctxn,lsig).blob;
-  let ctx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-  console.log("success optin")
-  let txn = algosdk.makeAssetTransferTxnWithSuggestedParams(lsig.address(),localStorage.getItem("wallet"),undefined,undefined,1,undefined,parseInt(item.title),params);
-  let signedTxn = algosdk.signLogicSigTransaction(txn,lsig).blob;
-  let ctxs = (await algodClient.sendRawTransaction(signedTxn).do());
-  await waitForConfirmation(algodClient,ctxs.txId)
-  
-  
-  
-    fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
-      fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
-      id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-      userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-      ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
-      previousoaddress:item.bid,datesets:item.date,
-      description:item.description,whois:'buyers',history:item.url
-      //paramsdb:item.image2x,privatekey:item.category  
-            }).then(()=>{
-              setIsOpenss(false)
-              setIsOpens(true)
-              
-            }) 
-  })
-  .catch((e) => {
-    console.error(e);
+.then((d) => {
+  txParamsJS = d;
+
+  const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: localStorage.getItem("wallet"),
+    to: item.bid,
+    amount: Number(parseInt(item.price)),
+    note: undefined,
+    suggestedParams:txParamsJS
   });
   
+  // Use the AlgoSigner encoding library to make the transactions base64
+  let txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
   
-  
-  
-  //
-  
-  //end new opt
-  
-  
-  //let revocationTarget = undefined;
-  //let closeRemainderTo = undefined;
-  
-  //new asset transfer added
-  
-  // let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(lsig.address(),localStorage.getItem("wallet"), closeRemainderTo, revocationTarget,
-  //   1,  note, item.title, params);
-  
-  
-  //
-  
-  //let txn = algosdk.makePaymentTxnWithSuggestedParams(lsig.address(),localStorage.getItem("wallet"),1,undefined,undefined,params);
-       
-      //let signedTxn = algosdk.signLogicSigTransaction(xtxn,lsig);
-  //     console.log('txn: '+ txn);
-  //     console.log(signedTxn);
-  // let txId = txn.txID().toString();
-  // await algodClient.sendRawTransaction(signedTxn.blob).do();
-  //         // Wait for confirmation
-  //         let confirmedTxn = await waitForConfirmation1(algodClient, txId, 4);
-  //         //Get the completed Transaction
-  //         console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-  //         let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
-  //         console.log("Transaction information: %o",JSON.stringify(mytxinfo));
-  //         var string = new TextDecoder().decode(confirmedTxn.txn.txn.note);
-  //         console.log("Note field: ", string);  
-  
-  //         console.log("transferred end")
-  
-  
-  // algodClient.getTransactionParams().do()
-  // .then((d) => {
-  //   let txParamsJS = d;
-  //   //document.getElementById('paramsprint').innerHTML = JSON.stringify(d);
-  //   const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-  //     from: lsig.address(),
-  //     to: localStorage.getItem("wallet"),
-  //     assetIndex: parseInt(item.title),
-  //     note: AlgoSigner.encoding.stringToByteArray("hello"),
-  //     amount: 0,
-  //     suggestedParams: {...txParamsJS}
-  //   });
-    
-  //   // Use the AlgoSigner encoding library to make the transactions base64
-  //   const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
-    
-  //   AlgoSigner.signTxn([{txn: txn_b64}]) 
-  //   .then((d) => {
-  //     let signedTxs = d;
-  //     //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
-  //     AlgoSigner.send({
-  //         ledger: 'TestNet',
-  //         tx: signedTxs[0].blob
-  //       })
-  //       .then((d) => {
-  //         let tx = d;
-          //document.getElementById('opt').innerHTML = JSON.stringify(d);
-  
-          //transfer start
-  
-          
-    //       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-    //         from: lsig.address(),
-    //         to: localStorage.getItem("wallet"),        
-    //         assetIndex: parseInt(item.title),
-    //         note: AlgoSigner.encoding.stringToByteArray("hello"),
-    //         amount: 1,
-    //         revocationTarget:undefined,
-    //         closeRemainderTo:undefined,
-    //         suggestedParams: {...txParamsJS}          
-    //       });        
-  
-    //       const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
-    
-    // AlgoSigner.signTxn([{txn: txn_b64}]) 
-    // .then((d) => {
-    //   let signedTxs = d;
-    //   //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
-    //   AlgoSigner.send({
-    //       ledger: 'TestNet',
-    //       tx: signedTxs[0].blob
-    //     })
-    //     .then((d) => {
-    //       let tx = d;
-  
-  
-    //       console.log("done all done ",tx)
-          //   fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
-  //     fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
-  //     id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
-  //     userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-  //     ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
-  //     previousoaddress:item.bid,datesets:item.date,
-  //     description:item.description,whois:'buyers',history:item.url
-  //     //paramsdb:item.image2x,privatekey:item.category  
-  //           }).then(()=>{
-  //             setIsOpenss(false)
-  //             setIsOpens(true)
-              
-  //           }) 
-  // })
-  // .catch((e) => {
-  //   console.error(e);
-  // });
-  
-  
-    //     })
-    //     .catch((e) => {
-    //       console.error(e);
-    //     });
-  
-    // })
-    // .catch((e) => {
-    //   console.error(e);
-    // });
-  
-  
-          //end transfer
-  
-  
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-  
+  AlgoSigner.signTxn([{txn: txn_b64}])
+  .then((d) => {
+    signedTxs = d;
+    AlgoSigner.send({
+      ledger: 'TestNet',
+      tx: signedTxs[0].blob
+    })
+    .then((d) => {
+      tx = d;
+      console.log("algos sent")
+      //own opt in
+      AlgoSigner.connect()
+    .then(() => AlgoSigner.algod({ 
+        ledger: 'TestNet', 
+        path: '/v2/transactions/params'
+    }))
+    // sign new opt-in transaction
+    .then((txParams) => AlgoSigner.sign({
+        assetIndex: Number(parseInt(item.title)),
+        from: localStorage.getItem("wallet"),
+        to: localStorage.getItem("wallet"),
+        amount: 0,
+        note: undefined,
+        type: 'axfer',
+        fee: txParams['min-fee'],
+        firstRound: txParams['last-round'],
+        lastRound: txParams['last-round'] + 1000,
+        genesisID: txParams['genesis-id'],
+        genesisHash: txParams['genesis-hash'],
+        flatFee: true
+    })) 
+    .then((signedTx) => AlgoSigner.send({ 
+        ledger: 'TestNet', 
+        tx: signedTx.blob 
+    }))
+    // wait for confirmation from the blockchain
+    .then((tx) => waitForAlgosignerConfirmationtest(tx)) // see algosignerutils.js
+    .then(async(tx) => {
+        // our transaction was successful, we can now view it on the blockchain 
+
+        //transfer
+        let account3_mnemonic = "ability awesome abandon photo acoustic ensure awful banana amount marine nurse candy cattle avoid pool code glance embrace cactus abandon foster luxury harbor abandon pony"
+        let recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
+    let sender = recoveredAccount3.addr;
+    let recipient = localStorage.getItem("wallet");
+    let revocationTarget = undefined;
+    let closeRemainderTo = undefined;
+    //Amount of the asset to transfer
+    let amount = 1;
+    let params = await algodClient.getTransactionParams().do();
+    //comment out the next two lines to use suggested fee
+    params.fee = 1000;
+    params.flatFee = true;
+
+    // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
+    let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+         amount,  undefined, Number(parseInt(item.title)),params);
+         // Must be signed by the account sending the asset  
+    let rawSignedTxn = xtxn.signTxn(recoveredAccount3.sk)
+    let xtx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+    console.log("Transaction : " + xtx.txId);
+    // wait for transaction to be confirmed
+    await waitForConfirmation(algodClient, xtx.txId);
+        // You should now see the 10 assets listed in the account information
+        console.log("Account 3 = " + recoveredAccount3.addr);
+        await printAssetHolding(algodClient, recoveredAccount3.addr,Number(parseInt(item.title)));
+
+        //end transfer
+        //db send
+        fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
+          fireDb.database().ref(`imagerefbuy/${getalgo}`).child(item.highestBid).set({
+          id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+          userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+          ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
+          previousoaddress:item.bid,datesets:item.date,
+          description:item.description,whois:'buyers',history:item.url
+          //paramsdb:item.image2x,privatekey:item.category  
+                }).then(()=>{
+                  setIsOpenss(false)
+                  setIsOpens(true)
+                  
+                }) 
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+      
+
+        //db sent
+        
+    })
+    .catch((e) => 
+    { 
+        // handle errors and perform error cleanup here
+        console.error(e); 
+    });
+
+
+
+      //end transfer
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+
+  })
+  .catch((e) => {
+      console.error(e);
+  });
+
+
+})
+.catch((e) => {
+  console.error(e);
+});
     })
     .catch((e) => {
       console.error(e);
     });
   })
-  .catch((e) => {
-    console.error(e);
-  })    
-  
-  //above
-  
-  })
-  .catch((e) => {
+  .catch(e => { 
+    console.error(e); 
+  });
+})
+.catch((e) => {
   console.error(e);
-  });
-  
-  
-  
-    //end opt
-  
-  
-  
-  
-    //Mnemonic transfer start
-  
-    //       (async () => {
-      
-    //         let assetID= parseInt(item.title)
-    //         let params = await algodClient.getTransactionParams().do();
-    //         //comment out the next two lines to use suggested fee
-    //         params.fee = 1000;
-    //         params.flatFee = true;
-    //         console.log(params);
-      
-    //       let sender = recoveredAccount2.addr;
-    //       let recipient = recoveredAccount2.addr;
-    //       console.log("sender",recoveredAccount2.addr)        
-    //       // We set revocationTarget to undefined as 
-    //       // This is not a clawback operation
-    //       let revocationTarget = undefined
-    //       // CloseReaminerTo is set to undefined as
-    //       // we are not closing out an asset
-    //       let closeRemainderTo = undefined
-    //       // We are sending 0 assets
-    //       let amount = 0;
-    //       let note = AlgoSigner.encoding.stringToByteArray("nothing");    
-    //       //item.title;
-    //       //let params =  item.image2x;
-    //       //let params = await algodClient.getTransactionParams().do();  
-    //       console.log("check","287")    
-    //       // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
-    //       let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
-    //       //let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(sender, recipient, closeRemainderTo, revocationTarget,amount, note, assetID, params);    
-          
-    //       console.log("304 working")
-    //       // Must be signed by the account wishing to opt in to the asset    
-    //       let rawSignedTxn = opttxn.signTxn(recoveredAccount2.sk);
-    //       let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-    //       console.log("Transaction : " + opttx.txId);
-    //       // wait for transaction to be confirmed
-    //       await waitForConfirmation(algodClient, opttx.txId);
-      
-    //       //You should now see the new asset listed in the account information
-    //       console.log("Account 3 = " + recoveredAccount2.addr);        
-    //       await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);
-      
-      
-    //       console.log("opt","success")
-  
-    //       //trans
-  
-    //       params = await algodClient.getTransactionParams().do();
-    //       params.fee = 1000;
-    //       params.flatFee = true;
-    //       sender = recoveredAccount1.addr;
-    //       recipient = recoveredAccount2.addr;
-    //       revocationTarget = undefined;
-    //       closeRemainderTo = undefined;
-    //       //Amount of the asset to transfer
-    //       amount = 1;
-    //       note = undefined
-    //       assetID= parseInt(item.title)
-    //       //params=item.image2x
-          
-    //       // signing and sending "txn" will send "amount" assets from "sender" to "recipient"
-    //       let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
-    //         amount,  note, assetID, params);
-    //         console.log("done")
-    //    // Must be signed by the account sending the asset  
-    //    rawSignedTxn = xtxn.signTxn(recoveredAccount1.sk)
-    //    console.log("done2")
-    //    let xtx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-    //    console.log("done3")
-    //    console.log("Transaction : " + xtx.txId);
-    //    // wait for transaction to be confirmed
-    //    await waitForConfirmation(algodClient, xtx.txId);    
-    //    // You should now see the 10 assets listed in the account information
-    //    console.log("Account 3 = " + recoveredAccount2.addr);
-    //    await printAssetHolding(algodClient, recoveredAccount2.addr, assetID);
-    //    console.log("trans","success")   
-    //      })().catch(e => {
-    //     console.log(e);
-    //     console.trace();
-    // });
-  
-  
-  
-    //Mnemonic transfer end
-  
-    //start shyam code add below
-  
-  //     let program = new Uint8Array(Buffer.from("ASAEADoKAS0VIhJAACIvFSISQAAVLRUjEkAAAC4VIg1AAAAvFSQNQAAGLS4TQAAAJQ==", "base64"));
-  //     const args=[];
-  //     args.push([...Buffer.from(item.bid)]);//owner address
-  //     args.push([...Buffer.from(localStorage.getItem("wallet"))]);//receiver address
-  //     args.push([...Buffer.from('')]);
-      
-  //     let lsig = algosdk.makeLogicSig(program,args);
-  //     let  params = await algodClient.getTransactionParams().do();
-  //       params.fee = 1000;
-  //       params.flatFee = true;
-  //       let revocationTarget = undefined;
-  //      let closeRemainderTo = undefined;
-  //        let  amount = 0;
-  //        let note = undefined;
-  //        //lsig.address()
-  //        let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(lsig.address(), localStorage.getItem("wallet"), closeRemainderTo, revocationTarget,
-  //       amount, note, item.title, params);
-    
-  //  let rawSignedTxn = algosdk.signLogicSigTransaction(opttxn,lsig).blob;
-  // let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-  // console.log("Transaction : " + opttx.txId);//work here now
-  // await waitForConfirmation(algodClient, opttx.txId);
-  //      //let manager = lsig.address();
-  //      let manager = localStorage.getItem("wallet");
-  //      let reserve = localStorage.getItem("wallet");
-  //      let freeze = localStorage.getItem("wallet");
-  //      let clawback = localStorage.getItem("wallet");
-  //      //lsig.address()
-  //       let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(lsig.address(), note, 
-  //       item.title, manager, reserve, freeze, clawback, params);  
-  //       rawSignedTxn = algosdk.signLogicSigTransaction(ctxn,lsig).blob;
-  //       let ctx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-  //       console.log("Transaction2 : " + ctx.txId);
-  //       await waitForConfirmation(algodClient, ctx.txId);
-  //       await printCreatedAsset(algodClient,item.bid, item.title);
-      
-  //cmd above
-  
-        // await fetch(`https://nft-app-ec882-default-rtdb.firebaseio.com/NFT/${name}.json`,
-        // {
-        //   method:'PATCH',
-        //   headers:{
-        //     'CONTENT-TYPE': 'application/json',
-        //   },
-        //   body:JSON.stringify({
-        //     'WalletAddress': localStorage.getItem("wallet"),
-        //   })
-        // }
-        // );
-  
-    
-    //end shyam code 
-   
-  
-    
-  })
-  .catch((e) => {
-    console.error(e);
-  });
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  
-    })
-    .catch((e) => {
-        console.error(e);
-    });
-  })
-  .catch((e) => {
-    console.error(e);
-  });
+});
 
 }
 

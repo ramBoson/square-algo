@@ -26,6 +26,27 @@ const Card = ({ className, item }) => {
   //const [historydbasset, sethistorydbasset] = useState([]);
   //console.log("histasset",historydbasset)
   const [isOpen, setIsOpen] = useState(false)
+
+
+      // Function used to print asset holding for account and assetid
+const printAssetHolding = async function (algodclient, account, assetid) {
+  // note: if you have an indexer instance available it is easier to just use this
+  //     let accountInfo = await indexerClient.searchAccounts()
+  //    .assetID(assetIndex).do();
+  // and in the loop below use this to extract the asset for a particular account
+  // accountInfo['accounts'][idx][account]);
+  let accountInfo = await algodclient.accountInformation(account).do();
+  for (let idx = 0; idx < accountInfo['assets'].length; idx++) {
+      let scrutinizedAsset = accountInfo['assets'][idx];
+      if (scrutinizedAsset['asset-id'] === assetid) {
+          let myassetholding = JSON.stringify(scrutinizedAsset, undefined, 2);
+          console.log("assetholdinginfo = " + myassetholding);
+          break;
+      }
+  }
+};
+
+
   async function waitForAlgosignerConfirmationtest(tx) {
     console.log(`Transaction ${tx.txId} waiting for confirmation...`);
     let status = await AlgoSigner.algod({
@@ -439,27 +460,52 @@ console.log("279")
 //let txn = algosdk.makeAssetTransferTxnWithSuggestedParams(localStorage.getItem("wallet"),lsig.address(),undefined,undefined,1,undefined,parseInt(idget),params);     
 //let txn = algosdk.makeAssetTransferTxnWithSuggestedParams(item.bid,localStorage.getItem("wallet"),undefined,undefined,1,undefined,parseInt(item.title),params);
 //console.log("282",txn)
+//new logic ram
+let assetID = Number(parseInt(idget));
+let account3_mnemonic = "ability awesome abandon photo acoustic ensure awful banana amount marine nurse candy cattle avoid pool code glance embrace cactus abandon foster luxury harbor abandon pony"
+let recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
 
-//start new code 
-//console.log(accounts)
-//let getacc=lsig.sign(accounts[1].address);
-let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(lsig.address(), note, 
-parseInt(idget), lsig.address(), localStorage.getItem("wallet"), localStorage.getItem("wallet"), localStorage.getItem("wallet"), params);        
-let rawSignedTxn = algosdk.signLogicSigTransaction(ctxn,lsig).blob;
-let ctx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
-console.log("success optin")
-//assetId = Number(parseInt(idget))
-let from = localStorage.getItem("wallet"); 
-let to = lsig.address(); 
-let amount = 1; 
-//let note = undefined; 
+    params = await algodClient.getTransactionParams().do();
+    //comment out the next two lines to use suggested fee
+    params.fee = 1000;
+    params.flatFee = true;
 
-AlgoSigner.algod({ 
+    let sender = recoveredAccount3.addr;
+    let recipient = sender;
+    // We set revocationTarget to undefined as 
+    // This is not a clawback operation
+    let revocationTarget = undefined;
+    // CloseReaminerTo is set to undefined as
+    // we are not closing out an asset
+    let closeRemainderTo = undefined;
+    // We are sending 0 assets
+    let amount = 0;
+
+    // signing and sending "txn" allows sender to begin accepting asset specified by creator and index
+    let opttxn = algosdk.makeAssetTransferTxnWithSuggestedParams(sender, recipient, closeRemainderTo, revocationTarget,
+         amount, note, assetID, params);
+         let rawSignedTxn = opttxn.signTxn(recoveredAccount3.sk);
+         let opttx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+    console.log("Transaction : " + opttx.txId);
+    // wait for transaction to be confirmed
+    await waitForConfirmation(algodClient, opttx.txId);
+    //You should now see the new asset listed in the account information
+    console.log("Account 3 = " + recoveredAccount3.addr); 
+    await printAssetHolding(algodClient, recoveredAccount3.addr, assetID);
+
+    //transfer
+    let assetId = Number(parseInt(idget));
+let from = localStorage.getItem("wallet")
+let to = recoveredAccount3.addr
+amount = 1
+note = undefined
+
+ AlgoSigner.algod({ 
         ledger: 'TestNet', 
         path: '/v2/transactions/params'
     })
     .then((txParams) => AlgoSigner.sign({
-      assetIndex: Number(parseInt(idget)),
+      assetIndex: assetId,
         from: from,
         to: to,
         amount: +amount,
@@ -480,9 +526,10 @@ AlgoSigner.algod({
     .then((tx) => waitForAlgosignerConfirmationtest(tx)) // see algosignerutils.js
     .then((tx) => {
         // our transaction was successful, we can now view it on the blockchain 
-        console.log("transfer success",tx)
-        fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).update({
-          id:idget,imageUrl:item.image,priceSet:urlprize,cAddress:item.categoryText,keyId:item.highestBid,
+        console.log("success",tx)
+        setIsOpens(true);
+            fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).update({
+            id:idget,imageUrl:item.image,priceSet:urlprize,cAddress:item.categoryText,keyId:item.highestBid,
             userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
             ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
             previousoaddress:item.previousaddress,datesets:item.date,
@@ -492,10 +539,71 @@ AlgoSigner.algod({
           setIsOpens(false);
           setIsOpenss(true)    
           })
-      })
-      .catch((e) => {
-        console.error(e);
-      })
+    })
+    .catch((e) => 
+    { 
+        // handle errors and perform error cleanup here
+        console.error(e); 
+    });
+
+
+//end logic ram
+//start new code 
+//console.log(accounts)
+//let getacc=lsig.sign(accounts[1].address);
+// let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(lsig.address(), note, 
+// parseInt(idget), lsig.address(), localStorage.getItem("wallet"), localStorage.getItem("wallet"), localStorage.getItem("wallet"), params);        
+// let rawSignedTxn = algosdk.signLogicSigTransaction(ctxn,lsig).blob;
+// let ctx = (await algodClient.sendRawTransaction(rawSignedTxn).do());
+// console.log("success optin")
+// //assetId = Number(parseInt(idget))
+// let from = localStorage.getItem("wallet"); 
+// let to = lsig.address(); 
+// let amount = 1; 
+// //let note = undefined; 
+
+// AlgoSigner.algod({ 
+//         ledger: 'TestNet', 
+//         path: '/v2/transactions/params'
+//     })
+//     .then((txParams) => AlgoSigner.sign({
+//       assetIndex: Number(parseInt(idget)),
+//         from: from,
+//         to: to,
+//         amount: +amount,
+//         note: note,
+//         type: 'axfer',
+//         fee: txParams['min-fee'],
+//         firstRound: txParams['last-round'],
+//         lastRound: txParams['last-round'] + 1000,
+//         genesisID: txParams['genesis-id'],
+//         genesisHash: txParams['genesis-hash'],
+//         flatFee: true
+//     })) 
+//     .then((signedTx) => AlgoSigner.send({ 
+//         ledger: 'TestNet', 
+//         tx: signedTx.blob 
+//     }))
+//     // wait for confirmation from the blockchain
+//     .then((tx) => waitForAlgosignerConfirmationtest(tx)) // see algosignerutils.js
+//     .then((tx) => {
+//         // our transaction was successful, we can now view it on the blockchain 
+//         console.log("transfer success",tx)
+//         fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).update({
+//           id:idget,imageUrl:item.image,priceSet:urlprize,cAddress:item.categoryText,keyId:item.highestBid,
+//             userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+//             ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
+//             previousoaddress:item.previousaddress,datesets:item.date,
+//             description:item.description,whois:'readytosale',history:item.url,Mnemonic:item.Mnemonic
+          
+//           }).then(()=>{  
+//           setIsOpens(false);
+//           setIsOpenss(true)    
+//           })
+//       })
+//       .catch((e) => {
+//         console.error(e);
+//       })
 
 // let txn = algosdk.makeAssetTransferTxnWithSuggestedParams(localStorage.getItem("wallet"),lsig.address(),undefined,undefined,1,undefined,parseInt(idget),params);
 // let signedTxn = algosdk.signLogicSigTransaction(txn,lsig).blob;
