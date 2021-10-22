@@ -1035,15 +1035,15 @@ algodClient.healthCheck().do()
 .then((d) => {
   let txParamsJS = d;
   console.log("txparamsJS",txParamsJS)
-  let program = new Uint8Array(Buffer.from("ASAEADoKAS0VIhJAACIvFSISQAAVLRUjEkAAAC4VIg1AAAAvFSQNQAAGLS4TQAAAJQ==", "base64"));
-  const args=[];
-  //args.push([...Buffer.from(idget.toString())]);
-  //const args=[];
-  args.push([...Buffer.from(localStorage.getItem("wallet"))]);//creator address
-  args.push([...Buffer.from('RWYPYF5XX40P2L6BCMZAA4ETP3S3HSF32QSWSGMXAU05NBJPKPHR6YCCAE')]);//lsig address
-  args.push([...Buffer.from('')]);
+  // let program = new Uint8Array(Buffer.from("ASAEADoKAS0VIhJAACIvFSISQAAVLRUjEkAAAC4VIg1AAAAvFSQNQAAGLS4TQAAAJQ==", "base64"));
+  // const args=[];
+  // //args.push([...Buffer.from(idget.toString())]);
+  // //const args=[];
+  // args.push([...Buffer.from(localStorage.getItem("wallet"))]);//creator address
+  // args.push([...Buffer.from('RWYPYF5XX40P2L6BCMZAA4ETP3S3HSF32QSWSGMXAU05NBJPKPHR6YCCAE')]);//lsig address
+  // args.push([...Buffer.from('')]);
 
-  let lsig = algosdk.makeLogicSig(program,args);
+  // let lsig = algosdk.makeLogicSig(program,args);
   //let thirumnemonic= 'empower twist carpet lawsuit across tape add leopard prevent abandon squeeze egg clown river funny sea labor level scheme race crime mystery party absent exist'
   //var recoveredAccount1 = algosdk.mnemonicToSecretKey(thirumnemonic);
   const txn = algosdk.makeAssetCreateTxnWithSuggestedParamsFromObject({    
@@ -1053,8 +1053,8 @@ algodClient.healthCheck().do()
     total: 1,
     decimals: 0,
     note: AlgoSigner.encoding.stringToByteArray("nothing"),
-    manager:lsig.address(),
-    //manager:localStorage.getItem("wallet"),
+    //manager:lsig.address(),
+    manager:localStorage.getItem("wallet"),
     reserve:localStorage.getItem("wallet"),
     freeze: localStorage.getItem("wallet"),
     clawback:localStorage.getItem("wallet"),
@@ -1298,17 +1298,22 @@ const checkurl=async()=>{
   //}
   //AiAHewYBBAAFAyYFAVMBQgJCTgJTTgFDMwAYIhIzABAjEhAxCTIDEhAxIDIDEhBAAAEANwAaACgSQAFrNwAaACkSQAEtNwAaACoSQACNNwAaACsSQAANNwAaACcEEkAAAQAkQzIEJRIzAhAlEhAzAhEiEhAzAhQzAAASEEAAAQAzAxAlEjMDESISEDMDEiQSEEAAAQAzARAkEjMBADMAABIQQAABADMDADMAABJBAA0zAQgzAgEPQAABACRDMwMAMwAAE0EAETMBCDMCATMDAQgPQAABACRDIQRDMwIQJRIzAhEiEhAzAhQzAAASMwIAMwAAEhEQMgQhBRIQQAABADMDECUSMwMRIhIQMwMSJBIQQAABADMEECUSMwQRIhIQQAABADMBECQSMwEAMwAAEhBAAAEAMwIAMwAAEkEAETMBCDMDATMEAQgPQAABACRDMwIUMwAAEkEAFTMBCDMCATMDAQgzBAEID0AAAQAkQyEEQzIEIQYSMwIQJRIQMwIRIhIQMwIUMwAAEhAzARAkEhAzAQAzAAASEDMBCDMCAQ8QQAABACRDMgQhBhIzARAkEhAzAQAzAAASEDMBCDMCAQ8QMwIQJRIQMwIRIhIQMwISJBIQMwIUMwAAEhBAAAEAJEM=  
   const algosdk = require('algosdk');
-  let program = new Uint8Array(Buffer.from("AiAHewYBBAAFAyYFAVMBQgJCTgJTTgFDMwAYIhIzABAjEhAxCTIDEhAxIDIDEhBAAAEANwAaACgSQAFrNwAaACkSQAEtNwAaACoSQACNNwAaACsSQAANNwAaACcEEkAAAQAkQzIEJRIzAhAlEhAzAhEiEhAzAhQzAAASEEAAAQAzAxAlEjMDESISEDMDEiQSEEAAAQAzARAkEjMBADMAABIQQAABADMDADMAABJBAA0zAQgzAgEPQAABACRDMwMAMwAAE0EAETMBCDMCATMDAQgPQAABACRDIQRDMwIQJRIzAhEiEhAzAhQzAAASMwIAMwAAEhEQMgQhBRIQQAABADMDECUSMwMRIhIQMwMSJBIQQAABADMEECUSMwQRIhIQQAABADMBECQSMwEAMwAAEhBAAAEAMwIAMwAAEkEAETMBCDMDATMEAQgPQAABACRDMwIUMwAAEkEAFTMBCDMCATMDAQgzBAEID0AAAQAkQyEEQzIEIQYSMwIQJRIQMwIRIhIQMwIUMwAAEhAzARAkEhAzAQAzAAASEDMBCDMCAQ8QQAABACRDMgQhBhIzARAkEhAzAQAzAAASEDMBCDMCAQ8QMwIQJRIQMwIRIhIQMwISJBIQMwIUMwAAEhBAAAEAJEM=", "base64"));
-    const args=[];
-    args.push([...Buffer.from("31840066")]);
 
-    args.push([...Buffer.from("BAZXPXEGPFQ7JVOZ7BZUYK36EXLRAWC7MAG3O2SPDWMVCYDMRLCHC6JC2U")]);
-    args.push([...Buffer.from("BAZXPXEGPFQ7JVOZ7BZUYK36EXLRAWC7MAG3O2SPDWMVCYDMRLCHC6JC2U")]);
-    args.push([...Buffer.from("RSWT2ZWIDPYTL4WX2NMIVWQOFCTBKEMQCXBNMHNT4NXOMDSNET66YBZT5Y")]);
-    args.push([...Buffer.from("10000")]);
-    //args.push([...Buffer.from('')]);    
-    let lsig = algosdk.makeLogicSig(program,args);
-    console.log("lsigaddress",lsig.address())
+  let account3_mnemonic = "ability awesome abandon photo acoustic ensure awful banana amount marine nurse candy cattle avoid pool code glance embrace cactus abandon foster luxury harbor abandon pony"
+  let recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
+  console.log("sk",recoveredAccount3.sk)
+
+  // let program = new Uint8Array(Buffer.from("AiAHewYBBAAFAyYFAVMBQgJCTgJTTgFDMwAYIhIzABAjEhAxCTIDEhAxIDIDEhBAAAEANwAaACgSQAFrNwAaACkSQAEtNwAaACoSQACNNwAaACsSQAANNwAaACcEEkAAAQAkQzIEJRIzAhAlEhAzAhEiEhAzAhQzAAASEEAAAQAzAxAlEjMDESISEDMDEiQSEEAAAQAzARAkEjMBADMAABIQQAABADMDADMAABJBAA0zAQgzAgEPQAABACRDMwMAMwAAE0EAETMBCDMCATMDAQgPQAABACRDIQRDMwIQJRIzAhEiEhAzAhQzAAASMwIAMwAAEhEQMgQhBRIQQAABADMDECUSMwMRIhIQMwMSJBIQQAABADMEECUSMwQRIhIQQAABADMBECQSMwEAMwAAEhBAAAEAMwIAMwAAEkEAETMBCDMDATMEAQgPQAABACRDMwIUMwAAEkEAFTMBCDMCATMDAQgzBAEID0AAAQAkQyEEQzIEIQYSMwIQJRIQMwIRIhIQMwIUMwAAEhAzARAkEhAzAQAzAAASEDMBCDMCAQ8QQAABACRDMgQhBhIzARAkEhAzAQAzAAASEDMBCDMCAQ8QMwIQJRIQMwIRIhIQMwISJBIQMwIUMwAAEhBAAAEAJEM=", "base64"));
+  //   const args=[];
+  //   args.push([...Buffer.from("31840066")]);
+
+  //   args.push([...Buffer.from("BAZXPXEGPFQ7JVOZ7BZUYK36EXLRAWC7MAG3O2SPDWMVCYDMRLCHC6JC2U")]);
+  //   args.push([...Buffer.from("BAZXPXEGPFQ7JVOZ7BZUYK36EXLRAWC7MAG3O2SPDWMVCYDMRLCHC6JC2U")]);
+  //   args.push([...Buffer.from("RSWT2ZWIDPYTL4WX2NMIVWQOFCTBKEMQCXBNMHNT4NXOMDSNET66YBZT5Y")]);
+  //   args.push([...Buffer.from("10000")]);
+  //   //args.push([...Buffer.from('')]);    
+  //   let lsig = algosdk.makeLogicSig(program,args);
+  //   console.log("lsigaddress",lsig.address())
   }
   
   const atomic=()=>{

@@ -106,7 +106,7 @@ const printAssetHolding = async function (algodclient, account, assetid) {
       });    
   }
   }
-  const saledbset=async()=>{
+  const setpricedb =async()=>{
     console.log("iitem",item)
     console.log("ititem",item.price)
     if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
@@ -172,18 +172,22 @@ const printAssetHolding = async function (algodclient, account, assetid) {
       console.log("assetidget",txnInfo.transactions[0]["created-asset-index"])  
       console.log("end")  
       setIsOpens(true)
-      fireDb.database().ref(`imagerefexploreoneAlgos/${getalgo}`).child(item.highestBid).set({
-        id:idget,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+
+      //setdb code added here
+      fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).update({
+        id:idget,imageUrl:item.image,priceSet:urlprize,cAddress:item.categoryText,keyId:item.highestBid,
         userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
         ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
         previousoaddress:item.previousaddress,datesets:item.date,
         description:item.description,whois:'readytosale',history:item.url,Mnemonic:item.Mnemonic
-      }).then(()=>{
-        fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).remove();
-          console.log("remove db");
-          setIsOpens(false)
-          window.location.reload(false)   
-      })    
+      
+      }).then(()=>{  
+      setIsOpens(false);
+      setIsOpenss(true)    
+      })
+
+      //ended here
+          
     })().catch(e => {
         console.log(e);
     });        
@@ -191,7 +195,7 @@ const printAssetHolding = async function (algodclient, account, assetid) {
   }
 }
 
-  const setpricedb=async()=>{
+  const saledbset=async()=>{
 
     if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
 
@@ -442,6 +446,8 @@ let  params = await algodClient.getTransactionParams().do();
 
   let note =undefined;
   console.log("254")
+  let account3_mnemonic = "ability awesome abandon photo acoustic ensure awful banana amount marine nurse candy cattle avoid pool code glance embrace cactus abandon foster luxury harbor abandon pony"
+let recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
   let program = new Uint8Array(Buffer.from("ASAEADoKAS0VIhJAACIvFSISQAAVLRUjEkAAAC4VIg1AAAAvFSQNQAAGLS4TQAAAJQ==", "base64"));
   const args=[];
   //args.push([...Buffer.from(idget.toString())]);
@@ -451,7 +457,7 @@ let  params = await algodClient.getTransactionParams().do();
   args.push([...Buffer.from('')]);
 
   let lsig = algosdk.makeLogicSig(program,args);
-
+  lsig.sign(recoveredAccount3.sk);
 //let ctxn = algosdk.makeAssetConfigTxnWithSuggestedParams(localStorage.getItem("wallet"), note, 
 //parseInt(idget), lsig.address(), lsig.address(), lsig.address(), lsig.address(), params);        
 console.log("275")
@@ -464,8 +470,7 @@ console.log("279")
 //console.log("282",txn)
 //new logic ram
 let assetID = Number(parseInt(idget));
-let account3_mnemonic = "ability awesome abandon photo acoustic ensure awful banana amount marine nurse candy cattle avoid pool code glance embrace cactus abandon foster luxury harbor abandon pony"
-let recoveredAccount3 = algosdk.mnemonicToSecretKey(account3_mnemonic);
+
 
     params = await algodClient.getTransactionParams().do();
     //comment out the next two lines to use suggested fee
@@ -530,17 +535,19 @@ note = undefined
         // our transaction was successful, we can now view it on the blockchain 
         console.log("success",tx)
         
-            fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).update({
-            id:idget,imageUrl:item.image,priceSet:urlprize,cAddress:item.categoryText,keyId:item.highestBid,
-            userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
-            ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
-            previousoaddress:item.previousaddress,datesets:item.date,
-            description:item.description,whois:'readytosale',history:item.url,Mnemonic:item.Mnemonic
-          
-          }).then(()=>{  
-          setIsOpens(false);
-          setIsOpenss(true)    
-          })
+        fireDb.database().ref(`imagerefexploreoneAlgos/${getalgo}`).child(item.highestBid).set({
+          id:idget,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+          userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+          ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
+          previousoaddress:item.previousaddress,datesets:item.date,
+          description:item.description,whois:'readytosale',history:item.url,Mnemonic:item.Mnemonic
+        }).then(()=>{
+          fireDb.database().ref(`imagerefAlgo/${getalgo}`).child(item.highestBid).remove();
+            console.log("remove db");
+            setIsOpens(false)
+            window.location.reload(false)   
+        })
+            
     })
     .catch((e) => 
     { 
