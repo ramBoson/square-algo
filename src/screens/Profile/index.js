@@ -283,6 +283,9 @@ const dbcollection=async()=>{
                 teamlogo:value.teamlogo,
                 dimen:value.dimen,
                 Mnemonic:value.Mnemonic,
+                usdcids:value.usdcids,
+              applicationid:value.applicationid,
+              escrowaddress:value.escrowaddress,
                 users: [                
                   {
                     //avatar: "/images/content/avatar-4.jpg",
@@ -352,6 +355,9 @@ const dbcollection2=async()=>{
                 teamlogo:value.teamlogo,
                 dimen:value.dimen,
                 Mnemonic:value.Mnemonic,
+                usdcids:value.usdcids,
+              applicationid:value.applicationid,
+              escrowaddress:value.escrowaddress,
                 users: [                
                   {
                     //avatar: "/images/content/avatar-4.jpg",
@@ -424,6 +430,9 @@ const dbcollection3=async()=>{
                 teamlogo:value.teamlogo,
                 dimen:value.dimen,
                 Mnemonic:value.Mnemonic,
+                usdcids:value.usdcids,
+              applicationid:value.applicationid,
+              escrowaddress:value.escrowaddress,
                 users: [                
                   {
                     //avatar: "/images/content/avatar-4.jpg",
@@ -496,6 +505,9 @@ const dbcollection4=async()=>{
                 dimen:value.dimen,
                 soldd:"",
                 Mnemonic:value.Mnemonic,
+                usdcids:value.usdcids,
+              applicationid:value.applicationid,
+              escrowaddress:value.escrowaddress,
                 users: [                
                   {
                     //avatar: "/images/content/avatar-4.jpg",
@@ -569,6 +581,9 @@ const dbcallalgolikes=async()=>{
               description:value.description,
               soldd:"",
               Mnemonic:value.Mnemonic,
+              usdcids:value.usdcids,
+              applicationid:value.applicationid,
+              escrowaddress:value.escrowaddress,
               users: [                
                 {
                   //avatar: "/images/content/avatar-4.jpg",
@@ -682,6 +697,9 @@ const dbcallsalealgo=async()=>{
               description:value.description,
               soldd:"",
               Mnemonic:value.Mnemonic,
+              usdcids:value.usdcids,
+              applicationid:value.applicationid,
+              escrowaddress:value.escrowaddress,
               users: [                
                 {
                   //avatar: "/images/content/avatar-4.jpg",
@@ -720,8 +738,7 @@ const dbcallalgo=async()=>{
         data.forEach((d) => {
           //console.log("keycheck",d.key)
           let value=d.val();
-          req.push(
-            
+          req.push(            
             {
               title: value.id,
               price: value.priceSet,
@@ -748,6 +765,9 @@ const dbcallalgo=async()=>{
               soldd:"",
               history:"",
               Mnemonic:value.Mnemonic,
+              usdcids:value.usdcids,
+              applicationid:value.applicationid,
+              escrowaddress:value.escrowaddress,
               users: [                
                 {
                   //avatar: "/images/content/avatar-4.jpg",
@@ -776,8 +796,7 @@ useEffect(()=>{dbcallalgo()},[])
 
 
 const dbcallalgobuy=async()=>{
-  console.log("inside dbcallalgobuy function")
-  
+  console.log("inside dbcallalgobuy function")  
   let req = [];
 
   if(localStorage.getItem("wallet")  === null || localStorage.getItem("wallet")  === "" || localStorage.getItem("wallet")  === " " || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === ''){
@@ -822,6 +841,9 @@ const dbcallalgobuy=async()=>{
               date:value.datesets,
               description:value.description,
               Mnemonic:value.Mnemonic,
+              usdcids:value.usdcids,
+              applicationid:value.applicationid,
+              escrowaddress:value.escrowaddress,
               users: [                
                 {
                   //avatar: "/images/content/avatar-4.jpg",

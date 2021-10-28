@@ -22,7 +22,24 @@ import MyAlgo from '@randlabs/myalgo-connect';
 
 
 const CardBuy = ({ className, item }) => {
+  console.log("itemprintcardbuy",item)
+  //console.log("itemprintcardkey",key)
+  const [geto, seto] = useState([]);
+  const [getno, setno] = useState([]);
+  console.log("geto",geto)
+  console.log("getno",getno)
+const [optedd, setoptted] = useState(false);
+const [datedt,setstartdt]= useState("");
+const [bid_user,setBid]= useState("");
+const [owner,setOwner]= useState("");
 
+
+const token = {
+  'X-API-Key': 'U5ivl9nv603lYUBRN3sHH5g0AzCwsetC7OAtYj9D'
+ };
+const server = "https://testnet-algorand.api.purestake.io/ps2";
+const port = "";
+let algodclient = new algosdk.Algodv2(token, server, port);
 
   async function waitForAlgosignerConfirmationtest(tx) {
     console.log(`Transaction ${tx.txId} waiting for confirmation...`);
@@ -71,6 +88,59 @@ const CardBuy = ({ className, item }) => {
   const [Mnemo,setMnemo] = useState(null);
   console.log("Mnemocheck",Mnemo)
 
+  let ro=[];
+  let rno=[];
+  
+
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     //setLoading(true);
+  //     //const res = await axios.get('https://jsonplaceholder.typicode.com/posts');      
+  //   //   let abc=fireDb.database().ref(`Algoopt/${localStorage.getItem("wallet")}`).child(item.applicationid)
+  //   // .catch((e) => {
+  //   // console.error(e);
+  //   // });
+  //   //let data=await fetch(`https://demonft-2e778-default-rtdb.firebaseio.com/Algoopt/${localStorage.getItem("wallet")}/${41088000}.json`);
+  //   //console.log("abcdata",data)
+  //   const nftdata = await fetch(`https://demonft-2e778-default-rtdb.firebaseio.com/Algoopt/${localStorage.getItem("wallet")}/${item.applicationid}/opt.json`);      
+  //   const resdata1 = await nftdata.json();
+  //   console.log("abc",resdata1)
+  //     //setPosts(res.data);
+  //     //setLoading(false);
+
+  // // fireDb.database()
+  // // .ref(`/Algoopt/${localStorage.getItem("wallet")/41088000}/opt`)
+  // // .once('value')
+  // // .then(snapshot => {
+  // //   console.log('User data: ', snapshot.val);
+  // // });
+  // let accountInfoResponse = await algodclient.accountInformation(localStorage.getItem("wallet")).do();
+  //   for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) { 
+  //   if (accountInfoResponse['apps-local-state'][i].id === item.applicationid) {    
+  //           console.log("User's local state: optted checked",item.applicationid);  
+  //           console.log("hello");
+  //           ro.push(item.applicationid)            
+  //         }
+  //         else{
+  //           rno.push(item.applicationid)
+  //           console.log("hi");
+  //         }
+  // }
+  // seto(ro)
+  // setno(rno)
+  //   };
+
+  //   fetchPosts();
+  // }, []);
+
+
+      
+
+
+
+  //readLocalState(algodclient,localStorage.getItem("wallet"),41088000)      
+
+
   const addlikedb=async()=>{
     //let getalgo=localStorage.getItem("walletalgo");
     //console.log("addlikedb function call");
@@ -89,7 +159,9 @@ const CardBuy = ({ className, item }) => {
       userName:item.counter,userSymbol:"Algos",ipfsUrl:item.ipfsurl,
       ownerAddress:item.bid,soldd:item.soldd,extra1:item.extra,
       previousoaddress:item.previousaddress,datesets:item.date,
-      description:item.description,whois:'likes',history:item.url,paramsdb:item.image2x,privatekey:item.category,Mnemonic:item.Mnemonic
+      description:item.description,whois:'likes',history:item.url,paramsdb:item.image2x,privatekey:item.category,Mnemonic:item.Mnemonic,
+      applicationid:item.applicationid,usdcids:item.usdcids,escrowaddress:item.escrowaddress
+
         }).then(()=>{
         setVisible(!visible)
         window.location.reload(false)   
@@ -121,7 +193,681 @@ const CardBuy = ({ className, item }) => {
 
 useEffect(()=>{usernameget()},[])
 
+
+const waitForConfirmation = async function (algodclient, txId) {
+  let response = await algodclient.status().do();
+  let lastround = response["last-round"];
+  while (true) {
+      const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
+      if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
+          console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
+          break;
+      }
+      lastround++;
+      await algodclient.statusAfterBlock(lastround).do();
+  }
+};
+
+// async function readLocalState(client, account, index){
+//   let accountInfoResponse = await client.accountInformation(account).do();
+//   for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) { 
+//       if (accountInfoResponse['apps-local-state'][i].id === index) {
+//           console.log("User's local state: optted checked");
+//           // for (let n = 0; n < accountInfoResponse['apps-local-state'][i][`key-value`].length; n++) {
+//           //     let enc = accountInfoResponse['apps-local-state'][i][`key-value`][n];
+//           //     var decodedString = window.atob(enc.key);
+//           //     if(decodedString === "B"){
+//           //       setBid(enc.value.uint);
+//           //     }
+//           // }
+//       }
+//       else{
+//         console.log("User's local state: not opt checked");
+//       }
+//   }
+// }
+
+// read global state of application
+async function readGlobalState(client, account, index){
+  let accountInfoResponse = await client.accountInformation(account).do();
+  for (let i = 0; i < accountInfoResponse['created-apps'].length; i++) { 
+      if (accountInfoResponse['created-apps'][i].id === index) {
+          console.log("Application's global state:");
+          for (let n = 0; n < accountInfoResponse['created-apps'][i]['params']['global-state'].length; n++) {
+            let enc = accountInfoResponse['created-apps'][i]['params']['global-state'][n];
+
+              var decodedString = window.atob(enc.key);
+              if(decodedString === "A"){
+                setstartdt(enc.value.uint);
+              }
+          }
+      }
+  }
+}
+
+async function readGlobalState_nftOwner(client, account, index){
+let accountInfoResponse = await client.accountInformation(account).do();
+for (let i = 0; i < accountInfoResponse['created-apps'].length; i++) { 
+    if (accountInfoResponse['created-apps'][i].id === index) {
+        console.log("Application's global state:");
+        for (let n = 0; n < accountInfoResponse['created-apps'][i]['params']['global-state'].length; n++) {
+          let enc = accountInfoResponse['created-apps'][i]['params']['global-state'][n];
+
+            var decodedString = window.atob(enc.key);
+            if(decodedString === "O"){
+              let address = JSON.stringify(enc.value);
+              // let getAddress = algosdk.encodeAddress(address,"base32")
+              setOwner(address);
+            }
+        }
+    }
+}
+}
+
+
+const buyapplicationid=async()=>{
+
+  if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
+  }
+  else{
+
+    if(item.bid === localStorage.getItem("wallet"))
+{
+  alert("you are owner so you does not purchase this token")
+}
+else{
+  setIsOpenss(true)
+
+  let params = await algodclient.getTransactionParams().do();
+//  comment out the next two lines to use suggested fee
+  params.fee = 1000;
+  params.flatFee = true;
+
+  //4BLKKSIOUAC3TYFS2KQR4HDFZE6CWYZTDJXHHGDROACPNSJXGTHHY6I6GM,40791643
+  await readGlobalState(algodclient, localStorage.getItem("wallet"),item.applicationid);
+  console.log("Global state", datedt);
+  let askPrice = Number(parseInt(item.price));
+
+  // await readGlobalState_nftOwner(algodclient, "4BLKKSIOUAC3TYFS2KQR4HDFZE6CWYZTDJXHHGDROACPNSJXGTHHY6I6GM", 40791643);
+  // console.log("Global state", owner);
+  // let asset_owner = owner;
+
+  // await readLocalState(algodclient, "4BLKKSIOUAC3TYFS2KQR4HDFZE6CWYZTDJXHHGDROACPNSJXGTHHY6I6GM", 40791643);
+  // console.log("Global state", bid_user);
+  // let bidPrice = bid_user;
+
+  //let diff = Math.abs(askPrice - bidPrice);
+
+AlgoSigner.connect()
+.then((d) => {
+AlgoSigner.accounts({
+ledger: 'TestNet'
+})
+.then(async(d) => {
+let accounts = d;
+let firstAcc = localStorage.getItem("wallet");
+let senderCallapp = firstAcc;
+let index = Number(parseInt(item.applicationid));//40791643 appid
+
+console.log("creator account", senderCallapp)
+//console.log(lsig.address())
+let appArgs = [];
+appArgs.push(new Uint8Array (Buffer.from("BN")));
+// appArgs.push(algosdk.encodeUint64(5));
+// let accArgs = [];
+// accArgs.push(lsig.address());
+let tx1 = algosdk.makeApplicationNoOpTxn(senderCallapp, params, index, appArgs);
+
+let senderTx2 = firstAcc;
+let receiverTx2 = item.escrowaddress;//5PXX6TXPQVB6P7J67TEIGEG2DZVXOZDBPYTAJ62RP457DMXELGMMKFJCBU escrowaddress
+let tx2Amount = 2000;
+let closeToRemaninder = undefined;
+let note = undefined;
+console.log("Amount", tx2Amount);
+////let tx2 = algosdk.makeAssetTransferTxnWithSuggestedParams(senderTx2, receiverTx2, tx2Amount, nft_id, params);
+let tx2 = algosdk.makePaymentTxnWithSuggestedParams(senderTx2, receiverTx2, tx2Amount,closeToRemaninder, note, params);
+console.log("after tx2");
+console.log("price",Number(parseInt(item.price)))
+console.log("price",Number(parseInt(item.usdcids)))
+console.log("price",Number(parseInt(item.applicationid)))
+let usdc_id = Number(parseInt(item.usdcids));//40788570 usdc id
+let tx2Amount_buy = Number(parseInt((item.price)));
+console.log("prizeprint",tx2Amount_buy)
+let closeRemainderTo = undefined;
+let revocationTarget = undefined;
+note = undefined;
+console.log("Amount", tx2Amount);
+
+let tx3 = algosdk.makeAssetTransferTxnWithSuggestedParams(senderTx2, receiverTx2, closeRemainderTo, revocationTarget, tx2Amount_buy, note, usdc_id, params );
+console.log("after tx3");
+let nft_id = Number(parseInt(item.title));//40789121 nft id
+let txNFT_buy = 1;
+closeRemainderTo = undefined;
+revocationTarget = undefined;
+note = undefined;
+console.log("Amount", tx2Amount);
+
+let tx4 = algosdk.makeAssetTransferTxnWithSuggestedParams(receiverTx2, senderTx2, closeRemainderTo, revocationTarget, txNFT_buy, note, nft_id, params );
+console.log("after tx4");
+console.log("dbget",item.bid)
+console.log("dbgettype",typeof(item.bid))
+let senderTxOwner = item.bid;//item.bid;//BSRLHUHZVMKUIG3JWUUMLQQ6V33WDEQHJCHIC3AUMRRRCJZMPHQXCAWXHE owner address
+usdc_id = Number(parseInt(item.usdcids));//40788570 usdc id
+txNFT_buy = Number(parseInt(item.price));
+closeRemainderTo = undefined;
+revocationTarget = undefined;
+note = undefined;
+console.log("Amount", tx2Amount);
+
+let tx5 = algosdk.makeAssetTransferTxnWithSuggestedParams(receiverTx2, senderTxOwner, closeRemainderTo, revocationTarget, txNFT_buy, note, usdc_id, params );
+
+let buyer_opt = firstAcc;
+
+// let opt_buyer = algosdk.makeAssetTransferTxnWithSuggestedParams
+
+//start
+algodclient.getTransactionParams().do()
+  .then((d) => {
+    let txParamsJS = d;
+    const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+      from: localStorage.getItem("wallet"),
+      to:localStorage.getItem("wallet"),
+      assetIndex: Number(parseInt(item.title)),//nft_id
+      note: undefined,
+      amount: 0,
+      suggestedParams: txParamsJS
+    });
+    
+    // Use the AlgoSigner encoding library to make the transactions base64
+    const txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
+    
+    AlgoSigner.signTxn([{txn: txn_b64}]) 
+    .then((d) => {
+      let signedTxs = d;
+      //signCodeElem.innerHTML = JSON.stringify(d, null, 2);
+      AlgoSigner.send({
+        ledger: 'TestNet',
+        tx: signedTxs[0].blob
+      })
+      .then(async(d) => {
+        let tx = d;
+        console.log("Opted", tx);
+        
+let txns = [tx1, tx2, tx3, tx4, tx5];
+
+  // Group both transactions
+  let txgroup = algosdk.assignGroupID(txns);
+  console.log(txgroup)
+//escrow start
+
+let data = `#pragma version 4
+gtxn 0 ApplicationID
+int appid                    
+==
+gtxn 0 TypeEnum
+int appl
+==
+&&
+txn CloseRemainderTo
+global ZeroAddress
+==
+&&
+txn RekeyTo
+global ZeroAddress
+==
+&&
+bnz main_l2
+err
+main_l2:
+gtxna 0 ApplicationArgs 0
+byte "S"
+==
+bnz main_l44
+gtxna 0 ApplicationArgs 0
+byte "B"
+==
+bnz main_l41
+gtxna 0 ApplicationArgs 0
+byte "BN"
+==
+bnz main_l24
+gtxna 0 ApplicationArgs 0
+byte "SN"
+==
+bnz main_l9
+gtxna 0 ApplicationArgs 0
+byte "C"
+==
+bnz main_l8
+err
+main_l8:
+int 1
+return
+main_l9:
+global GroupSize
+int 4
+==
+gtxn 2 TypeEnum
+int axfer
+==
+&&
+gtxn 2 XferAsset
+int usdcid //usdc                    
+==
+&&
+gtxn 2 AssetReceiver
+gtxn 0 Sender
+==
+&&
+bnz main_l11
+err
+main_l11:
+gtxn 3 TypeEnum
+int axfer
+==
+gtxn 3 XferAsset
+int nftid //nft                    
+==
+&&
+gtxn 3 AssetAmount
+int 1
+==
+&&
+bnz main_l13
+err
+main_l13:
+gtxn 1 TypeEnum
+int pay
+==
+gtxn 1 Sender
+gtxn 0 Sender
+==
+&&
+bnz main_l15
+err
+main_l15:
+gtxn 3 Sender
+gtxn 0 Sender
+==
+bnz main_l21
+gtxn 3 Sender
+gtxn 0 Sender
+!=
+bnz main_l18
+int 0
+return
+main_l18:
+gtxn 1 Amount
+gtxn 2 Fee
+gtxn 3 Fee
++
+>=
+bnz main_l20
+err
+main_l20:
+int 1
+return
+main_l21:
+gtxn 1 Amount
+gtxn 2 Fee
+>=
+bnz main_l23
+err
+main_l23:
+int 1
+return
+main_l24:
+gtxn 2 TypeEnum
+int axfer
+==
+gtxn 2 XferAsset
+int usdcid //usdc                  
+==
+&&
+gtxn 2 AssetReceiver
+gtxn 0 Sender
+==
+gtxn 2 Sender
+gtxn 0 Sender
+==
+||
+&&
+global GroupSize
+int 5
+==
+&&
+bnz main_l26
+err
+main_l26:
+gtxn 3 TypeEnum
+int axfer
+==
+gtxn 3 XferAsset
+int nftid //nft                    
+==
+&&
+gtxn 3 AssetAmount
+int 1
+==
+&&
+bnz main_l28
+err
+main_l28:
+gtxn 4 TypeEnum
+int axfer
+==
+gtxn 4 XferAsset
+int usdcid //usdc                    
+==
+&&
+bnz main_l30
+err
+main_l30:
+gtxn 1 TypeEnum
+int pay
+==
+gtxn 1 Sender
+gtxn 0 Sender
+==
+&&
+bnz main_l32
+err
+main_l32:
+gtxn 2 Sender
+gtxn 0 Sender
+==
+bnz main_l38
+gtxn 2 AssetReceiver
+gtxn 0 Sender
+==
+bnz main_l35
+int 0
+return
+main_l35:
+gtxn 1 Amount
+gtxn 2 Fee
+gtxn 3 Fee
++
+gtxn 4 Fee
++
+>=
+bnz main_l37
+err
+main_l37:
+int 1
+return
+main_l38:
+gtxn 1 Amount
+gtxn 3 Fee
+gtxn 4 Fee
++
+>=
+bnz main_l40
+err
+main_l40:
+int 1
+return
+main_l41:
+global GroupSize
+int 3
+==
+gtxn 2 TypeEnum
+int axfer
+==
+&&
+gtxn 2 XferAsset
+int usdcid //usdc                    
+==
+&&
+gtxn 2 AssetReceiver
+gtxn 0 Sender
+==
+&&
+gtxn 1 TypeEnum
+int pay
+==
+&&
+gtxn 1 Sender
+gtxn 0 Sender
+==
+&&
+gtxn 1 Amount
+gtxn 2 Fee
+>=
+&&
+bnz main_l43
+err
+main_l43:
+int 1
+return
+main_l44:
+global GroupSize
+int 3
+==
+gtxn 1 TypeEnum
+int pay
+==
+&&
+gtxn 1 Sender
+gtxn 0 Sender
+==
+&&
+gtxn 1 Amount
+gtxn 2 Fee
+>=
+&&
+gtxn 2 TypeEnum
+int axfer
+==
+&&
+gtxn 2 XferAsset
+int nftid //nft                    
+==
+&&
+gtxn 2 AssetAmount
+int 1
+==
+&&
+gtxn 2 AssetReceiver
+gtxn 0 Sender
+==
+&&
+bnz main_l46
+err
+main_l46:
+int 1
+return        
+`;
+      let data2 = data.replace("appid",Number(parseInt(item.applicationid)));
+      let data3 = data2.replaceAll("usdcid",Number(parseInt(item.usdcids)));
+      let data4 = data3.replaceAll("nftid",Number(parseInt(item.title)));
+
+  const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+  }
+      let results = await algodclient.compile(data4).do();
+      console.log("Resultconsole = " + results);
+      console.log("Hash = " + results.hash);
+      console.log("Result = " + results.result);
+      // await sleep(20000)
+      let program = new Uint8Array(Buffer.from(results.result, "base64"));
+      let args = [];
+      args.push(algosdk.encodeUint64(Number(parseInt(item.applicationid))));//40791643 app id
+      args.push(algosdk.encodeUint64(Number(parseInt(item.usdcids))));//40788570 usdc id
+      args.push(algosdk.encodeUint64(Number(parseInt(item.title))));//40789121 nft id
+      //args.push(algosdk.encodeUint64(5));
+      let lsig = algosdk.makeLogicSig(program);
+      console.log("LSIG",lsig.address())
+//escrow end
+//changes
+  let txn_b64_1 = tx1.toByte();
+  let txn_b64_2 = tx2.toByte();
+  let txn_b64_3 = tx3.toByte();
+  // let base64Txs1 =  AlgoSigner.encoding.msgpackToBase64(txn_b64_1);
+  // let base64Txs2 =  AlgoSigner.encoding.msgpackToBase64(txn_b64_2);
+  console.log("signing")
   
+  let base64Txs1 = AlgoSigner.encoding.msgpackToBase64(txn_b64_1);
+  let base64Txs2 = AlgoSigner.encoding.msgpackToBase64(txn_b64_2);
+  let base64Txs3 = AlgoSigner.encoding.msgpackToBase64(txn_b64_3);
+  console.log("encoded")
+  let signedTxs51 = await AlgoSigner.signTxn([
+    {
+      txn: base64Txs1,
+    }
+  ]);
+  let signedTxs52 = await AlgoSigner.signTxn([
+    {
+      txn: base64Txs2,
+    },
+  ]);
+  let signedTxs53 = await AlgoSigner.signTxn([
+    {
+      txn: base64Txs3,
+    }
+  ]);
+  //console.log("logic",signedTxs5)
+
+  let binarySignedTxs1 =  AlgoSigner.encoding.base64ToMsgpack(signedTxs51[0].blob);
+  let binarySignedTxs2 =  AlgoSigner.encoding.base64ToMsgpack(signedTxs52[0].blob);
+  let binarySignedTxs3 =  AlgoSigner.encoding.base64ToMsgpack(signedTxs53[0].blob);
+  let rawSignedTxn4 = algosdk.signLogicSigTransactionObject(tx4, lsig);
+  let rawSignedTxn5 = algosdk.signLogicSigTransactionObject(tx5, lsig);
+  //let binarySignedTxs = signedTxs.map((txn) => AlgoSigner.encoding.base64ToMsgpack(txn[0].blob));
+  let signArr43 = [binarySignedTxs1, binarySignedTxs2, binarySignedTxs3, rawSignedTxn4.blob, rawSignedTxn5.blob];
+  //console.log("signed",rawSignedTxn2.blob)
+  let trans = await algodclient.sendRawTransaction(signArr43).do();
+   console.log("Send complete");
+//   console.log("txID", trans);
+   console.log("id", trans.txId);
+ await waitForConfirmation(algodclient, trans.txId);
+
+ console.log("signed transfered")
+//db store here
+fireDb.database().ref(`imagerefexploreoneAlgos/${item.bid}`).child(item.highestBid).remove().then(()=>{
+  fireDb.database().ref(`imagerefbuy/${localStorage.getItem("wallet")}`).child(item.highestBid).set({
+  id:item.title,imageUrl:item.image,priceSet:item.price,cAddress:item.categoryText,keyId:item.highestBid,
+  userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
+  ownerAddress:localStorage.getItem("wallet"),soldd:item.soldd,extra1:item.extra,
+  previousoaddress:item.bid,datesets:item.date,
+  description:item.description,whois:'buyers',history:item.url,
+  applicationid:item.applicationid,usdcids:item.usdcids,escrowaddress:item.escrowaddress
+  //paramsdb:item.image2x,privatekey:item.category  
+        }).then(()=>{
+          setIsOpenss(false)
+          setIsOpens(true)
+          
+        }) 
+})
+.catch((e) => {
+console.error(e);
+});
+//end db store
+  
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+    
+  })
+  .catch((e) => {
+    console.error(e);
+  });
+})
+.catch((e) => {
+console.error(e);
+});
+})
+.catch((e) => {
+console.error(e);
+});
+
+  //end option buynow
+
+}
+  }
+  //after optin buynow 
+}
+
+async function optInApp(client, account, index) {
+  // define sender
+  let sender = account;
+
+// get node suggested parameters
+  let params = await client.getTransactionParams().do();
+  // comment out the next two lines to use suggested fee
+  params.fee = 1000;
+  params.flatFee = true;
+  // create unsigned transaction
+  let txn = algosdk.makeApplicationOptInTxn(sender, params, index);
+  let txId = txn.txID().toString();
+  // Sign the transaction
+  // let signedTxn = txn.signTxn(account.sk);
+  let txn_b64 = AlgoSigner.encoding.msgpackToBase64(txn.toByte());
+  let signedTxs = await AlgoSigner.signTxn([{txn:txn_b64}]);
+  console.log("txn signing")
+  let signedT = AlgoSigner.encoding.base64ToMsgpack(signedTxs[0].blob);
+  let transcat = await client.sendRawTransaction(signedT).do();
+  console.log("txn working")
+  await waitForConfirmation(client, transcat.txId);
+  console.log("Signed transaction with txID: %s", txId);
+  // Submit the transaction
+  // await client.sendRawTransaction(signedTxn).do();
+  // Wait for confirmation
+  // await waitForConfirmation(client, txId);
+  // display results
+  let transactionResponse = await client.pendingTransactionInformation(transcat.txId).do();
+  console.log("Opted-in to app-id:",transactionResponse['txn']['txn']['apid']) 
+
+  //optdb added here
+                  fireDb.database().ref(`Algoopt/${localStorage.getItem("wallet")}`).child(item.applicationid).set({opt:true})
+                  .then(()=>{
+                    console.log("db stored")
+                    setoptted(true)
+                    setIsOpenss(false)                    
+                    window.location.reload(false)   
+                  })             
+}
+
+
+
+const buynftapp = async()=>{
+
+  console.log("inside buy function")
+    if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x" || localStorage.getItem("wallet") === undefined || localStorage.getItem("wallet") === ''){
+    }
+    else{
+
+      if(item.bid === localStorage.getItem("wallet"))
+  {
+    alert("you are owner so you does not purchase this token")
+  }
+  else{
+    setIsOpenss(true)
+    AlgoSigner.connect()
+  .then((d) => {
+    AlgoSigner.accounts({
+      ledger: 'TestNet'
+    })
+    .then(async(d) => {
+      let accounts = localStorage.getItem("wallet");
+      let index = item.applicationid ;//40791643;//app id
+      await optInApp(algodclient, accounts, index);
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+  })
+  .catch((e) => {
+    console.error(e);
+  });
+  }  
+}
+}
 
 const buynft=async()=>{
 
@@ -210,7 +956,7 @@ const waitForConfirmation1 = async function (algodClient, txId, timeout) {
     alert("you are owner so you does not purchase this token")
   }
   else{
-    setIsOpenss(true)
+setIsOpenss(true)
 const algosdk = require('algosdk');
 if(localStorage.getItem("net") === "mainnet"){
 const algodServer = 'https://mainnet-algorand.api.purestake.io/ps2'
@@ -488,12 +1234,12 @@ else{
             userName:"",userSymbol:"Algos",ipfsUrl:item.ipfsurl,
             ownerAddress:getalgo,soldd:item.soldd,extra1:item.extra,
             previousoaddress:item.bid,datesets:item.date,
-            description:item.description,whois:'buyers',history:item.url
+            description:item.description,whois:'buyers',history:item.url,
+            applicationid:item.applicationid,usdcids:item.usdcids,escrowaddress:item.escrowaddress
             //paramsdb:item.image2x,privatekey:item.category  
                   }).then(()=>{
                     setIsOpenss(false)
-                    setIsOpens(true)
-                    
+                    setIsOpens(true)                    
                   }) 
         })
         .catch((e) => {
@@ -1102,18 +1848,18 @@ else{
         
       </div>
       <br></br>
-      {item.price ? (
+      {item.price && (
 <>   
-   <button className={cn("button-small")} onClick={buynft}>
+{item.resdata1 === null || item.resdata1 === undefined || item.resdata1 === "" ? (
+<button className={cn("button-small")} onClick={buynftapp}>
+      <span>OPT</span>      
+    </button>
+) :(  
+  <button className={cn("button-small")} onClick={buyapplicationid}>
       <span>Buy</span>      
     </button>
-    </>
-      )
-    :
-    (
-    <></>
-    )
-}
+)}
+</>)}
       <Link className={styles.link} to={item.url}>
         <div className={styles.body}>
           <div className={styles.line}>
