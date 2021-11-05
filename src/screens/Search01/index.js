@@ -59,6 +59,7 @@ const Search = () => {
     setActiveIndex(index)
     console.log("inside dbcallsalealgo function")
     if(localStorage.getItem("wallet")  === null || localStorage.getItem("wallet")  === "" || localStorage.getItem("wallet")  === " " || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === '' || localStorage.getItem("wallet") === "0x"){
+      alert("please connect your wallet")
     }
     else{    
     //let getalgo=localStorage.getItem("wallet");
@@ -75,9 +76,9 @@ const Search = () => {
           const a=d.val();
           Object.keys(a).map(async(b)=>{                            
             //console.log(a[b].id);          
-            const nftdata = await fetch(`https://demonft-2e778-default-rtdb.firebaseio.com/Algoopt/${localStorage.getItem("wallet")}/${a[b].applicationid}/opt.json`);      
-            const resdata1 = await nftdata.json();        
-            console.log("restdata1",resdata1)        
+            //const nftdata = await fetch(`https://demonft-2e778-default-rtdb.firebaseio.com/Algoopt/${localStorage.getItem("wallet")}/${a[b].applicationid}/opt.json`);      
+            //const resdata1 = await nftdata.json();        
+            //console.log("restdata1",resdata1)        
               req.push({
                 title: a[b].id,
                 price: a[b].priceSet,
@@ -102,7 +103,7 @@ const Search = () => {
                 usdcids:a[b].usdcids,
               applicationid:a[b].applicationid,
               escrowaddress:a[b].escrowaddress,
-              resdata1:resdata1,
+              resdata1:"",
                 users: [                
                   {
                     //avatar: "/images/content/avatar-4.jpg",

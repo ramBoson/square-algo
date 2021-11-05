@@ -7,6 +7,7 @@ import styles from "./Collections.module.sass";
 import Icon from "../../../components/Icon";
 import firebase from "../../UploadDetails/firebase";
 //import DropdownEmptyCopy from "../../../components/DropdownEmptyCopy";
+
 //../UploadDetails/firebase
 const items = [
   {
@@ -184,7 +185,7 @@ const SlickArrow = ({ currentSlide, slideCount, children, ...props }) => (
   <button {...props}>{children}</button>
 );
 
-const Collections = () => {
+const TopCollections = () => {
   
 const directionOptions = ["Minor League", "Major League","Triangle League","Aryan Shah","Others"];
 const [direction, setDirection] = useState(directionOptions[0]);
@@ -223,14 +224,11 @@ console.log("getlt",getImgreffalgobuy)
     ],
   };
 
+
+  // imagerefAlgolt
   useEffect(() => {
     const fetchPosts = async () => {
       let req = [];  
-    // if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x"){  
-    // }
-    //else{    
-//      let getalgo=localStorage.getItem("wallet");      
-      //let kreq =[];
       firebase.database().ref("imagerefAlgolt").on("value", (data) => {          
         if (data) {          
           data.forEach((d) => {            
@@ -277,107 +275,22 @@ console.log("getlt",getImgreffalgobuy)
   }, []);
 
 
-  // req.push(              
-  //   {
-  //     title: value.id,
-  //     price: value.priceSet,
-  //     highestBid: value.keyId,
-  //     counter:value.userName ,
-  //     //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
-  //     bid:value.ownerAddress,
-  //     image: value.imageUrl,
-  //     image2x:value.paramsdb,
-  //     category: value.privatekey,
-  //     categoryText: value.cAddress,
-  //     //purchasing !
-  //     url: value.history,
-  //     league:value.league,
-  //     team:value.team,
-  //     type:value.type,
-  //     teamlogo:value.teamlogo,
-  //     dimen:value.dimen,
-  //     users: [                
-  //       {
-  //         avatar:value.imageUrl,
-  //       },
-  //     ],
-  //   })
-
-
-  const dbcallalgobuy=async()=>{
-    //console.log("inside dbcallalgobuy function")    
-    //let req = [];  
-    // if(localStorage.getItem("wallet") === null || localStorage.getItem("wallet") === "0x"){  
-    // }
-    //else{    
-//      let getalgo=localStorage.getItem("wallet");      
-      //let kreq =[];
-      // firebase.database().ref("imagerefPolylt").on("value", (data) => {
-          
-      //   if (data) {
-      //     data.forEach((d) => {
-      //       //console.log("keycheck",d.key)
-      //       let value=d.val();
-      //       req.push(              
-      //         {
-      //           title: value.id,
-      //           price: value.priceSet,
-      //           highestBid: value.keyId,
-      //           counter:value.userName ,
-      //           //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
-      //           bid:value.ownerAddress,
-      //           image: value.imageUrl,
-      //           image2x:value.paramsdb,
-      //           category: value.privatekey,
-      //           categoryText: value.cAddress,
-      //           //purchasing !
-      //           url: value.history,
-      //           league:value.league,
-      //           team:value.team,
-      //           type:value.type,
-      //           teamlogo:value.teamlogo,
-      //           dimen:value.dimen,
-      //           users: [                
-      //             {
-      //               avatar: "/images/content/avatar-4.jpg",
-      //             },
-      //           ],
-      //         },
-            
-      //       )
-  
-      //       //image:images/content/card-pic-1.jpg
-      //       //image2x: "/images/content/card-pic-1@2x.jpg",
-  
-      //       //req.push(d.key)          
-      //     });        
-      //   }
-      // });
-      // //setgetImgreffalgobuy(req);
-    
-    
-    //console.log("acc",getalgo)
-  
-  }
-  
-  useEffect(()=>{dbcallalgobuy()},[])
-
-
-
   return (
+    
     <div className={cn("section-bg", styles.section)}>
       <div className={cn("container", styles.container)}>
         <div className={styles.wrapper}>          
-          <h3 className={cn("h3", styles.title)}>Hot collections</h3>          
+          <h3 className={cn("h3", styles.title)}>Top collections</h3>          
           <div className={styles.box}>
           
             </div>
           
-            
+
 <div className={styles.inner}>
 <Slider className="collection-slider" {...settings}>
 {getImgreffalgobuy.map((x, index) => (
   <>
+  <Link className={styles.item} to={{pathname:`/profileuserview`,state:{address:x.bid}}}>            
     <div className={styles.gallery}>      
         <div className={styles.preview} key={index}>
           <img src={x.image} alt="Collectiond" />
@@ -397,17 +310,20 @@ console.log("getlt",getImgreffalgobuy)
         <span>{x.counter}</span>
       </div>
     </div>
-    </>  
+    </Link>
+   </> 
 ))}
 </Slider>
 </div>
+
+
+
      </div>         
       </div>
     </div>
   );
 };
+export default TopCollections;
 
-export default Collections;
-
-// {/* <Link className={styles.item} to={{pathname:`/profilecopy`,state:{add:'0x2709807c7bc1bb23fb3a7b8d2a2D829499212740',team:x.title,logo:x.avatar}}} key={index}></Link>
-// </Link> */}
+// // <Link className={styles.item} to={{pathname:`/profilecopy`,state:{add:'0x2709807c7bc1bb23fb3a7b8d2a2D829499212740',team:x.title,logo:x.avatar}}} key={index}>
+// </Link>

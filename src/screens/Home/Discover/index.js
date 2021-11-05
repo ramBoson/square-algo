@@ -125,45 +125,100 @@ const Discover = () => {
     },
   ];
 
-  const dbcallsaleal=async(index)=>{
-    setActiveIndex(index)
-    console.log("inside dbcallsalealgo function")
+//   const dbcallsaleal=async(index)=>{
+//     setActiveIndex(index)
+//     console.log("inside dbcallsalealgo function")
 
 
-    if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
+//     if(localStorage.getItem("walletalgo") === null || localStorage.getItem("walletalgo") === "0x"){
 
-    }
-    else{
+//     }
+//     else{
 
     
-    let getalgo=localStorage.getItem("walletalgo");
-    //let req = [];
+//     let getalgo=localStorage.getItem("walletalgo");
+//     //let req = [];
   
-    if(getalgo === ""){
+//     if(getalgo === ""){
   
-    }else{
+//     }else{
 
-      //let req = [];
-    let req2 = [];//imagerefexplore//
+//       //let req = [];
+//     let req2 = [];//imagerefexplore//
+//     firebase.database().ref("imagerefexploreoneAlgos").on("value", (data) => {
+//       if (data) {
+//         data.forEach((d) => {
+//           req2.push(d.val())          
+//         });        
+//       }
+      
+//     });
+    
+//     setgetIm(req2)
+
+//     let req=[];
+
+//     getIm.map((a)=>{
+//       console.log(`abb`, a)    
+//       Object.keys(a).map((b)=>{
+
+//         console.log(a[b].id);
+//                 req.push({
+//                 title: a[b].id,
+//                 price: a[b].priceSet,
+//                 highestBid: a[b].keyId,
+//                 counter:a[b].userName ,
+//                 //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
+//                 bid:a[b].ownerAddress,
+//                 image: a[b].imageUrl,
+//                 image2x: a[b].imageUrl,
+//                 category: "green",
+//                 categoryText: a[b].cAddress,
+//                 //purchasing !
+//                 url: "/",
+//                 users: [                
+//                   {
+//                     avatar: "/images/content/avatar-4.jpg",
+//                   },
+//                 ],
+//               })
+              
+//       })      
+//       setgetI(req)    
+//     })    
+//     console.log("cfbbba",req) 
+    
+//   }
+// }
+// }
+//   useEffect(()=>{dbcallsaleal()},[])
+
+
+  const dbcallsaleal=async(index)=>{
+    console.log("hello ramachandran")
+    setActiveIndex(index)
+    console.log("inside dbcallsalealgo function")
+    //if(localStorage.getItem("wallet")  === null || localStorage.getItem("wallet")  === "" || localStorage.getItem("wallet")  === " " || localStorage.getItem("wallet") === 'undefined' || localStorage.getItem("wallet") === '' || localStorage.getItem("wallet") === "0x"){
+    //}
+    //else{    
+    //let getalgo=localStorage.getItem("wallet");
+    //let req = [];  
+    // if(getalgo === ""){  
+    // }else{
+      let req = [];
+      console.log("req",req)
+   // let req2 = [];//imagerefexplore//
     firebase.database().ref("imagerefexploreoneAlgos").on("value", (data) => {
       if (data) {
         data.forEach((d) => {
-          req2.push(d.val())          
-        });        
-      }
-      
-    });
-    
-    setgetIm(req2)
-
-    let req=[];
-
-    getIm.map((a)=>{
-      console.log(`abb`, a)    
-      Object.keys(a).map((b)=>{
-
-        console.log(a[b].id);
-                req.push({
+          //req2.push(a.val())          
+          const a=d.val();
+          Object.keys(a).map(async(b)=>{                            
+            //console.log(a[b].id);          
+            //const nftdata = await fetch(`https://demonft-2e778-default-rtdb.firebaseio.com/Algoopt/${localStorage.getItem("wallet")}/${a[b].applicationid}/opt.json`);      
+            //const resdata1 = await nftdata.json();        
+            //console.log("restdata1",resdata1)        
+              req.push({
                 title: a[b].id,
                 price: a[b].priceSet,
                 highestBid: a[b].keyId,
@@ -171,27 +226,39 @@ const Discover = () => {
                 //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
                 bid:a[b].ownerAddress,
                 image: a[b].imageUrl,
-                image2x: a[b].imageUrl,
-                category: "green",
+                image2x: a[b].paramsdb,
+                category: a[b].privatekey,
                 categoryText: a[b].cAddress,
                 //purchasing !
-                url: "/",
+                url: a[b].history,
+                date:a[b].datesets,
+                description:a[b].description,
+                extra:a[b].extra1,
+                ipfsurl:a[b].ipfsUrl,
+                previousaddress:a[b].previousoaddress,
+                soldd:a[b].soldd,
+                whois:a[b].whois,
+                Mnemonic:a[b].Mnemonic,
+                usdcids:a[b].usdcids,
+              applicationid:a[b].applicationid,
+              escrowaddress:a[b].escrowaddress,
+              resdata1:"",
                 users: [                
                   {
-                    avatar: "/images/content/avatar-4.jpg",
+                    //avatar: "/images/content/avatar-4.jpg",
+                    avatar: a[b].imageUrl,
                   },
                 ],
-              })
-              
-      })      
-      setgetI(req)    
-    })    
-    console.log("cfbbba",req) 
-    
-  }
+              })                                                                                                    
+          })                                                                     
+        });                        
+        setgetI(req)
+      }       
+    });               
+  // } 
 }
-}
-  useEffect(()=>{dbcallsaleal()},[])
+useEffect(()=>{dbcallsaleal()},[])
+
 
   const STEP = 0.1;
   const MIN = 0.01;
@@ -387,7 +454,7 @@ const Discover = () => {
             className={cn("discover-slider", styles.slider)}
             {...settings}
           >
-            {items.map((x, index) => (
+            {getI.map((x, index) => (
               
               <CardDiscover className={styles.card} item={x} key={index} />
             

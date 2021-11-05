@@ -37,3 +37,10 @@
     border: 1px solid #999;
     font-size: 20px;
   }
+
+  .container {
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    borderColor: '#ccc', borderWidth: 1, 
+    width: 150, height: 150, margin: 10,
+    borderRadius: 15, backgroundColor: colors.background,
+}

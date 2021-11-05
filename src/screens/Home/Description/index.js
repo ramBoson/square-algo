@@ -7,8 +7,7 @@ import Image from "../../../components/Image";
 const Description = () => {
   return (
     
-    <div className={styles.section}>
-      
+    <div className={cn("section-bg", styles.section)}>    
       <div className={cn("container", styles.container)}>
         <div className={styles.wrap}>
           <div className={styles.stage}>SAVE YOUR TIME WITH CIFI</div>

@@ -15,6 +15,7 @@ import ProfileEdit from "./screens/ProfileEdit";
 import Item from "./screens/Item";
 import PageList from "./screens/PageList";
 import "./style.css";
+import Profileuserview from "./screens/Profileuserview";
 
 function App() {  
   return (        
@@ -126,6 +127,15 @@ function App() {
           render={() => (
             <Page>
               <PageList />
+            </Page>
+          )}
+          />
+          <Route
+          exact
+          path="/profileuserview"
+          render={() => (
+            <Page>
+              <Profileuserview />
             </Page>
           )}
         />

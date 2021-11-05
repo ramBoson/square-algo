@@ -185,15 +185,11 @@ const SlickArrow = ({ currentSlide, slideCount, children, ...props }) => (
 
 const Popular = () => {
   let history=useHistory();
-
   const onClo=()=>{
-
-    console.log("hello onclo")
-    
+    console.log("hello onclo")    
     //setIsOpen(false);
     history.push("/search01")
     window.location.reload();
-
   }
 
 
@@ -264,191 +260,147 @@ const directionOptions = ["Sellers", "Buyers"];
 
   const dbcallalgobuy=async()=>{
     //console.log("inside dbcallalgobuy function")
-    let req2 = [];//imagerefexplore//
-    firebase.database().ref("imagerefbuyAlgos").on("value", (data) => {
+    //imagerefexplore//
+    let req = [];
+    firebase.database().ref("imagerefbuy").on("value", (data) => {      
       if (data) {
-        data.forEach((d) => {
-          req2.push(d.val())          
+        data.forEach((d) => {          
+          const a=d.val();
+            Object.keys(a).map(async(b)=>{      
+              //console.log(a[b].id);
+                      req.push({
+                      price: a[b].id,
+                      sign: a[b].priceSet,
+                      // sign: "/images/content/cup.svg",
+                      number: a[b].keyId,
+                      name:a[b].userName ,
+                      //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
+                      bid:a[b].ownerAddress,
+                      avatar: a[b].imageUrl,
+                      image2x: a[b].paramsdb,
+                      category: a[b].privatekey,
+                      categoryText: a[b].cAddress,
+                      //purchasing !
+                      url: a[b].datesets,
+                      users: [                
+                        {
+                          avatar: a[b].imageUrl,
+                        },
+                      ],
+                    })                    
+            })            
         });        
-      }
-      
+        setgetIb(req)              
+      }    
+      //setgetImb(req)
     });
-    
-    setgetImb(req2)
-
-    let req=[];
-
-    getImb.map((a)=>{
-      //console.log(`abb`, a)    
-      Object.keys(a).map((b)=>{
-
-        //console.log(a[b].id);
-                req.push({
-                price: a[b].id,
-                sign: a[b].priceSet,
-                // sign: "/images/content/cup.svg",
-                number: a[b].keyId,
-                name:a[b].userName ,
-                //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
-                bid:a[b].ownerAddress,
-                avatar: a[b].imageUrl,
-                image2x: a[b].paramsdb,
-                category: a[b].privatekey,
-                categoryText: a[b].cAddress,
-                //purchasing !
-                url: a[b].datesets,
-                users: [                
-                  {
-                    avatar: "/images/content/avatar-4.jpg",
-                  },
-                ],
-              })
-              
-      })      
-      setgetIb(req)    
-    })    
-    //console.log("cfbbba",req) 
-  
   }
   
-  useEffect(()=>{dbcallalgobuy()},[getImb])
+  useEffect(()=>{dbcallalgobuy()},[])
 
 
   //seller
-  const dbcallsalealgo=async()=>{
-    //console.log("inside dbcallsalealgo function")
-    let req2 = [];//imagerefexplore//
-    firebase.database().ref("imagerefexploreoneAlgos").on("value", (data) => {
-      if (data) {
-        data.forEach((d) => {
-          req2.push(d.val())                    
-        });        
-      }
-      setgetIm(req2)  
-    })  
-    
-    let req=[];
-    getIm.map((a)=>{
-      //console.log(`abb`, a)    
-      Object.keys(a).map((b)=>{
-
-        //console.log(a[b].id);
-                req.push({
-                price: a[b].id,
-                sign: a[b].priceSet,
-                //sign: "/images/content/cup.svg",
-                number: a[b].keyId,
-                name:a[b].userName ,
-                //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
-                bid:a[b].ownerAddress,
-                avatar: a[b].imageUrl,
-                image2x: a[b].paramsdb,
-                category: a[b].privatekey,
-                categoryText: a[b].cAddress,
-                //purchasing !
-                url: a[b].datesets,
-                users: [                
-                  {
-                    avatar: "/images/content/avatar-4.jpg",
-                  },
-                ],
-              })
-              
-      })      
-      setgetI(req)    
-    })    
-    //console.log("cfbbba",req) 
   
+  const dbcallalgosale=async()=>{
+    //console.log("inside dbcallalgobuy function")
+    //imagerefexplore//
+    let reqsale = [];
+    firebase.database().ref("imagerefexploreoneAlgos").on("value", (data) => {      
+      if (data) {
+        data.forEach((d) => {          
+          const a=d.val();
+            Object.keys(a).map(async(b)=>{      
+              //console.log(a[b].id);
+                      reqsale.push({
+                      price: a[b].id,
+                      sign: a[b].priceSet,
+                      // sign: "/images/content/cup.svg",
+                      number: a[b].keyId,
+                      name:a[b].userName ,
+                      //bid: 'New bid <span role="img" aria-label="fire">🔥</span>',
+                      bid:a[b].ownerAddress,
+                      avatar: a[b].imageUrl,
+                      image2x: a[b].paramsdb,
+                      category: a[b].privatekey,
+                      categoryText: a[b].cAddress,
+                      //purchasing !
+                      url: a[b].datesets,
+                      users: [                
+                        {
+                          avatar:a[b].imageUrl,
+                        },
+                      ],
+                    })                    
+            })            
+        });        
+        setgetImb(reqsale) 
+      }          
+    });
   }
-  useEffect(()=>{dbcallsalealgo()},[getIm])
+  
+  useEffect(()=>{dbcallalgosale()},[])
 
   //getIm
 
   const filterdata=()=>{
     console.log("inside filter function")
-
-    if(direction === 'Sellers'){
-
+    if(direction === 'Sellers') {
       if(date === '1')
       {
-        console.log("one")
-        return items;
+          console.log("one")
+          let data = getImb.filter((val)=>{
+            console.log("datainside",val)
+          let currentdate=moment().format('ddd MMM DD YYYY')
+          //let currentdate = moment(val.url);
+          console.log("currentdate",currentdate)
+          let createddate=moment(val.url).format('ddd MMM DD YYYY')
+          console.log("createddate",createddate)
+          return currentdate === createddate 
+        })
+        console.log("R1",data)
+        return data;              
       }    
-        
-        return items;    
+        let data = getImb.filter((val)=>{
+          console.log("sellers7get",val)
+          console.log("sellers7",val.url)
+          console.log("sellers two")
+          let currentdate=moment().subtract(1,"days")
+          let weekdate=moment().subtract(parseInt(date),"days")
+          //let createddate=moment(val.url)
+          return moment(val.url).isBetween(weekdate,currentdate)
+        })
+        console.log("R7",data)
+        //window.location.reload(false)
+        return data;    
     }
-
-
     if(date === '1')
     {
-        
-      return itemss;
+        let data = getIb.filter((val)=>{
+          let currentdate=moment().format('ddd MMM DD YYYY')
+          //let currentdate = moment(val.url);
+          console.log("currentdate",currentdate)
+          let createddate=moment(val.url).format('ddd MMM DD YYYY')
+          return currentdate===createddate 
+      })
+      console.log("B1",data)
+      return data;
     }    
-      
-      return itemss;    
-
-
-
-    // if(direction === 'Sellers') {
-
-    //   if(date === '1')
-    //   {
-    //     console.log("one")
-    //       let data = getI.filter((val)=>{
-    //       let currentdate=moment()
-    //       let createddate=moment(val.url)
-    //       return currentdate===createddate 
-    //     })
-    //     console.log("R1",data)
-    //     return data;
-    //   }    
-    //     let data = getI.filter((val)=>{
-    //       console.log("sellers7get",val)
-    //     console.log("sellers7",val.url)
-    //       console.log("sellers two")
-    //       let currentdate=moment().subtract(1,"days")
-    //       let weekdate=moment().subtract(parseInt(date),"days")
-    //       //let createddate=moment(val.url)
-    //       return moment(val.url).isBetween(weekdate,currentdate)
-    //     })
-
-    //     console.log("R7",data)
-    //     return data;    
-    // }
-
-
-    // if(date === '1')
-    // {
-    //     let data = getIb.filter((val)=>{
-    //     let currentdate=moment()
-    //     let createddate=moment(val.url)
-    //     return currentdate===createddate 
-    //   })
-    //   console.log("B1",data)
-    //   return data;
-    // }    
-    //   let data = getIb.filter((val)=>{
-
-    //     console.log("Buyers7get",val)
-    //     console.log("Buyers7",val.url)
-    //     let currentdate=moment().subtract(1,"days")
-    //     let weekdate=moment().subtract(parseInt(date),"days")
-    //     //let createddate=moment(val.adddate)
-    //     return moment(val.url).isBetween(weekdate,currentdate)        
-    //   })
-
-    //   console.log("B7",data)
-    //   return data;    
-
-    //return getIb;
-
+      let data = getIb.filter((val)=>{
+        console.log("Buyers7get",val)
+        console.log("Buyers7",val.url)
+        let currentdate=moment().subtract(1,"days")
+        let weekdate=moment().subtract(parseInt(date),"days")
+        //let createddate=moment(val.adddate)
+        return moment(val.url).isBetween(weekdate,currentdate)        
+      })
+      console.log("B7",data)
+      return data;    
+    //return getIb;    
   }
-
-  
-  // useEffect(()=>{filterdata()},[])
+  useEffect(()=>{filterdata()},[])
 
   return (
-    <div className={cn("section-bg", styles.section)}>
+    <div className={cn("section", styles.section)}>
       <div className={cn("container", styles.container)}>
         <div className={styles.top}>
           <div className={styles.box}>
@@ -461,7 +413,7 @@ const directionOptions = ["Sellers", "Buyers"];
               //onChange={changeSelectOptionHandler}
             />
           </div>
-          {/* <div className={styles.field}>
+          <div className={styles.field}>
             <div className={styles.label}>timeframe</div>
             <Dropdown
               className={styles.dropdown}
@@ -469,7 +421,7 @@ const directionOptions = ["Sellers", "Buyers"];
               setValue={setDate}
               options={dateOptions}
             />
-          </div> */}
+          </div>
         </div>
 
         
@@ -487,12 +439,10 @@ const directionOptions = ["Sellers", "Buyers"];
           
           {/* {getIb.length === 0 && getI.length === 0 ? ( */}
 
-            {direction==="Sellers"  ? (
-            
+{direction==="Sellers" ? (            
 <div className={styles.wrapper}>
-          <Slider className="popular-slider" {...settings}>
-            
-{getI.map((x, index) => (
+          <Slider className="popular-slider" {...settings}>            
+{filterdata().map((x, index) => (
               <div className={styles.slide} key={index} onClick={() => onClo()}>
                 <div className={styles.item}>
                   <div className={styles.head} >
@@ -534,13 +484,12 @@ const directionOptions = ["Sellers", "Buyers"];
               </div>
             ))}
             </Slider>
-        </div>
-            
+        </div>            
           ):            
           (
             <div className={styles.wrapper}>
           <Slider className="popular-slider" {...settings}>
-            {getIb.map((x, index) => (
+            {filterdata().map((x, index) => (
               <div className={styles.slide} key={index} onClick={() =>onClo()}>
                 <div className={styles.item}>
                   <div className={styles.head}>

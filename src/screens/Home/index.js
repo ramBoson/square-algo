@@ -7,28 +7,22 @@ import Collections from "./Collections";
 import Discover from "./Discover";
 import Description from "./Description";
 import Selectioncopy from "./Selectioncopy";
+import TopCollections from "./TopCollections";
 
 const Home = () => {
   return (
-    <>
-    
+    <>    
       {/* <Hero /> */}
-      
-
       <Selectioncopy />
-
-      <Selection />
-      {/* <Popular /> */}
+      <TopCollections />
+      {/* <Selection /> */}
+      <Popular />
       {/* <HotBid classSection="section" /> */}
-      {/* <Collections /> */}
-
+      <Collections />
       {/* <PopularCopy />
       <PopularCopys /> */}
       <Discover />
-      <Description />
-
-
-                
+      <Description />                
     </>
   );
 };
